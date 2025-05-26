@@ -1,4 +1,4 @@
-// Update Wallet Status Icon
+// Wallet Status
 function updateWalletStatus(status, color) {
     document.getElementById("walletStatus").innerHTML = `<span style="color:${color};">${status}</span>`;
 }
@@ -6,43 +6,14 @@ function updateWalletStatus(status, color) {
 // Connect Wallets
 async function connectMetamask() {
     if (window.ethereum) {
-        try {
-            const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
-            updateWalletStatus("🟢 Connected: " + accounts[0], "green");
-        } catch (error) {
-            alert("Error: " + error.message);
-        }
+        const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+        updateWalletStatus("🟢 Connected: " + accounts[0], "green");
     } else {
         alert("Metamask is not installed!");
     }
 }
 
-async function connectWalletConnect() {
-    const provider = new WalletConnectProvider({ rpc: { 56: "https://bsc-dataseed.binance.org/" } });
-    await provider.enable();
-    const web3 = new Web3(provider);
-    const accounts = await web3.eth.getAccounts();
-    updateWalletStatus("🟢 Connected: " + accounts[0], "green");
-}
-
-async function connectBinance() {
-    if (window.BinanceChain) {
-        try {
-            const accounts = await window.BinanceChain.request({ method: "eth_requestAccounts" });
-            updateWalletStatus("🟢 Connected: " + accounts[0], "green");
-        } catch (error) {
-            alert("Error: " + error.message);
-        }
-    } else {
-        alert("Binance Wallet is not installed!");
-    }
-}
-
 // Buy Tokens
-async function buyWithCrypto() {
-    alert("Buying LFIST with ETH...");
-}
-
 async function buyWithCard() {
     window.location.href = "https://checkout.stripe.com/pay/YOUR_STRIPE_LINK";
 }
@@ -53,9 +24,15 @@ async function updateMarketCap() {
     const data = await response.json();
     document.getElementById("marketCap").innerHTML = `${data.market_cap} LFIST`;
 }
-
 setInterval(updateMarketCap, 5000);
-updateMarketCap();
+
+// FAQ Toggle
+document.querySelectorAll(".faq-question").forEach(button => {
+    button.addEventListener("click", () => {
+        button.nextElementSibling.style.display = button.nextElementSibling.style.display === "block" ? "none" : "block";
+    });
+});
+
 
 
 
