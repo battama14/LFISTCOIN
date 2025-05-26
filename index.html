@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LFIST Token - Prévente</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Logo -->
+    <div class="logo-container">
+        <img src="logo.png" alt="LFIST TOKEN Logo" class="logo">
+    </div>
+
+    <!-- Presale Timer -->
+    <div class="countdown-box">
+        PRESALE ENDS IN <span id="timer">06:23:45</span>
+    </div>
+
+    <!-- Buy Section -->
+    <div class="purchase">
+        <input type="number" id="amount" placeholder="Amount to buy" class="input-buy">
+        <div class="btn-container">
+            <button class="btn eth" onclick="buyWithCrypto()">Buy with ETH</button>
+            <button class="btn card" onclick="buyWithCard()">Buy with Card</button>
+        </div>
+    </div>
+
+    <!-- Connect Wallet -->
+    <div class="wallet-section">
+        <button class="wallet-btn" onclick="connectWallet()">Connect Wallet 🦊</button>
+    </div>
+
+    <!-- Capitalization Counter -->
+    <div class="capitalization">
+        Current Market Cap: <span id="marketCap">0 LFIST</span>
+    </div>
+
+    <!-- Menu -->
+    <nav class="nav-bar">
+        <a href="#about" class="nav-link">About</a>
+        <a href="#tokenomics" class="nav-link">Tokenomics</a>
+        <a href="#faq" class="nav-link">FAQ</a>
+    </nav>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.7.5/web3.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
+
