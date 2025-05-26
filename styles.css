@@ -8,14 +8,28 @@ body {
     text-align: center;
 }
 
+/* Header */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+}
+
 /* Logo */
 .logo-container {
-    text-align: center;
-    margin-top: 20px;
+    text-align: left;
 }
 
 .logo {
     max-width: 300px;
+}
+
+/* Wallet Status */
+.wallet-status {
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
 }
 
 /* Presale Timer */
@@ -42,7 +56,6 @@ body {
     font-size: 18px;
     border: 3px solid black;
     border-radius: 10px;
-    margin-right: 10px;
 }
 
 .btn-container {

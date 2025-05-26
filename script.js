@@ -1,9 +1,14 @@
-// Connecter Metamask
+// Update Wallet Status Icon
+function updateWalletStatus(status, color) {
+    document.getElementById("walletStatus").innerHTML = `<span style="color:${color};">${status}</span>`;
+}
+
+// Connect Wallets
 async function connectMetamask() {
     if (window.ethereum) {
         try {
             const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
-            alert("Metamask Connected: " + accounts[0]);
+            updateWalletStatus("🟢 Connected: " + accounts[0], "green");
         } catch (error) {
             alert("Error: " + error.message);
         }
@@ -12,22 +17,19 @@ async function connectMetamask() {
     }
 }
 
-// Connecter WalletConnect
 async function connectWalletConnect() {
-    const provider = new WalletConnectProvider({
-        rpc: { 56: "https://bsc-dataseed.binance.org/" }
-    });
+    const provider = new WalletConnectProvider({ rpc: { 56: "https://bsc-dataseed.binance.org/" } });
     await provider.enable();
     const web3 = new Web3(provider);
-    alert("WalletConnect enabled!");
+    const accounts = await web3.eth.getAccounts();
+    updateWalletStatus("🟢 Connected: " + accounts[0], "green");
 }
 
-// Connecter Binance Wallet
 async function connectBinance() {
     if (window.BinanceChain) {
         try {
             const accounts = await window.BinanceChain.request({ method: "eth_requestAccounts" });
-            alert("Binance Wallet Connected: " + accounts[0]);
+            updateWalletStatus("🟢 Connected: " + accounts[0], "green");
         } catch (error) {
             alert("Error: " + error.message);
         }
@@ -36,12 +38,11 @@ async function connectBinance() {
     }
 }
 
-// Ajouter support pour BestWallet, Bitget, BingX, Uniswap, Coinbase
-async function connectWallet(walletName) {
-    alert(walletName + " support coming soon!");
+// Buy Tokens
+async function buyWithCrypto() {
+    alert("Buying LFIST with ETH...");
 }
 
-// Acheter avec carte (via Stripe)
 async function buyWithCard() {
     window.location.href = "https://checkout.stripe.com/pay/YOUR_STRIPE_LINK";
 }
@@ -55,6 +56,7 @@ async function updateMarketCap() {
 
 setInterval(updateMarketCap, 5000);
 updateMarketCap();
+
 
 
 
