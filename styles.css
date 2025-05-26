@@ -10,12 +10,17 @@ body {
 
 /* Wallet Status */
 .wallet-status {
-    font-size: 18px;
-    font-weight: bold;
+    text-align: right;
+    padding: 20px;
+}
+
+#connectWallet {
+    background-color: #ff6600;
+    border: 2px solid black;
     color: white;
-    position: absolute;
-    top: 20px;
-    right: 20px;
+    font-size: 18px;
+    padding: 10px;
+    cursor: pointer;
 }
 
 /* FAQ */

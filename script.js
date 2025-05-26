@@ -1,35 +1,43 @@
-import { ethers } from "ethers";
-import WalletConnectProvider from "@walletconnect/web3-provider";
-import Web3Modal from "web3modal";
+import { connectorsForWallets } from '@rainbow-me/rainbowkit';
+import { configureChains, createClient } from 'wagmi';
+import { mainnet } from 'wagmi/chains';
+import { publicProvider } from 'wagmi/providers/public';
 
-// Configuration Web3Modal pour gérer tous les wallets
-const providerOptions = {
-    walletconnect: {
-        package: WalletConnectProvider,
-        options: {
-            rpc: { 56: "https://bsc-dataseed.binance.org/" }
-        }
-    }
-};
+// Configuration RainbowKit
+const { chains, provider } = configureChains([mainnet], [publicProvider()]);
+const connectors = connectorsForWallets([
+    {
+        groupName: 'Popular Wallets',
+        wallets: [
+            { name: 'Metamask', id: 'metaMask' },
+            { name: 'WalletConnect', id: 'walletConnect' },
+            { name: 'Coinbase Wallet', id: 'coinbaseWallet' },
+            { name: 'Binance Wallet', id: 'binanceWallet' },
+        ],
+    },
+]);
 
-const web3Modal = new Web3Modal({
-    cacheProvider: true,
-    providerOptions
+// Création du client Wagmi
+const wagmiClient = createClient({
+    autoConnect: true,
+    connectors,
+    provider,
 });
 
 // Connexion au wallet
 async function connectWallet() {
     try {
-        const provider = await web3Modal.connect();
-        const web3 = new ethers.providers.Web3Provider(provider);
-        const accounts = await web3.listAccounts();
-        document.getElementById("walletStatus").innerHTML = `🟢 Connected: ${accounts[0]}`;
-        console.log("Wallet connecté :", accounts[0]);
+        const { account } = await wagmiClient.connect();
+        document.getElementById('walletStatus').innerHTML = `🟢 Connected: ${account}`;
+        console.log('Wallet connecté :', account);
     } catch (error) {
-        console.error("Échec de connexion au wallet :", error);
-        alert("Erreur de connexion au wallet !");
+        console.error('Échec de connexion au wallet :', error);
+        alert('Erreur de connexion au wallet !');
     }
 }
+
+// Ajout du gestionnaire d'événement au bouton
+document.getElementById('connectWallet').addEventListener('click', connectWallet);
 
 // Achat via Stripe
 async function buyWithCard() {
@@ -54,3 +62,4 @@ document.querySelectorAll(".faq-question").forEach(button => {
         button.nextElementSibling.style.display = button.nextElementSibling.style.display === "block" ? "none" : "block";
     });
 });
+
