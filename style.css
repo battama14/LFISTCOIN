@@ -232,4 +232,33 @@ footer {
     transform: scale(1);
     box-shadow: 0 0 20px rgba(255, 0, 204, 0.6);
   }
+/* 💻 Pour les écrans de moins de 768px (smartphones) */
+@media (max-width: 768px) {
+  .presale-flex {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .side-image {
+    max-height: 80px;
+    width: 100%;
+  }
+
+  section {
+    padding: 2rem 1rem;
+  }
+
+  .external-btn {
+    font-size: 1.2rem;
+    padding: 1rem 2rem;
+  }
+
+  h1, h2 {
+    font-size: 1.8rem;
+  }
+
+  #buyLFISTBtn {
+    padding: 10px 20px;
+    font-size: 1rem;
+  }
 }
