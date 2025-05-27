@@ -1,0 +1,235 @@
+/* ---------- BASE ---------- */
+.body, html {
+  margin: 0;
+  padding: 0;
+  font-family: 'Luckiest Guy', cursive;
+  background-color: #000;
+  color: #FFD700;
+  overflow-x: hidden;
+}
+
+.background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-image: url('fond.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: -1;
+  opacity: 0.85;
+}
+
+/* ---------- HEADER ---------- */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.2rem 2rem;
+  background-color: rgba(0, 0, 0, 0.9);
+}
+
+.logo {
+  height: 80px;
+}
+
+nav ul {
+  display: flex;
+  gap: 1.5rem;
+  list-style: none;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+
+nav a, #langSwitch {
+  text-decoration: none;
+  color: #FFD700;
+  font-size: 1rem;
+  background: none;
+  border: 2px solid #FFD700;
+  padding: 0.4rem 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+nav a:hover, #langSwitch:hover {
+  background-color: #FFD700;
+  color: black;
+}
+
+/* ---------- MAIN ---------- */
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3rem 1.5rem;
+  gap: 4rem;
+}
+
+/* ---------- SECTIONS ---------- */
+section {
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 3rem 2rem;
+  border-radius: 25px;
+  box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+  max-width: 900px;
+  width: 100%;
+  text-align: center;
+}
+
+/* ---------- TITRES ---------- */
+h1, h2 {
+  color: #FFD700;
+  margin-bottom: 1.2rem;
+  text-shadow: 2px 2px 5px #000;
+}
+
+/* ---------- BOUTON CONNECT WALLET ---------- */
+#connectWallet {
+  background: linear-gradient(45deg, #FFD700, #FF8C00);
+  color: black;
+  font-size: 1.3rem;
+  padding: 1rem 2rem;
+  margin: 1.5rem 0;
+  border: none;
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(255, 165, 0, 0.6);
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+#connectWallet:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 30px #FFA500;
+}
+.external-link-section {
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 3rem 2rem;
+  border-radius: 25px;
+  box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+  max-width: 900px;
+  width: 100%;
+  text-align: center;
+}
+.presale-flex {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.presale-center {
+  text-align: center;
+  max-width: 500px;
+  flex: 1;
+}
+
+.side-image {
+  max-height: 300px;
+  width: auto;
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .presale-flex {
+    flex-direction: column;
+  }
+
+  .side-image {
+    max-height: 80px;
+  }
+}
+
+/* ---------- BOUTON VISIT SITE ---------- */
+.external-btn {
+  display: inline-block;
+  margin-top: 2rem;
+  padding: 1.5rem 3rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  background: linear-gradient(45deg, #FF4500, #FFD700);
+  color: black;
+  text-decoration: none;
+  border-radius: 25px;
+  box-shadow: 0 0 25px rgba(255, 140, 0, 0.8);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.external-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 40px #FFA500;
+}
+.wallet-button-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+/* ---------- PROGRESS BAR ---------- */
+.progress-bar-container {
+  width: 100%;
+  height: 30px;
+  background-color: #222;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.1);
+  margin-bottom: 1rem;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(to right, #00FF00, #7CFC00);
+  transition: width 0.5s ease;
+}
+
+#progress-text {
+  font-size: 1.1rem;
+  margin-top: 0.5rem;
+}
+
+/* ---------- FOOTER ---------- */
+footer {
+  text-align: center;
+  padding: 2rem;
+  font-size: 0.9rem;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #FFD700;
+  box-shadow: 0 -5px 20px rgba(255, 255, 0, 0.1);
+}
+#buyLFISTBtn {
+  display: inline-block;
+  padding: 12px 25px;
+  background: linear-gradient(90deg, #ff00cc, #333399);
+  color: white;
+  font-weight: bold;
+  border-radius: 30px;
+  text-decoration: none;
+  cursor: pointer;
+  animation: pulse 2s infinite;
+  transition: background 0.3s ease;
+}
+
+#buyLFISTBtn:hover {
+  background: linear-gradient(90deg, #333399, #ff00cc);
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 20px rgba(255, 0, 204, 0.6);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 40px rgba(255, 204, 0, 0.8);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 20px rgba(255, 0, 204, 0.6);
+  }
+}
