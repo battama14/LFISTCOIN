@@ -1,5 +1,5 @@
-document.getElementById('connectWallet').addEventListener('click', async () => {
-  alert("Wallet connection coming soon!");
+document.getElementById('connectWallet').addEventListener('click', () => {
+  window.location.href = "fist.html"; // Redirige sans afficher l'alerte
 });
 
 // Countdown logic
