@@ -56,6 +56,3 @@ document.getElementById('langSwitch').addEventListener('click', () => {
 
   document.getElementById('langSwitch').innerText = isFrench ? 'EN' : 'FR';
 });
-
-
-
