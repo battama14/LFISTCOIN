@@ -1,69 +1,93 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LFIST Token</title>
-  <link rel="stylesheet" href="style.css" />
-  <script defer src="script.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LFIST Token - Prends ton Fist !</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="background"></div>
 
-  <header>
-    <img src="logo.png" alt="LFIST Token Logo" class="logo" />
-    <nav>
-      <ul>
-        <li><a href="#about">À propos</a></li>
-        <li><a href="#takemonic">Takemonic</a></li>
-        <li><a href="#faq">FAQ</a></li>
-        <li><button id="lang-toggle">EN</button></li>
-      </ul>
-    </nav>
-  </header>
+    <header>
+        <img src="logo.png" alt="LFIST Token Logo" class="logo">
+        <nav>
+            <ul>
+                <li><a href="#about">À propos</a></li>
+                <li><a href="#takemonic">Takemonic</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li><a href="#presale">Prévente</a></li>
+            </ul>
+        </nav>
+    </header>
 
-  <main>
-    <section class="countdown-section">
-      <h1 data-fr="Prévente LFIST Token" data-en="LFIST Token Presale">Prévente LFIST Token</h1>
-      <div id="countdown"></div>
-      <button id="connectWallet">Connecter le Wallet</button>
-    </section>
+    <main>
 
-    <section class="progress-section">
-      <h2 data-fr="Progression de la vente" data-en="Sale Progress">Progression de la vente</h2>
-      <div class="progress-bar-container">
-        <div class="progress-bar" id="progress-bar"></div>
-      </div>
-      <p id="progress-text">0 / 1000000 LFIST vendus</p>
-    </section>
+        <!-- Section LFIST Update -->
+        <section id="update">
+            <h2>🔥 LFIST Token - Fist Update coming soon!</h2>
+            <p><strong>33d 7h 32m 54s</strong> avant la mise à jour !</p>
+            <button id="getFist">💥 DEMANDE TON FIST</button>
+        </section>
 
-    <section id="about">
-      <h2 data-fr="À propos" data-en="About">À propos</h2>
-      <p data-fr="LFIST est un token révolutionnaire..." data-en="LFIST is a revolutionary token...">
-        LFIST est un token révolutionnaire...
-      </p>
-    </section>
+        <!-- Section Vente -->
+        <section id="sale-progress">
+            <h2>📊 Progression de la Vente</h2>
+            <p><strong>164949 / 1000000 LFIST vendus</strong></p>
+            <a href="https://pancakeswap.finance/swap?inputCurrency=BNB&outputCurrency=0x2841Cd05Fc718E04c9a1324354E94F111879A0E7" class="buy-button">🔥 Acheter LFIST sur PancakeSwap</a>
+        </section>
 
-    <section id="takemonic">
-      <h2 data-fr="Takemonic" data-en="Takemonic">Takemonic</h2>
-      <p data-fr="Takemonic est notre plateforme de punchlines décentralisées." data-en="Takemonic is our decentralized punchline platform.">
-        Takemonic est notre plateforme de punchlines décentralisées.
-      </p>
-    </section>
+        <!-- Section À propos -->
+        <section id="about">
+            <h2>👊 LaurieFist : La Terreur du Net, la Justice du Fist !</h2>
+            <p>Dans les abysses du Web, là où les shitcoins pullulent et les escrocs prospèrent, une légende rode… LaurieFist ! 🔥</p>
+            <p>⚡ Elle traque les rugpulls et démolit les arnaques plus vite qu'un bot sous stéroïdes.</p>
+            <p>🍺 Sa Chimay sacrée lui donne une rage divine contre les imposteurs !</p>
+            <p>💀 LFIST est une armée menée par LaurieFist elle-même ! Rejoins le mouvement ou tremble !</p>
+        </section>
 
-    <section id="faq">
-      <h2 data-fr="FAQ" data-en="FAQ">FAQ</h2>
-      <p data-fr="Tout ce que vous devez savoir sur LFIST Token." data-en="Everything you need to know about LFIST Token.">
-        Tout ce que vous devez savoir sur LFIST Token.
-      </p>
-    </section>
-  </main>
+        <!-- Section Takemonic -->
+        <section id="takemonic">
+            <h2>🎭 Takemonic - L’arène du chaos</h2>
+            <p>💥 Un combat éternel entre les esprits les plus affûtés du Web.</p>
+            <ul>
+                <li>💀 Tu frappes fort avec tes idées.</li>
+                <li>⚡ Tu fais plier ceux qui se croyaient intouchables.</li>
+                <li>😈 Si tu échoues, tu finis en PFP sur un shitcoin oublié.</li>
+            </ul>
+            <p>🔥 Rejoins Takemonic, ou reste dans l’ombre et regarde les titans s’affronter.</p>
+        </section>
 
-  <footer>
-    <p data-fr="© 2025 LFIST Token. Tous droits réservés." data-en="© 2025 LFIST Token. All rights reserved.">
-      © 2025 LFIST Token. Tous droits réservés.
-    </p>
-  </footer>
+        <!-- Section FAQ -->
+        <section id="faq">
+            <h2>❓ FAQ – Tout savoir sur LFIST</h2>
+            <h3>💰 Qu'est-ce que LFIST Token ?</h3>
+            <p>LFIST est une déclaration de guerre contre les injustices crypto.</p>
+            <h3>⚡ Comment acheter du LFIST ?</h3>
+            <p>Tu peux l’obtenir sur <a href="https://pancakeswap.finance/">PancakeSwap</a>.</p>
+            <h3>📄 Livre Blanc</h3>
+            <div class="livre-blanc-container">
+                <div class="livre-blanc-item">
+                    <a href="https://site.com/livre-blanc-fr.pdf">
+                        <img src="drapeau-fr.png" alt="FR"> 🇫🇷 Français
+                    </a>
+                </div>
+                <div class="livre-blanc-item">
+                    <a href="https://site.com/livre-blanc-en.pdf">
+                        <img src="drapeau-en.png" alt="EN"> 🇬🇧 English
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>© 2025 LFIST Token. Tous droits réservés.</p>
+        <div class="social-links">
+            <a href="https://twitter.com/lfistcoin" target="_blank"><img src="twitter-icon.png" alt="Twitter"></a>
+            <a href="https://pancakeswap.finance/swap?inputCurrency=BNB" target="_blank"><img src="pancakeswap-icon.png" alt="PancakeSwap"></a>
+        </div>
+    </footer>
+
 </body>
 </html>
-
