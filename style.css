@@ -282,16 +282,30 @@ footer {
     line-height: 1.6;
     color: #fff;
 }
-#livre-blanc {
+.livre-blanc-container {
     display: flex;
     justify-content: center;
-    gap: 20px;
+    gap: 40px; /* Espacement entre les icônes */
     margin-top: 15px;
 }
 
-#livre-blanc a img {
-    width: 50px;
+.livre-blanc-item {
+    text-align: center;
+}
+
+.livre-blanc-item a {
+    text-decoration: none;
+    color: #FFD700;
+    font-weight: bold;
+}
+
+.livre-blanc-item img {
+    width: 60px; /* Ajuste la taille des drapeaux */
     transition: transform 0.3s ease;
+}
+
+.livre-blanc-item img:hover {
+    transform: scale(1.1);
 }
 
 #livre-blanc a img:hover {
