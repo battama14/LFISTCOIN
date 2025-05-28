@@ -311,20 +311,22 @@ footer {
 #livre-blanc a img:hover {
     transform
 
-  .social-links {
+ .social-links {
     display: flex;
     justify-content: center;
-    gap: 15px; /* Espacement entre les icônes */
+    gap: 10px; /* Réduction de l’espace entre les icônes */
     margin-top: 10px;
 }
 
 .social-links a img {
-    width: 30px; /* Taille uniforme pour toutes les icônes */
-    height: auto;
+    width: 24px !important; /* Taille réduite des icônes */
+    height: 24px !important;
+    object-fit: contain;
     transition: transform 0.3s ease;
 }
 
 .social-links a img:hover {
-    transform: scale(1.2);
+    transform: scale(1.15);
 }
+
 
