@@ -47,7 +47,7 @@ document.getElementById('langSwitch').addEventListener('click', () => {
   document.documentElement.lang = isFrench ? 'en' : 'fr';
 
   // Example content switch
-  document.getElementById("main-title").textContent = isFrench ? "Prévente du Token LFIST" : "LFIST Token Presale";
+  document.getElementById("main-title").textContent = isFrench ? "Vente du Token LFIST 🔥 Mise a jour du Fist dans" : "LFIST Token sale 🔥 Fist Update in";
   document.getElementById("progress-title").textContent = isFrench ? "Progression de la vente" : "Sale Progress";
   progressText.innerText = isFrench
     ? `${sold} / ${max} LFIST vendus`
@@ -56,3 +56,6 @@ document.getElementById('langSwitch').addEventListener('click', () => {
 
   document.getElementById('langSwitch').innerText = isFrench ? 'EN' : 'FR';
 });
+
+
+
