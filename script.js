@@ -47,7 +47,7 @@ document.getElementById('langSwitch').addEventListener('click', () => {
   document.documentElement.lang = isFrench ? 'en' : 'fr';
 
   // Example content switch
-  document.getElementById("main-title").textContent = isFrench ? "Vente du Token LFIST 🔥 Mise a jour du Fist dans" : "LFIST Token sale 🔥 Fist Update in";
+  document.getElementById("main-title").textContent = isFrench ? "LFIST Token 🔥 Mise à jour du Fist bientôt !" : "LFIST Token 🔥 Fist Update coming soon!";
   document.getElementById("progress-title").textContent = isFrench ? "Progression de la vente" : "Sale Progress";
   progressText.innerText = isFrench
     ? `${sold} / ${max} LFIST vendus`
