@@ -197,7 +197,7 @@ h1, h2 {
 }
 
 /* ---------- FOOTER ---------- */
-footer {
+.footer {
   background-color: transparent; /* on enlève le background global, on laisse le parent gérer */
   padding: 2rem;
   text-align: center;
