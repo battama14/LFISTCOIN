@@ -314,12 +314,12 @@ footer {
   .social-links {
     display: flex;
     justify-content: center;
-    gap: 15px; /* Réduit l’espace entre les icônes */
+    gap: 15px; /* Espacement entre les icônes */
     margin-top: 10px;
 }
 
 .social-links a img {
-    width: 30px; /* Réduction de la taille des icônes */
+    width: 30px; /* Taille uniforme pour toutes les icônes */
     height: auto;
     transition: transform 0.3s ease;
 }
@@ -327,3 +327,4 @@ footer {
 .social-links a img:hover {
     transform: scale(1.2);
 }
+
