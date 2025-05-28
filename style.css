@@ -329,4 +329,28 @@ footer {
     transform: scale(1.15);
 }
 
+@media (max-width: 768px) { /* Pour smartphones et tablettes */
+    body {
+        font-size: 14px;
+    }
 
+    h1, h2 {
+        font-size: 1.5rem; /* Réduction des titres */
+    }
+
+    .social-links a img {
+        width: 20px; /* Réduction des icônes */
+        height: 20px;
+    }
+
+    .presale-flex {
+        flex-direction: column; /* Passe les éléments en colonne */
+        align-items: center;
+    }
+
+    #connectWallet {
+        width: 100%;
+        font-size: 1rem;
+        padding: 10px;
+    }
+}
