@@ -310,3 +310,18 @@ footer {
 
 #livre-blanc a img:hover {
     transform
+.social-links {
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Espacement entre les icônes */
+    margin-top: 10px;
+}
+
+.social-links a img {
+    width: 40px; /* Taille des icônes */
+    transition: transform 0.3s ease;
+}
+
+.social-links a img:hover {
+    transform: scale(1.2);
+}
