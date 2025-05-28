@@ -198,16 +198,23 @@ h1, h2 {
 
 /* ---------- FOOTER ---------- */
 footer {
-  background-color: rgba(0, 0, 0, 0.8);
-  padding: 1.5rem;
+  background-color: transparent; /* on enlève le background global, on laisse le parent gérer */
+  padding: 2rem;
   text-align: center;
-  box-shadow: 0 -5px 20px rgba(255, 255, 0, 0.1);
 }
 
 .footer-icons {
-  display: flex;
+  display: inline-flex;
   justify-content: center;
   gap: 20px;
+  
+  /* Encadré sombre comme les sections */
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 1rem 2rem;
+  border-radius: 25px;
+  box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+  border: 2px solid rgba(255, 215, 0, 0.5);
+  margin: 0 auto 1rem auto;
 }
 
 .footer-icons a img {
@@ -218,6 +225,19 @@ footer {
 
 .footer-icons a img:hover {
   transform: scale(1.1);
+}
+
+/* Optionnel : adaptation mobile */
+@media (max-width: 768px) {
+  .footer-icons {
+    padding: 0.8rem 1.5rem;
+    border-radius: 20px;
+    gap: 15px;
+  }
+  .footer-icons a img {
+    width: 30px;
+    height: 30px;
+  }
 }
 
 #buyLFISTBtn {
