@@ -55,8 +55,13 @@
 <body>
 
   <header>
+    <div class="hamburger" id="hamburger-toggle">
+     <span></span>
+     <span></span>
+     <span></span>
+    </div>
     <div class="container header-container" style="display:flex; align-items:center; justify-content:space-between;">
-      <img src="logoLFIST.png" alt="Omalley Token Logo" class="logo" />
+      <img src="logo1.gif" alt="LFIST Token Logo" class="logo" />
       <nav>
         <ul class="nav-links">
           <li><a href="#hero" data-lang-key="nav-home" class="lang-text">Accueil</a></li>
@@ -266,6 +271,14 @@
     </div>
   </div>
 </footer>
+<script>
+  const toggle = document.getElementById("hamburger-toggle");
+  const nav = document.querySelector("nav ul");
 
+  toggle.addEventListener("click", () => {
+    nav.classList.toggle("open");
+    toggle.classList.toggle("open");
+  });
+</script>
 </body>
 </html>

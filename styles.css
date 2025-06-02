@@ -388,10 +388,28 @@ nav ul li a.active {
   background: #c07f00;
 }
 
+/* Hamburger Menu */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.hamburger span {
+  height: 4px;
+  background: #f0a500;
+  border-radius: 2px;
+  transition: 0.3s;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   header {
-    background-color: rgba(0, 0, 0, 0.8); /* fond semi-opaque pour meilleure lisibilité */
+    position: static;
+    background-color: rgba(0, 0, 0, 0.9);
     padding: 0.5rem 0;
   }
 
@@ -407,20 +425,28 @@ nav ul li a.active {
     background-size: contain;
   }
 
-  nav ul {
-    flex-direction: column;
-    gap: 0.8rem;
-    align-items: center;
+  .hamburger {
+    display: flex;
   }
 
-  .container,
-  .hero-section,
-  .features-section,
-  .roadmap-section,
-  .team-section,
-  .faq-section,
-  .contact-section {
-    margin-top: 120px; /* espace pour éviter le chevauchement sous le header sticky */
+  nav ul {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    display: none;
+    margin-top: 1rem;
+  }
+
+  nav ul.open {
+    display: flex;
+  }
+
+  .hero-container h1 {
+    font-size: 1.8rem;
+  }
+
+  .hero-container p {
+    font-size: 1rem;
   }
 
   .features-grid,
@@ -435,43 +461,9 @@ nav ul li a.active {
     max-width: 100%;
   }
 
-  .hero-container h1 {
-    font-size: 1.8rem;
-  }
-
-  .hero-container p {
-    font-size: 1rem;
-  }
-
-  .section-title {
-    font-size: 1.5rem;
-  }
-
   .contact-section,
   .faq-section {
     padding: 2rem 1rem;
-  }
-
-  .contact-form input,
-  .contact-form textarea {
-    font-size: 0.95rem;
-  }
-
-  nav ul li a {
-    font-size: 1rem;
-    padding: 0.3rem 0.8rem;
-  }
-
-  .btn-primary,
-  .btn-secondary {
-    padding: 0.4rem 1rem;
-    font-size: 0.95rem;
-  }
-
-  .header-buttons {
-    flex-direction: column;
-    width: 100%;
-    align-items: stretch;
   }
 
   .hero-buttons {
@@ -482,5 +474,25 @@ nav ul li a.active {
   .hero-buttons a {
     display: block;
     width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .header-buttons {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 0.5rem;
+  }
+
+  #lang-switch,
+  .btn-primary,
+  .btn-secondary {
+    width: auto;
+    font-size: 0.95rem;
+    padding: 0.4rem 1rem;
+    text-align: center;
   }
 }
+
