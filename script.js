@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
       "roadmap-q4": "🚀 Fonctionnalités avancées & Staking",
       "team-title": "Équipe",
       "team-role1": "Dieu de la crypto et mentor",
-      "team-role2": "Le troll officiel",
+      "team-role2": "Dieu des memecoins et ma victime",
       "team-role3": "Community manager",
       "team-role4": "Développeur blockchain",
       "faq-title": "FAQ",
