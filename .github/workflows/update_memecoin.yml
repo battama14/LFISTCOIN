@@ -1,32 +1,32 @@
-name: FIST-DETECTOR
+name: Update Memecoins Weekly
+
 on:
   schedule:
-    - cron: '0 10 * * 1' # Chaque lundi à 10h UTC
+    - cron: '0 10 * * 1'  # Tous les lundis à 10h UTC
   workflow_dispatch:
 
 jobs:
-  generate:
+  update:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Cloner le dépôt
         uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - name: Installer Node.js
+        uses: actions/setup-node@v3
         with:
-          python-version: '3.11'
+          node-version: '18'
 
-      - name: Install dependencies
-        run: pip install -r requirements.txt
+      - name: Installer les dépendances
+        run: npm install node-fetch
 
-      - name: Run script
-        run: python scripts/weekly_memecoin.py
+      - name: Générer le fichier memecoins.json
+        run: node scripts/update-memecoins.js
 
-      - name: Commit & Push
+      - name: Commit et push
         run: |
-          git config --global user.name "FIST-BOT"
-          git config --global user.email "fistbot@users.noreply.github.com"
-          git add data/memecoin.json
-          git commit -m "Weekly update 🚀"
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
+          git add memecoins.json
+          git commit -m "🤖 Mise à jour automatique des memecoins" || echo "Aucun changement"
           git push
-
