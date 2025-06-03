@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Shiba Inu",
+    "image": "https://assets.coingecko.com/coins/images/11939/large/shiba.png",
+    "desc_fr": "Le memecoin Shiba Inu fait japper les marchés. FIST garde l'œil ouvert.",
+    "desc_en": "Shiba Inu is barking up the charts. FIST is watching."
+  },
+  {
+    "name": "Pepe",
+    "image": "https://assets.coingecko.com/coins/images/29850/large/pepe-token.jpeg",
+    "desc_fr": "Pepe déclenche des soupçons... FIST dégaine.",
+    "desc_en": "Pepe looks suspicious... FIST is on it."
+  },
+  {
+    "name": "Doge",
+    "image": "https://assets.coingecko.com/coins/images/5/large/dogecoin.png",
+    "desc_fr": "Doge s'excite ? FIST garde son calme.",
+    "desc_en": "Doge gets excited? FIST stays cool."
+  }
+]
