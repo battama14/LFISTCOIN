@@ -73,6 +73,7 @@ nav ul {
   gap: 20px;
   justify-content: center;
   align-items: center;
+  /* Sur desktop, on laisse le menu visible */
 }
 nav ul li a {
   color: #f0a500;
@@ -89,11 +90,9 @@ nav ul li a.active {
   box-shadow: 0 4px 10px rgba(255, 152, 0, 0.5);
 }
 
-/* Sous-menu pour FIST-DETECTOR 
-   On l'affiche sur la même ligne sans marge excessive et on l'anime pour attirer l'oeil.
-*/
+/* Sous-menu pour FIST-DETECTOR (placé donc à côté des autres liens) */
 .sub-menu {
-  margin-top: 0; /* annule l'ancienne marge afin d'aligner les liens */
+  margin-top: 0;
   text-align: center;
 }
 .fist-link {
@@ -111,17 +110,17 @@ nav ul li a.active {
   animation: shake 0.8s infinite;
 }
 @keyframes shake {
-  0% { transform: translate(1px,1px) rotate(0deg); }
-  10% { transform: translate(-1px,-2px) rotate(-1deg); }
-  20% { transform: translate(-3px,0px) rotate(1deg); }
-  30% { transform: translate(3px,2px) rotate(0deg); }
-  40% { transform: translate(1px,-1px) rotate(1deg); }
-  50% { transform: translate(-1px,2px) rotate(-1deg); }
-  60% { transform: translate(-3px,1px) rotate(0deg); }
-  70% { transform: translate(3px,1px) rotate(-1deg); }
-  80% { transform: translate(-1px,-1px) rotate(1deg); }
-  90% { transform: translate(1px,2px) rotate(0deg); }
-  100% { transform: translate(1px,-2px) rotate(-1deg); }
+  0% { transform: translate(1px, 1px) rotate(0deg); }
+  10% { transform: translate(-1px, -2px) rotate(-1deg); }
+  20% { transform: translate(-3px, 0px) rotate(1deg); }
+  30% { transform: translate(3px, 2px) rotate(0deg); }
+  40% { transform: translate(1px, -1px) rotate(1deg); }
+  50% { transform: translate(-1px, 2px) rotate(-1deg); }
+  60% { transform: translate(-3px, 1px) rotate(0deg); }
+  70% { transform: translate(3px, 1px) rotate(-1deg); }
+  80% { transform: translate(-1px, -1px) rotate(1deg); }
+  90% { transform: translate(1px, 2px) rotate(0deg); }
+  100% { transform: translate(1px, -2px) rotate(-1deg); }
 }
 .fist-link:hover {
   background-color: #ff9800;
@@ -178,7 +177,7 @@ nav ul li a.active {
 
 /* Menu hamburger pour mobile */
 .hamburger {
-  display: none;
+  display: none; /* caché par défaut sur desktop */
   flex-direction: column;
   gap: 5px;
   background: none;
@@ -334,7 +333,6 @@ nav ul li a.active {
 }
 
 /* ROADMAP */
-/* On centre entièrement le contenu de la section pour garantir un rendu harmonieux */
 .roadmap-section {
   text-align: center;
 }
@@ -473,8 +471,6 @@ nav ul li a.active {
     transform: translateY(0);
   }
 }
-
-/* Section Features - réduction de la taille du titre et animation des encarts */
 .features-section .section-title {
   font-size: 1.75em;
 }
@@ -516,10 +512,18 @@ nav ul li a.active {
    RESPONSIVE
 ======================== */
 @media (max-width: 768px) {
+  /* Pour le menu, masquer la liste par défaut et afficher le hamburger */
   nav ul {
+    display: none;
     flex-direction: column;
     gap: 10px;
+    width: 100%;
+    text-align: center;
   }
+  nav ul.open {
+    display: flex;
+  }
+  /* Afficher le hamburger sur mobile */
   .hamburger {
     display: flex;
   }
@@ -531,6 +535,7 @@ nav ul li a.active {
     flex-direction: column;
   }
 }
+
 
 
 
