@@ -535,6 +535,22 @@ nav ul li a.active {
     flex-direction: column;
   }
 }
+/* ────────────────────────────────────────────────── */
+/* DEBUG – Force l’affichage des memecoin cards     */
+/* ────────────────────────────────────────────────── */
+#memecoins-container {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 10px !important;
+  border: 2px dashed red !important;
+  padding: 10px !important;
+}
+
+.memecoin-card {
+  display: inline-block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
 
 
 

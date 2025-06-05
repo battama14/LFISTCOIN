@@ -118,274 +118,258 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  // Appliquer les traductions aux éléments munis de data-lang-key
-  function applyTranslations(lang) {
-    document.querySelectorAll('[data-lang-key]').forEach(el => {
-      const key = el.getAttribute('data-lang-key');
-      if (translations[lang] && translations[lang][key]) {
-        el.textContent = translations[lang][key];
-      }
-    });
+ // ------------------------------------------------------------------
+// 1) TRADUCTIONS FR/EN
+// ------------------------------------------------------------------
+const translations = {
+  fr: {
+    "nav-home": "Ma mission",
+    "nav-features": "Mes routines",
+    "nav-roadmap": "Roadmap",
+    "nav-team": "Team",
+    "nav-faq": "FAQ",
+    "btn-buy-token": "Acheter",
+    "hero-title": "LFIST sa mission .. casser du Memecoin",
+    "hero-title-2": "Le FIST a porté de mains",
+    "hero-subtitle": "Rejoignez la révolution LFIST avec notre token innovant.",
+    "btn-whitepaper": "Lire le whitepaper",
+    "btn-start-detection": "🔍 Lancer la détection",
+    "btn-vote": "Voter",
+    "features-title": "La routine de LFIST pour être aussi forte !!!",
+    "feature1-title": "Le FIST et la Chimay, la détente avant tout",
+    "feature2-title": "Chasse aux sexistes dans les bas-fonds de la ville",
+    "feature3-title": "Entretien du FIST dès le réveil",
+    "roadmap-q1": "🔥 Lancement & Campagne marketing",
+    "roadmap-q2": "🏗️ Développement de la plateforme LFIST",
+    "roadmap-q3": "🤝 Partenariats & Listings",
+    "roadmap-q4": "🚀 Fonctionnalités avancées & Staking",
+    "team-title": "Équipe",
+    "team-role1": "Dieu de la crypto et mentor",
+    "team-role2": "Dieu des memecoins et ma victime",
+    "faq-title": "FAQ",
+    "faq-q1": "Qu’est-ce que LFIST Token ?",
+    "faq-a1": "LFIST Token est un memecoin innovant conçu pour une communauté engagée et fun.",
+    "faq-q2": "Comment acheter LFIST Token ?",
+    "faq-a2": "Vous pouvez acheter LFIST sur Pancakeswap via le lien \"Acheter\" en haut de la page.",
+    "contact-title": "Contact"
+  },
+  en: {
+    "nav-home": "My mission",
+    "nav-features": "My routines",
+    "nav-roadmap": "Roadmap",
+    "nav-team": "Team",
+    "nav-faq": "FAQ",
+    "btn-buy-token": "Buy",
+    "hero-title": "LFIST’s mission … smashing memecoins",
+    "hero-title-2": "FIST within reach",
+    "hero-subtitle": "Join the LFIST revolution with our innovative token.",
+    "btn-whitepaper": "Read whitepaper",
+    "btn-start-detection": "🔍 Start detection",
+    "btn-vote": "Vote",
+    "features-title": "LFIST’s routine to stay strong !!!",
+    "feature1-title": "FIST & Chimay, relaxation first",
+    "feature2-title": "Hunting sexists in the city’s underbelly",
+    "feature3-title": "FIST maintenance on waking",
+    "roadmap-q1": "🔥 Launch & Marketing",
+    "roadmap-q2": "🏗️ Platform Development",
+    "roadmap-q3": "🤝 Partnerships & Listings",
+    "roadmap-q4": "🚀 Advanced Features & Staking",
+    "team-title": "Team",
+    "team-role1": "Crypto god & mentor",
+    "team-role2": "Memecoin god & my victim",
+    "faq-title": "FAQ",
+    "faq-q1": "What is LFIST Token?",
+    "faq-a1": "LFIST Token is an innovative memecoin for an engaged, fun community.",
+    "faq-q2": "How to buy LFIST Token?",
+    "faq-a2": "You can buy LFIST on Pancakeswap via the “Buy” link above.",
+    "contact-title": "Contact"
   }
+};
 
-  // ------------------------------------------------------------------
-  // Gestion du changement de langue
-  // ------------------------------------------------------------------
-  let currentLang = 'fr';
-  applyTranslations(currentLang);
-  const langSwitchBtn = document.getElementById('lang-switch');
-  langSwitchBtn.addEventListener('click', () => {
-    currentLang = (currentLang === 'fr') ? 'en' : 'fr';
-    langSwitchBtn.textContent = currentLang.toUpperCase();
-    applyTranslations(currentLang);
+let currentLang = 'fr';
+function applyTranslations() {
+  document.querySelectorAll('[data-lang-key]').forEach(el => {
+    const key = el.dataset.langKey;
+    if (translations[currentLang] && translations[currentLang][key]) {
+      el.textContent = translations[currentLang][key];
+    }
   });
+}
 
-  // ------------------------------------------------------------------
-  // Détection des memecoins et votes
-  // ------------------------------------------------------------------
-  const fallback = [
-    {
-      name: "Dogecoin",
-      symbol: "DOGE",
-      price: "$0.068",
-      logo: "https://cryptologos.cc/logos/dogecoin-doge-logo.png"
-    },
-    {
-      name: "Shiba Inu",
-      symbol: "SHIB",
-      price: "$0.000007",
-      logo: "https://cryptologos.cc/logos/shiba-inu-shib-logo.png"
-    },
-    {
-      name: "Pepe Coin",
-      symbol: "PEPE",
-      price: "N/A",
-      logo: "https://cryptologos.cc/logos/pepecoin-pepe-logo.png"
-    }
+// ------------------------------------------------------------------
+// 2) Initialisation Firebase (compat)
+// ------------------------------------------------------------------
+const firebaseConfig = {
+  apiKey: "AIzaSyBoV5tfsn1huWI6uXSudxTSRFDL1-jrnkU",
+  authDomain: "lfistdata.firebaseapp.com",
+  databaseURL: "https://lfistdata-default-rtdb.firebaseio.com",
+  projectId: "lfistdata",
+  storageBucket: "lfistdata.appspot.com",
+  messagingSenderId: "123456789",
+  appId: "1:123456789:web:abcdef"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+// ------------------------------------------------------------------
+// 3) Données & cache hebdo
+// ------------------------------------------------------------------
+const fallback = [
+  { name: "Dogecoin", symbol: "DOGE", price: "$0.068", logo: "https://cryptologos.cc/logos/dogecoin-doge-logo.png" },
+  { name: "Shiba Inu", symbol: "SHIB", price: "$0.000007", logo: "https://cryptologos.cc/logos/shiba-inu-shib-logo.png" },
+  { name: "Pepe Coin", symbol: "PEPE", price: "N/A",      logo: "https://cryptologos.cc/logos/pepecoin-pepe-logo.png" }
+];
+const keywords = ['meme','doge','shib','pepe','floki','bonk','cat','fist'];
+const ONE_WEEK = 7 * 24 * 60 * 60 * 1000;
+
+function loadDetectionData() {
+  const t = +localStorage.getItem("lastDetectionTimestamp");
+  const d = localStorage.getItem("memecoinsData");
+  return (t && d && Date.now() - t < ONE_WEEK) ? JSON.parse(d) : null;
+}
+function saveDetectionData(coins) {
+  localStorage.setItem("lastDetectionTimestamp", Date.now());
+  localStorage.setItem("memecoinsData", JSON.stringify(coins));
+}
+
+// ------------------------------------------------------------------
+// 4) Récupération memecoins via API
+// ------------------------------------------------------------------
+async function fetchFromApis() {
+  const apis = [
+    'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false',
+    'https://api.coinpaprika.com/v1/tickers',
+    'https://api.coinscap.io/v2/assets'
   ];
-
-  const keywords = ['meme', 'doge', 'shib', 'pepe', 'floki', 'bonk', 'cat', 'fist'];
-  const voteStore = {};
-
-  function createCard(coin) {
-    const card = document.createElement('div');
-    card.className = 'memecoin-card';
-    card.style.cssText = `
-      background: #222; color: #eee; border-radius: 10px; padding: 15px; margin: 10px; width: 200px;
-      text-align: center; font-family: Arial, sans-serif; box-shadow: 0 0 12px #000; display: inline-block; vertical-align: top;
-    `;
-    const img = document.createElement('img');
-    img.src = coin.logo;
-    img.alt = `${coin.name} logo`;
-    img.style.cssText = "width:80px; height:80px; object-fit: contain; margin-bottom:10px;";
-    const name = document.createElement('h3');
-    name.textContent = coin.name;
-    name.style.margin = "5px 0";
-    name.style.fontSize = "1.1em";
-    const symbol = document.createElement('p');
-    symbol.textContent = coin.symbol;
-    symbol.style.color = "#aaa";
-    symbol.style.margin = "3px 0";
-    symbol.style.fontWeight = "bold";
-    const price = document.createElement('p');
-    price.textContent = coin.price;
-    price.style.margin = "5px 0";
-    price.style.fontSize = "1.2em";
-    price.style.color = "#4caf50";
-    const voteBtn = document.createElement('button');
-    voteBtn.textContent = translations[currentLang]["btn-vote"];
-    voteBtn.style.cssText = `
-      background: #4caf50; color: white; border: none; padding: 5px 10px; margin-top: 10px;
-      border-radius: 5px; cursor: pointer; font-weight: bold;
-    `;
-    const voteBar = document.createElement('div');
-    voteBar.style.cssText = "width:100%; background: #444; border-radius: 5px; margin-top: 5px; height: 10px;";
-    const progress = document.createElement('div');
-    progress.style.cssText = "height:100%; background: #4caf50; width: 0%; border-radius: 5px; transition: width 0.3s;";
-    voteBar.appendChild(progress);
-    const voteCount = document.createElement('div');
-    voteCount.style.cssText = "margin-top:5px; font-size:0.9em; color:#aaa;";
-    const voteKey = `votes_${coin.name.replace(/\s+/g, '_')}`;
-    let votes = parseInt(localStorage.getItem(voteKey)) || 0;
-    voteStore[coin.name] = votes;
-    voteCount.textContent = `Votes : ${votes}`;
-    voteBtn.addEventListener('click', () => {
-      votes++;
-      voteStore[coin.name] = votes;
-      localStorage.setItem(voteKey, votes);
-      voteCount.textContent = `Votes : ${votes}`;
-      updateVoteBars();
-    });
-    card.append(img, name, symbol, price, voteBtn, voteCount, voteBar);
-    card.voteProgress = progress;
-    card.coinName = coin.name;
-    return card;
-  }
-
-  function updateVoteBars() {
-    const totalVotes = Object.values(voteStore).reduce((a, b) => a + b, 0);
-    const cards = document.querySelectorAll('.memecoin-card');
-    cards.forEach(card => {
-      const percent = totalVotes > 0 ? (voteStore[card.coinName] / totalVotes) * 100 : 0;
-      card.voteProgress.style.width = `${percent}%`;
-    });
-    const leaderboard = document.getElementById('leaderboard');
-    if (leaderboard) {
-      const sorted = Object.entries(voteStore).sort((a, b) => b[1] - a[1]);
-      leaderboard.innerHTML = `<strong>Classement :</strong><br>` +
-        sorted.map(([name, v], i) => `${i + 1}. ${name} - ${v} votes`).join('<br>');
+  for (const url of apis) {
+    try {
+      const res = await fetch(url);
+      if (!res.ok) continue;
+      const data = await res.json();
+      const list = url.includes('coinscap') ? data.data : data;
+      const coins = list
+        .filter(c => keywords.some(kw =>
+          c.name.toLowerCase().includes(kw) ||
+          c.symbol.toLowerCase().includes(kw)
+        ))
+        .slice(0, 3)
+        .map(c => ({
+          name: c.name,
+          symbol: c.symbol,
+          price: "$" + (
+            c.current_price ||
+            c.quotes?.USD?.price ||
+            c.priceUsd ||
+            0
+          ).toFixed(6),
+          logo: c.image || "https://cryptologos.cc/logos/default-crypto-logo.png"
+        }));
+      if (coins.length === 3) return coins;
+    } catch (e) {
+      console.warn("API error", url, e);
     }
   }
+  return fallback;
+}
 
-  // ------------------------------------------------------------------
-  // Gestion de la détection hebdomadaire et stockage des résultats
-  // ------------------------------------------------------------------
-  const ONE_WEEK = 7 * 24 * 60 * 60 * 1000; // Durée en ms d'une semaine
+// ------------------------------------------------------------------
+// 5) Création carte memecoin + vote
+// ------------------------------------------------------------------
+function createCard(coin) {
+  const card = document.createElement('div');
+  card.className = 'memecoin-card';
+  card.style.cssText = `
+    background:#222;color:#eee;border-radius:10px;padding:15px;
+    margin:10px;width:200px;text-align:center;font-family:Arial,sans-serif;
+    box-shadow:0 0 12px #000;display:inline-block;vertical-align:top;
+  `;
+  card.innerHTML = `
+    <img src="${coin.logo}" alt="${coin.name}" style="width:80px;height:80px;object-fit:contain;margin-bottom:10px;">
+    <h3 style="margin:5px 0;font-size:1.1em;">${coin.name}</h3>
+    <p style="color:#aaa;margin:3px 0;font-weight:bold;">${coin.symbol}</p>
+    <p style="margin:5px 0;font-size:1.2em;color:#4caf50;">${coin.price}</p>
+    <button class="vote-btn" style="
+      background:#4caf50;color:white;border:none;padding:5px 10px;margin-top:10px;
+      border-radius:5px;cursor:pointer;font-weight:bold;">
+      ${translations[currentLang]["btn-vote"]}
+    </button>
+    <div class="vote-count" style="margin-top:5px;font-size:0.9em;color:#aaa;">
+      Votes : 0
+    </div>
+  `;
+  const key = `votes/${coin.name.replace(/\s+/g,'_')}`;
+  const btn = card.querySelector('.vote-btn');
+  const count = card.querySelector('.vote-count');
+  db.ref(key).on('value', snap => {
+    count.textContent = 'Votes : ' + (snap.val() || 0);
+  });
+  btn.addEventListener('click', () => {
+    db.ref(key).transaction(v => (v || 0) + 1);
+  });
+  return card;
+}
 
-  // Vérifie si des données de détection existent et sont encore valides
-  function loadDetectionData() {
-    const lastDetection = localStorage.getItem("lastDetectionTimestamp");
-    const storedData = localStorage.getItem("memecoinsData");
-    if (lastDetection && storedData) {
-      if ((Date.now() - parseInt(lastDetection)) < ONE_WEEK) {
-        return JSON.parse(storedData);
-      }
-    }
-    return null;
+// ------------------------------------------------------------------
+// 6) startDetection : affiche les 3 memecoins
+// ------------------------------------------------------------------
+async function startDetection() {
+  const container = document.getElementById('memecoins-container');
+  if (!container) return console.error('#memecoins-container introuvable');
+  let coins = loadDetectionData();
+  if (!coins) {
+    coins = await fetchFromApis();
+    saveDetectionData(coins);
   }
+  container.innerHTML = '';
+  coins.forEach(c => container.appendChild(createCard(c)));
+}
 
-  // Enregistre les données de détection
-  function saveDetectionData(coins) {
-    localStorage.setItem("lastDetectionTimestamp", Date.now());
-    localStorage.setItem("memecoinsData", JSON.stringify(coins));
-  }
-
-  async function fetchFromApis() {
-    const urls = [
-      'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false',
-      'https://api.coinpaprika.com/v1/tickers',
-      'https://api.coinscap.io/v2/assets'
-    ];
-    for (const url of urls) {
-      try {
-        const res = await fetch(url);
-        if (!res.ok) continue;
-        const data = await res.json();
-        let coins = [];
-        if (url.includes('coingecko')) {
-          coins = data.filter(coin => keywords.some(kw => 
-            coin.name.toLowerCase().includes(kw) || coin.symbol.toLowerCase().includes(kw)))
-            .slice(0, 10)
-            .map(coin => ({
-              name: coin.name,
-              symbol: coin.symbol,
-              price: "$" + coin.current_price.toFixed(6),
-              logo: coin.image
-            }));
-        } else if (url.includes('coinpaprika')) {
-          coins = data.filter(coin => keywords.some(kw => 
-            coin.name.toLowerCase().includes(kw) || coin.symbol.toLowerCase().includes(kw)))
-            .slice(0, 10)
-            .map(coin => ({
-              name: coin.name,
-              symbol: coin.symbol,
-              price: "$" + parseFloat(coin.quotes.USD.price).toFixed(6),
-              logo: "https://cryptologos.cc/logos/default-crypto-logo.png"
-            }));
-        } else if (url.includes('coinscap')) {
-          coins = data.data.filter(coin => keywords.some(kw => 
-            coin.name.toLowerCase().includes(kw) || coin.symbol.toLowerCase().includes(kw)))
-            .slice(0, 10)
-            .map(coin => ({
-              name: coin.name,
-              symbol: coin.symbol,
-              price: "$" + parseFloat(coin.priceUsd).toFixed(6),
-              logo: "https://cryptologos.cc/logos/default-crypto-logo.png"
-            }));
-        }
-        if (coins.length >= 3) return coins.slice(0, 3);
-      } catch (e) {
-        console.warn("API error", url, e);
-      }
-    }
-    return fallback;
-  }
-
-  async function startDetection() {
-    const container = document.getElementById("memecoins-container");
-    if (!container) {
-      console.error("Container #memecoins-container non trouvé");
-      return;
-    }
-    
-    // Vérifier si des données existent déjà pour la semaine
-    let coins = loadDetectionData();
-    if (!coins) {
-      // Si pas de données, lancer la recherche via les API
-      coins = await fetchFromApis();
-      saveDetectionData(coins);
-    }
-    
-    container.innerHTML = "";
-    coins.forEach(coin => {
-      const card = createCard(coin);
-      container.appendChild(card);
-    });
-    if (!document.getElementById('leaderboard')) {
-      const lb = document.createElement('div');
-      lb.id = 'leaderboard';
-      lb.style.cssText = "margin:20px; color:#fff; font-family:sans-serif; font-size:1em";
-      container.parentElement.appendChild(lb);
-    }
-    updateVoteBars();
-  }
-
-  // ------------------------------------------------------------------
-  // Overlay full-screen pour affichage avant détection
-  // ------------------------------------------------------------------
-  function showOverlay() {
-    const overlay = document.createElement("div");
-    overlay.id = "detection-overlay";
-    overlay.style.position = "fixed";
-    overlay.style.top = "0";
-    overlay.style.left = "0";
-    overlay.style.width = "100%";
-    overlay.style.height = "100%";
-    overlay.style.background = "url('detection_image.gif') no-repeat center center";
-    overlay.style.backgroundSize = "cover";
-    overlay.style.zIndex = "2000";
-    document.body.appendChild(overlay);
-    
-    setTimeout(() => {
-      overlay.remove();
-      startDetection();
-    }, 5000); // Affichage pendant 5 secondes
-  }
-
-  // ------------------------------------------------------------------
-  // Événement sur le bouton "Lancer la détection"
-  // ------------------------------------------------------------------
-  const startButton = document.getElementById("startButton");
-  if (startButton) {
-    // Définit le texte du bouton selon la langue
-    startButton.textContent = translations[currentLang]["btn-start-detection"];
-    startButton.addEventListener("click", () => {
-      showOverlay();
-    });
-  }
-
-  // ------------------------------------------------------------------
-  // Lancement initial : on affiche les données existantes (si elles existent)
-  // ------------------------------------------------------------------
-  // Au chargement, on ne force pas la recherche, on montre simplement ce qui est stocké
-  if (loadDetectionData()) {
+// ------------------------------------------------------------------
+// 7) Overlay plein écran avant détection
+// ------------------------------------------------------------------
+function showOverlay() {
+  const o = document.createElement('div');
+  o.id = 'detection-overlay';
+  o.style.cssText = `
+    position:fixed;top:0;left:0;width:100%;height:100%;
+    background:url('detection_image.gif') no-repeat center center;
+    background-size:cover;z-index:2000;
+  `;
+  document.body.appendChild(o);
+  setTimeout(() => {
+    o.remove();
     startDetection();
+  }, 5000);
+}
+
+// ------------------------------------------------------------------
+// 8) Initialisation
+// ------------------------------------------------------------------
+(function init() {
+  applyTranslations();
+  startDetection();
+
+  // Bouton 🔍 Lancer la détection
+  const btn = document.getElementById('startButton');
+  if (btn) {
+    btn.textContent = translations[currentLang]["btn-start-detection"];
+    btn.addEventListener('click', showOverlay);
   }
-});
 
+  // Bascule FR/EN
+  document.getElementById('lang-switch')
+    .addEventListener('click', () => {
+      currentLang = currentLang === 'fr' ? 'en' : 'fr';
+      document.getElementById('lang-switch').textContent = currentLang.toUpperCase();
+      applyTranslations();
+    });
 
-
-
-
-
-
+  // Menu hamburger
+  const toggle = document.getElementById('hamburger-toggle');
+  const nav = document.querySelector('nav ul');
+  if (toggle && nav) {
+    toggle.addEventListener('click', () => {
+      toggle.classList.toggle('open');
+      nav.classList.toggle('open');
+    });
+  }
