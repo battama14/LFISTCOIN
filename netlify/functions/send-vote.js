@@ -1,5 +1,6 @@
 const Pusher = require('pusher');
 
+// Configuration Pusher
 const pusher = new Pusher({
   appId: '2004404',
   key: '2adaefe3456db8023516',
@@ -9,18 +10,33 @@ const pusher = new Pusher({
 });
 
 exports.handler = async (event) => {
-  try {
-    console.log('event.body:', event.body);
-    if (!event.body) {
-      return {
-        statusCode: 400,
-        body: JSON.stringify({ message: 'Body manquant' }),
-      };
-    }
+  // Log complet pour debug
+  console.log("EVENT REÇU:", JSON.stringify(event, null, 2));
 
+  // Vérifie que c’est bien un POST
+  if (event.httpMethod !== 'POST') {
+    return {
+      statusCode: 405,
+      body: JSON.stringify({ message: 'Méthode non autorisée' }),
+    };
+  }
+
+  // Vérifie que le body est bien là
+  if (!event.body) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({ message: 'Body manquant' }),
+    };
+  }
+
+  try {
     const data = JSON.parse(event.body);
     const { symbol, votes } = data;
 
+    // Log des données reçues
+    console.log("Données reçues:", symbol, votes);
+
+    // Envoie via Pusher
     await pusher.trigger('votes-channel', 'vote-event', { symbol, votes });
 
     return {
