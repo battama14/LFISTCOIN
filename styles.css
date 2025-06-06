@@ -382,6 +382,7 @@ nav ul li a.active {
   max-width: 250px;
   text-align: center;
 }
+
 .team-image {
   width: 100%;
   border-radius: 10px;
@@ -552,10 +553,45 @@ nav ul li a.active {
   opacity: 1 !important;
 }
 
+/* Centrage général pour les titres et contenus des sections clés */
+#features h2,
+#team h2,
+#faq h2,
+#faq h3,
+#faq p {
+  text-align: center;
+}
 
+/* Pour recentrer les éléments à l'intérieur de .team-grid */
+.team-grid {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  text-align: center;
+}
 
+/* Ajoute un centrage pour chaque membre de l’équipe */
+.team-member {
+  max-width: 200px;
+}
 
+/* Pour limiter la largeur des questions/réponses et les centrer */
+.faq-item {
+  max-width: 800px;
+  margin: 0 auto 2rem auto;
+  text-align: center;
+}
 
+/* Ajustement pour la section features */
+.features-section .features-grid {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+  text-align: center;
+}
 
-
-
+.feature-item {
+  max-width: 250px;
+}

@@ -1,126 +1,122 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="LFIST Token - Le nouveau délire memecoin engagé pour casser du memecoin" />
-  <link rel="icon" href="favicon.ico" />
-  <title>LFIST Token - Memecoin Hunter</title>
+  <meta name="description" content="LFIST Token - Memecoin Hunter" />
+  <link rel="icon" href="https://cryptologos.cc/logos/default-crypto-logo.png" />
+  <title data-lang-key="page-title">LFIST Token - Memecoin Hunter</title>
 
   <!-- CSS -->
   <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
-  <!-- Firebase compat SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-database-compat.js"></script>
+  <!-- Pusher -->
+  <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+  <script>
+    // Configuration de Pusher
+    const pusher = new Pusher('2adaefe3456db8023516', {
+      cluster: "eu",
+      encrypted: true
+    });
+
+    // Abonnement à un canal (par exemple "lfist-channel")
+    const channel = pusher.subscribe('lfist-channel');
+
+    // Écoute d'un événement (par exemple "new-memecoin")
+    channel.bind('new-memecoin', function(data) {
+      console.log("📡 Nouveau memecoin détecté :", data);
+      const container = document.getElementById("memecoins-container");
+      const card = document.createElement("div");
+      card.className = "memecoin-card";
+      card.innerHTML = `
+        <h3>${data.name}</h3>
+        <p>${data.description}</p>
+        <a href="${data.link}" target="_blank">Voir le token</a>
+      `;
+      container.prepend(card);
+    });
+  </script>
 
   <!-- Script principal -->
   <script defer src="script.js"></script>
 </head>
+
 <body>
   <!-- HEADER -->
   <header>
-    <button class="hamburger" id="hamburger-toggle" aria-label="Ouvrir le menu">
+    <button class="hamburger" id="hamburger-toggle" aria-label="Ouvrir le menu" data-lang-key="aria-open-menu">
       <span></span><span></span><span></span>
     </button>
     <div class="container header-container">
       <img src="logo1.gif" alt="LFIST Token Logo" class="logo" />
       <nav>
         <ul class="main-menu">
-          <li><a href="#accueil" class="active" data-lang-key="nav-home">Ma mission</a></li>
-          <li><a href="#tokenomics" data-lang-key="nav-features">Mes routines</a></li>
-          <li><a href="#roadmap" data-lang-key="nav-roadmap">Roadmap</a></li>
-          <li><a href="#team" data-lang-key="team-title">Team</a></li>
-          <li><a href="#faq" data-lang-key="faq-title">FAQ</a></li>
+          <li><a href="#accueil" class="active" data-lang-key="menu-mission">Ma mission</a></li>
+          <li><a href="#tokenomics" data-lang-key="menu-routines">Mes routines</a></li>
+          <li><a href="#roadmap" data-lang-key="menu-roadmap">Roadmap</a></li>
+          <li><a href="#team" data-lang-key="menu-team">Team</a></li>
+          <li><a href="#faq" data-lang-key="menu-faq">FAQ</a></li>
         </ul>
         <ul class="sub-menu">
-          <li><a href="#fist-detector" class="fist-link">FIST-DETECTOR</a></li>
+          <li><a href="#fist-detector" class="fist-link" data-lang-key="menu-fist-detector">FIST-DETECTOR</a></li>
         </ul>
       </nav>
       <div class="header-buttons">
-        <button id="lang-switch" aria-label="Changer de langue">EN</button>
-        <a href="https://pancakeswap.finance/swap?inputCurrency=BNB&amp;outputCurrency=0x6606E82494AEf0a62c90A33545fbBb0AecE5B40E"
-           target="_blank" rel="noopener" class="btn-primary" data-lang-key="btn-buy-token">
-          Acheter
-        </a>
+        <button id="lang-switch">FR</button>
+        <a href="https://pancakeswap.finance/swap?inputCurrency=BNB&outputCurrency=0xDbEC92b00E4372Cf797f6bd91A98a3f382DCE576"
+           target="_blank" rel="noopener" class="btn-primary" data-lang-key="btn-buy">Acheter</a>
       </div>
     </div>
   </header>
 
-  <!-- MAIN -->
   <main>
-    <!-- Section Accueil -->
+    <!-- ACCUEIL -->
     <section id="accueil" class="hero-section" style="padding:100px 20px;">
       <div class="container hero-container">
-        <h1 data-lang-key="hero-title">LFIST sa mission .. casser du Memecoin</h1>
+        <h1 data-lang-key="hero-title">LFIST sa mission … casser du Memecoin</h1>
         <div class="hero-cards">
           <div class="hero-card">
             <img src="FIST-PEPE.png" alt="Mission LFIST" />
-            <p>Les cuisses de grenouilles LFIST adore ça ... Gare à toi PEPE !!!</p>
+            <p data-lang-key="hero-card1-text">Les cuisses de grenouilles LFIST adore ça … Gare à toi PEPE !!!</p>
           </div>
           <div class="hero-card">
             <img src="LFIST-SHIBA.jpeg" alt="Communauté LFIST" />
-            <p>Petit dressage du toutou .. il ne reviendra plus.</p>
+            <p data-lang-key="hero-card2-text">Petit dressage du toutou … il ne reviendra plus.</p>
           </div>
           <div class="hero-card">
             <img src="LFIST-POULPO.jpeg" alt="Innovation LFIST" />
-            <p>Dégustation des petits nouveaux à la casserole ou bien grillés.</p>
+            <p data-lang-key="hero-card3-text">Dégustation des petits nouveaux à la casserole ou bien grillés.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Section Héro secondaire -->
-    <section class="hero-section">
-      <div class="container hero-container">
-        <h1 data-lang-key="hero-title-2">Le FIST a porté de mains</h1>
-        <p data-lang-key="hero-subtitle">Rejoignez la révolution LFIST avec notre token innovant.</p>
-        <div class="hero-buttons">
-          <a href="W-P.pdf" target="_blank" rel="noopener noreferrer" class="btn-secondary" data-lang-key="btn-whitepaper">
-            Lire le whitepaper
-          </a>
-          <a href="https://pancakeswap.finance/swap?inputCurrency=BNB&amp;outputCurrency=0x6606E82494AEf0a62c90A33545fbBb0AecE5B40E"
-             target="_blank" rel="noopener" class="btn-primary" data-lang-key="btn-buy-token">
-            Acheter
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <!-- Section FIST-DETECTOR -->
+    <!-- FIST-DETECTOR -->
     <section id="fist-detector" class="fist-detector-section">
-      <h2>FIST-DETECTOR</h2>
-      <button id="startButton" class="start-button" data-lang-key="btn-start-detection">
-        🔍 Lancer la détection
-      </button>
+      <h2 data-lang-key="fist-detector-title">FIST-DETECTOR</h2>
+      <button id="startButton" class="start-button" data-lang-key="btn-start-detection">🔍 Lancer la détection</button>
       <div id="memecoins-container"></div>
-      <div id="results" class="results-container">
-        <pre id="vote-display"></pre>
-      </div>
+      <div id="leaderboard"></div>
     </section>
 
-    <!-- Section Tokenomics -->
+    <!-- TOKENOMICS -->
     <section id="tokenomics">
       <div class="container hero-container">
-        <h1 data-lang-key="tokenomics-title">Le FIST a porté de mains</h1>
-        <p data-lang-key="tokenomics-subtitle">Rejoignez la révolution LFIST avec notre token innovant.</p>
+        <h1 data-lang-key="tokenomics-title">Le FIST à portée de main</h1>
+        <p data-lang-key="tokenomics-desc">Rejoignez la révolution LFIST avec notre token innovant.</p>
         <div class="hero-buttons">
-          <a href="W-P.pdf" target="_blank" rel="noopener noreferrer" class="btn-secondary" data-lang-key="btn-whitepaper">
-            Lire le whitepaper
-          </a>
-          <a href="https://pancakeswap.finance/swap?inputCurrency=BNB&amp;outputCurrency=0x6606E82494AEf0a62c90A33545fbBb0AecE5B40E"
-             target="_blank" rel="noopener" class="btn-primary" data-lang-key="btn-buy-token">
-            Acheter
-          </a>
+          <a href="W-P.pdf" target="_blank" rel="noopener" class="btn-secondary" data-lang-key="btn-whitepaper">Lire le whitepaper</a>
+          <a href="https://pancakeswap.finance/swap?inputCurrency=BNB&outputCurrency=0xDbEC92b00E4372Cf797f6bd91A98a3f382DCE576"
+             target="_blank" rel="noopener" class="btn-primary" data-lang-key="btn-buy">Acheter</a>
         </div>
       </div>
     </section>
 
-    <!-- Section Features -->
+    <!-- FEATURES -->
     <section id="features" class="features-section">
       <div class="container">
-        <h2 class="section-title" data-lang-key="features-title">La routine de LFIST pour être aussi forte !!!</h2>
+        <h2 data-lang-key="features-title">La routine de LFIST pour être aussi forte !!!</h2>
         <div class="features-grid">
           <div class="feature-item">
             <h3 data-lang-key="feature1-title">Le FIST et la Chimay, la détente avant tout</h3>
@@ -138,133 +134,88 @@
       </div>
     </section>
 
-    <!-- Section Roadmap -->
+    <!-- ROADMAP -->
     <section id="roadmap" class="roadmap-section">
       <div class="container">
-        <h2 class="section-title" data-lang-key="roadmap-title">Roadmap</h2>
+        <h2 data-lang-key="roadmap-title">Roadmap</h2>
         <ul class="roadmap-list">
-          <li class="roadmap-item">
-            <div class="roadmap-title">
-              Q1 2025 – <span data-lang-key="roadmap-q1">🔥 Lancement & Campagne marketing</span>
-            </div>
-            <p class="roadmap-description">
-              Déploiement officiel du LFIST Token sur Pancakeswap.<br /><br />
-              Début d’une campagne marketing percutante : vidéos, memes et punchlines enflammées.<br /><br />
-              Premiers raids anti-memecoins frauduleux avec dénonciations humoristiques.<br /><br />
-              Lancement du LFIST Manifesto.
-            </p>
+          <li>
+            <strong data-lang-key="roadmap-q1-title">Q1 2025 – 🔥 Lancement & Campagne marketing</strong>
+            <p data-lang-key="roadmap-q1-desc">Déploiement officiel…<br>…Lancement du LFIST Manifesto.</p>
           </li>
-          <li class="roadmap-item">
-            <div class="roadmap-title">
-              Q2 2025 – <span data-lang-key="roadmap-q2">🏗️ Développement de la plateforme LFIST</span>
-            </div>
-            <p class="roadmap-description">
-              Mise en place de LFIST Tracker, outil communautaire pour signaler les tokens suspects.<br /><br />
-              Espace interactif pour analyses et débats sur les tendances crypto.<br /><br />
-              Création de la section "Fist of Justice".<br /><br />
-              Début de la gouvernance décentralisée.
-            </p>
+          <li>
+            <strong data-lang-key="roadmap-q2-title">Q2 2025 – 🏗️ Développement de la plateforme LFIST</strong>
+            <p data-lang-key="roadmap-q2-desc">LFIST Tracker, débats crypto…<br>Gouvernance décentralisée.</p>
           </li>
-          <li class="roadmap-item">
-            <div class="roadmap-title">
-              Q3 2025 – <span data-lang-key="roadmap-q3">🤝 Partenariats & Listings</span>
-            </div>
-            <p class="roadmap-description">
-              Collaboration avec des influenceurs crypto pour amplifier la portée.<br /><br />
-              Premiers listings sur exchanges centralisés et décentralisés.<br /><br />
-              Développement du programme LFIST Elite.<br /><br />
-              Sensibilisation aux risques des memecoins frauduleux.
-            </p>
+          <li>
+            <strong data-lang-key="roadmap-q3-title">Q3 2025 – 🤝 Partenariats & Listings</strong>
+            <p data-lang-key="roadmap-q3-desc">Influenceurs, nouveaux listings…<br>Programme LFIST Elite.</p>
           </li>
-          <li class="roadmap-item">
-            <div class="roadmap-title">
-              Q4 2025 – <span data-lang-key="roadmap-q4">🚀 Fonctionnalités avancées & Staking</span>
-            </div>
-            <p class="roadmap-description">
-              Lancement du staking LFIST pour impliquer les holders.<br /><br />
-              Développement de LFIST NFT, collection unique.<br /><br />
-              Mise en place du LFIST Punchboard pour voter sur les tokens.<br /><br />
-              Événement final : "La Grande Fistade".
-            </p>
+          <li>
+            <strong data-lang-key="roadmap-q4-title">Q4 2025 – 🚀 Fonctionnalités avancées & Staking</strong>
+            <p data-lang-key="roadmap-q4-desc">Staking, NFT, Punchboard…<br>Événement “La Grande Fistade”.</p>
           </li>
         </ul>
-        <p class="roadmap-final-message">Restez connectés, de belles surprises arrivent bientôt !</p>
+        <p data-lang-key="roadmap-footer">Restez connectés, de belles surprises arrivent bientôt !</p>
       </div>
     </section>
 
-    <!-- Section Team -->
+    <!-- TEAM -->
     <section id="team" class="team-section">
       <div class="container">
-        <h2 class="section-title" data-lang-key="team-title">Équipe</h2>
+        <h2 data-lang-key="team-title">Équipe</h2>
         <div class="team-grid">
           <div class="team-member">
             <img src="BTC.png" alt="Alice Dupont" class="team-image" />
-            <p class="team-role" data-lang-key="team-role1">Dieu de la crypto et mentor</p>
-            <a href="https://x.com/Bitcoin" target="_blank" rel="noopener" class="team-link">
-              Twitter / X
+            <p data-lang-key="team-member1-role">Dieu de la crypto et mentor</p>
+            <a href="https://x.com/Bitcoin" target="_blank" aria-label="X / Twitter">
+              <i class="fab fa-x-twitter"></i>
             </a>
           </div>
           <div class="team-member">
             <img src="PEPE.png" alt="Marc Leroy" class="team-image" />
-            <p class="team-role" data-lang-key="team-role2">Dieu des memecoins et ma victime</p>
-            <a href="https://x.com/pepecoineth" target="_blank" rel="noopener" class="team-link">
-              Twitter / X
+            <p data-lang-key="team-member2-role">Dieu des memecoins et ma victime</p>
+            <a href="https://x.com/pepecoineth" target="_blank" aria-label="X / Twitter">
+              <i class="fab fa-x-twitter"></i>
             </a>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Section FAQ -->
+    <!-- FAQ -->
     <section id="faq" class="faq-section">
-      <div class="container faq-container">
-        <h2 class="section-title" data-lang-key="faq-title">FAQ</h2>
+      <div class="container">
+        <h2 data-lang-key="faq-title">FAQ</h2>
         <div class="faq-item">
-          <h3 data-lang-key="faq-q1" style="font-weight:600;">Qu’est-ce que LFIST Token ?</h3>
-          <p data-lang-key="faq-a1" style="color:#f0a500;font-style:italic;">
-            LFIST Token est un memecoin innovant conçu pour une communauté engagée et fun.
-          </p>
+          <h3 data-lang-key="faq-q1">Qu’est-ce que LFIST Token ?</h3>
+          <p data-lang-key="faq-a1">LFIST Token est un memecoin innovant conçu pour une communauté engagée et fun.</p>
         </div>
         <div class="faq-item">
-          <h3 data-lang-key="faq-q2" style="font-weight:600;">Comment acheter LFIST Token ?</h3>
-          <p data-lang-key="faq-a2" style="color:#f0a500;font-style:italic;">
-            Vous pouvez acheter LFIST sur Pancakeswap via le lien "Acheter" en haut de la page.
-          </p>
+          <h3 data-lang-key="faq-q2">Comment acheter LFIST Token ?</h3>
+          <p data-lang-key="faq-a2">Vous pouvez acheter sur Pancakeswap via le lien “Acheter” en haut de la page.</p>
         </div>
       </div>
     </section>
 
-    <!-- Section Contact -->
+    <!-- CONTACT -->
     <section id="contact" class="contact-section">
-      <div class="container">
-        <h2 class="section-title" data-lang-key="contact-title">Contact</h2>
-        <div class="contact-box">
-          <p>Email :</p>
-          <a href="mailto:lfistcoin@gmail.com">lfistcoin@gmail.com</a>
-        </div>
+      <div class="container contact-box">
+        <h2 data-lang-key="contact-title">Contact</h2>
+        <p>Email : <a href="mailto:lfistcoin@gmail.com" data-lang-key="contact-email">lfistcoin@gmail.com</a></p>
       </div>
     </section>
   </main>
 
-  <!-- FOOTER -->
   <footer class="site-footer">
-    <div class="container footer-container">
-      <p>© 2025 LFIST Token. Tous droits réservés.</p>
+    <div class="container">
+      <p data-lang-key="footer-copyright">© 2025 LFIST Token. Tous droits réservés.</p>
       <div class="social-links">
-        <img src="twitter-icon.svg" alt="Twitter" width="24" height="24" />
-        <img src="telegram-icon.svg" alt="Telegram" width="24" height="24" />
+        <a href="https://x.com/LFISTCOIN" target="_blank" aria-label="X / Twitter"><i class="fab fa-x-twitter"></i></a>
+        <a href="https://t.me/lfistcoin" target="_blank" aria-label="Telegram"><i class="fab fa-telegram"></i></a>
       </div>
     </div>
   </footer>
-
-  <!-- Google Translate -->
-  <div id="google_translate_element"></div>
-  <script>
-    function googleTranslateElementInit() {
-      new google.translate.TranslateElement({pageLanguage:'fr'}, 'google_translate_element');
-    }
-  </script>
-  <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
 

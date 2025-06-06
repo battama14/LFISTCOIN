@@ -1,375 +1,265 @@
 "use strict";
+
 document.addEventListener("DOMContentLoaded", () => {
-  // ------------------------------------------------------------------
-  // OBJET DE TRADUCTIONS (complète pour l'ensemble du site)
-  // ------------------------------------------------------------------
+  // -------------------------------------------------------
+  // (1) OBJET DE TRADUCTIONS (fr/en)
+  // -------------------------------------------------------
   const translations = {
     fr: {
-      // Navigation
-      "nav-home": "Accueil",
-      "nav-features": "Fonctionnalités",
-      "nav-roadmap": "Roadmap",
-      "nav-team": "Équipe",
-      "nav-faq": "FAQ",
-      "nav-contact": "Contact",
-      
-      // Boutons
-      "btn-buy-token": "Acheter",
-      "btn-whitepaper": "Lire le whitepaper",
-      "btn-start-detection": "🔍 Lancer la détection",
-      "btn-vote": "👍 Voter",
-      
-      // Section Hero
+      "page-title": "LFIST Token - Memecoin Hunter",
+      "aria-open-menu": "Ouvrir le menu",
+      "menu-mission": "Ma mission",
+      "menu-routines": "Mes routines",
+      "menu-roadmap": "Roadmap",
+      "menu-team": "Team",
+      "menu-faq": "FAQ",
+      "menu-fist-detector": "FIST-DETECTOR",
+      "btn-buy": "Acheter",
       "hero-title": "LFIST sa mission … casser du Memecoin",
-      "hero-title-2": "Le FIST a porté de mains",
-      "hero-subtitle": "Rejoignez la révolution LFIST avec notre token innovant.",
-      
-      // FIST-DETECTOR
+      "hero-card1-text": "Les cuisses de grenouilles LFIST adore ça … Gare à toi PEPE !!!",
+      "hero-card2-text": "Petit dressage du toutou … il ne reviendra plus.",
+      "hero-card3-text": "Dégustation des petits nouveaux à la casserole ou bien grillés.",
       "fist-detector-title": "FIST-DETECTOR",
-      
-      // Roadmap
-      "roadmap-title": "Roadmap",
-      "roadmap-q1": "Q1 2025 - 🔥 Lancement & Campagne marketing",
-      "roadmap-desc-q1": "Déploiement officiel du LFIST Token sur Pancakeswap.\n\nDébut d’une campagne marketing percutante : vidéos, memes et punchlines enflammées.\n\nPremiers raids anti-memecoins frauduleux avec dénonciations humoristiques.\n\nLancement du LFIST Manifesto.",
-      "roadmap-q2": "Q2 2025 - 🏗️ Développement de la plateforme LFIST",
-      "roadmap-desc-q2": "Mise en place de LFIST Tracker, outil communautaire pour signaler les tokens suspects.\n\nEspace interactif pour analyses et débats sur les tendances crypto.\n\nCréation de la section \"Fist of Justice\".\n\nDébut de la gouvernance décentralisée.",
-      "roadmap-q3": "Q3 2025 - 🤝 Partenariats & Listings",
-      "roadmap-desc-q3": "Collaboration avec des influenceurs crypto pour amplifier la portée.\n\nPremiers listings sur exchanges centralisés et décentralisés.\n\nDéveloppement du programme LFIST Elite.\n\nSensibilisation aux risques des memecoins frauduleux.",
-      "roadmap-q4": "Q4 2025 - 🚀 Fonctionnalités avancées & Staking",
-      "roadmap-desc-q4": "Lancement du staking LFIST pour impliquer les holders.\n\nDéveloppement de LFIST NFT, collection unique.\n\nMise en place du LFIST Punchboard pour voter sur les tokens.\n\nÉvénement final : \"La Grande Fistade\".",
-      "roadmap-final-message": "Restez connectés, de belles surprises arrivent bientôt !",
-      
-      // Features
+      "btn-start-detection": "🔍 Lancer la détection",
+      "tokenomics-title": "Le FIST a porté de mains",
+      "tokenomics-desc": "Rejoignez la révolution LFIST avec notre token innovant.",
+      "btn-whitepaper": "Lire le whitepaper",
       "features-title": "La routine de LFIST pour être aussi forte !!!",
       "feature1-title": "Le FIST et la Chimay, la détente avant tout",
       "feature2-title": "Chasse aux sexistes dans les bas-fonds de la ville",
       "feature3-title": "Entretien du FIST dès le réveil",
-      
-      // Team
+      "roadmap-title": "Roadmap",
+      "roadmap-q1-title": "Q1 2025 – 🔥 Lancement & Campagne marketing",
+      "roadmap-q1-desc": "Déploiement officiel…<br>…Lancement du LFIST Manifesto.",
+      "roadmap-q2-title": "Q2 2025 – 🏗️ Développement de la plateforme LFIST",
+      "roadmap-q2-desc": "LFIST Tracker, débats crypto…<br>Gouvernance décentralisée.",
+      "roadmap-q3-title": "Q3 2025 – 🤝 Partenariats & Listings",
+      "roadmap-q3-desc": "Influenceurs, nouveaux listings…<br>Programme LFIST Elite.",
+      "roadmap-q4-title": "Q4 2025 – 🚀 Fonctionnalités avancées & Staking",
+      "roadmap-q4-desc": "Staking, NFT, Punchboard…<br>Événement “La Grande Fistade”.",
+      "roadmap-footer": "Restez connectés, de belles surprises arrivent bientôt !",
       "team-title": "Équipe",
-      "team-role1": "Dieu de la crypto et mentor",
-      "team-role2": "Dieu des memecoins et ma victime",
-      
-      // FAQ
+      "team-member1-role": "Dieu de la crypto et mentor",
+      "team-member2-role": "Dieu des memecoins et ma victime",
       "faq-title": "FAQ",
       "faq-q1": "Qu’est-ce que LFIST Token ?",
       "faq-a1": "LFIST Token est un memecoin innovant conçu pour une communauté engagée et fun.",
       "faq-q2": "Comment acheter LFIST Token ?",
-      "faq-a2": "Vous pouvez acheter LFIST sur Pancakeswap via le lien « Acheter » en haut de la page.",
-      
-      // Contact
-      "contact-title": "Contact"
+      "faq-a2": "Vous pouvez acheter sur Pancakeswap via le lien “Acheter” en haut de la page.",
+      "contact-title": "Contact",
+      "contact-email": "lfistcoin@gmail.com",
+      "footer-copyright": "© 2025 LFIST Token. Tous droits réservés.",
+      "btn-vote": "👍 Voter",
+      "leaderboard-title": "Classement :",
+      "no-coins-msg": "Aucun memecoin détecté.",
+      "lang-switch-label": "Changer langue",
+      "votes-label": "Votes :",
+      "hamburger-open": "Ouvrir menu",
+      "hamburger-close": "Fermer menu"
     },
     en: {
-      // Navigation
-      "nav-home": "Home",
-      "nav-features": "Features",
-      "nav-roadmap": "Roadmap",
-      "nav-team": "Team",
-      "nav-faq": "FAQ",
-      "nav-contact": "Contact",
-      
-      // Boutons
-      "btn-buy-token": "Buy",
-      "btn-whitepaper": "Read Whitepaper",
-      "btn-start-detection": "🔍 Start Detection",
-      "btn-vote": "👍 Vote",
-      
-      // Section Hero
-      "hero-title": "LFIST mission... Breaking Memecoins",
-      "hero-title-2": "The FIST is Handed Over",
-      "hero-subtitle": "Join the LFIST revolution with our innovative token.",
-      
-      // FIST-DETECTOR
+      "page-title": "LFIST Token - Memecoin Hunter",
+      "aria-open-menu": "Open menu",
+      "menu-mission": "My mission",
+      "menu-routines": "My routines",
+      "menu-roadmap": "Roadmap",
+      "menu-team": "Team",
+      "menu-faq": "FAQ",
+      "menu-fist-detector": "FIST-DETECTOR",
+      "btn-buy": "Buy",
+      "hero-title": "LFIST mission ... crush Memecoin",
+      "hero-card1-text": "LFIST loves frog legs... Watch out PEPE!!!",
+      "hero-card2-text": "Little dog training... He won't come back.",
+      "hero-card3-text": "Cooking new ones in the pan or grilled.",
       "fist-detector-title": "FIST-DETECTOR",
-      
-      // Roadmap
+      "btn-start-detection": "🔍 Start detection",
+      "tokenomics-title": "The FIST within reach",
+      "tokenomics-desc": "Join the LFIST revolution with our innovative token.",
+      "btn-whitepaper": "Read the whitepaper",
+      "features-title": "LFIST’s routine to be so strong!!!",
+      "feature1-title": "FIST and Chimay, relaxation first",
+      "feature2-title": "Hunting sexists in the city’s underworld",
+      "feature3-title": "FIST maintenance at wake up",
       "roadmap-title": "Roadmap",
-      "roadmap-q1": "Q1 2025 - 🔥 Launch & Marketing Campaign",
-      "roadmap-desc-q1": "Official launch of the LFIST Token on Pancakeswap.\n\nKick-off of a powerful marketing campaign: videos, memes, and fiery punchlines.\n\nInitial anti-memecoin raids with humorous denunciations.\n\nLaunch of the LFIST Manifesto.",
-      "roadmap-q2": "Q2 2025 - 🏗️ Development of the LFIST Platform",
-      "roadmap-desc-q2": "Implementation of LFIST Tracker, a community tool to report suspicious tokens.\n\nInteractive space for crypto trend analysis and debates.\n\nCreation of the 'Fist of Justice' section.\n\nStart of decentralized governance.",
-      "roadmap-q3": "Q3 2025 - 🤝 Partnerships & Listings",
-      "roadmap-desc-q3": "Collaboration with crypto influencers to boost reach.\n\nInitial listings on both centralized and decentralized exchanges.\n\nDevelopment of the LFIST Elite program.\n\nAwareness-raising about fraudulent memecoin risks.",
-      "roadmap-q4": "Q4 2025 - 🚀 Advanced Features & Staking",
-      "roadmap-desc-q4": "Launch of LFIST staking to engage holders.\n\nDevelopment of LFIST NFT, a unique collection.\n\nImplementation of the LFIST Punchboard for token voting.\n\nFinal event: 'The Great Fistade'.",
-      "roadmap-final-message": "Stay tuned, amazing surprises are coming soon!",
-      
-      // Features
-      "features-title": "LFIST Routine to Stay Strong!!!",
-      "feature1-title": "FIST and Chimay, Relaxation First",
-      "feature2-title": "Hunting Sexists in the City's Underbelly",
-      "feature3-title": "FIST Maintenance from the Wake-Up",
-      
-      // Team
+      "roadmap-q1-title": "Q1 2025 – 🔥 Launch & Marketing Campaign",
+      "roadmap-q1-desc": "Official deployment…<br>…Launch of the LFIST Manifesto.",
+      "roadmap-q2-title": "Q2 2025 – 🏗️ Development of the LFIST platform",
+      "roadmap-q2-desc": "LFIST Tracker, crypto debates…<br>Decentralized governance.",
+      "roadmap-q3-title": "Q3 2025 – 🤝 Partnerships & Listings",
+      "roadmap-q3-desc": "Influencers, new listings…<br>LFIST Elite Program.",
+      "roadmap-q4-title": "Q4 2025 – 🚀 Advanced features & Staking",
+      "roadmap-q4-desc": "Staking, NFT, Punchboard…<br>Event “The Great Fistade”.",
+      "roadmap-footer": "Stay tuned, exciting surprises coming soon!",
       "team-title": "Team",
-      "team-role1": "Crypto god and mentor",
-      "team-role2": "Official troll",
-      
-      // FAQ
+      "team-member1-role": "Crypto god and mentor",
+      "team-member2-role": "Memecoin god and my victim",
       "faq-title": "FAQ",
       "faq-q1": "What is LFIST Token?",
-      "faq-a1": "LFIST Token is an innovative memecoin designed for a fun and engaged community.",
-      "faq-q2": "How can I buy LFIST Token?",
-      "faq-a2": "You can buy LFIST on Pancakeswap via the 'Buy' link at the top of the page.",
-      
-      // Contact
-      "contact-title": "Contact"
+      "faq-a1": "LFIST Token is an innovative memecoin designed for an engaged and fun community.",
+      "faq-q2": "How to buy LFIST Token?",
+      "faq-a2": "You can buy on Pancakeswap via the “Buy” link at the top of the page.",
+      "contact-title": "Contact",
+      "contact-email": "lfistcoin@gmail.com",
+      "footer-copyright": "© 2025 LFIST Token. All rights reserved.",
+      "btn-vote": "👍 Vote",
+      "leaderboard-title": "Leaderboard:",
+      "no-coins-msg": "No memecoin detected.",
+      "lang-switch-label": "Change language",
+      "votes-label": "Votes:",
+      "hamburger-open": "Open menu",
+      "hamburger-close": "Close menu"
     }
   };
 
- // ------------------------------------------------------------------
-// 1) TRADUCTIONS FR/EN
-// ------------------------------------------------------------------
-const translations = {
-  fr: {
-    "nav-home": "Ma mission",
-    "nav-features": "Mes routines",
-    "nav-roadmap": "Roadmap",
-    "nav-team": "Team",
-    "nav-faq": "FAQ",
-    "btn-buy-token": "Acheter",
-    "hero-title": "LFIST sa mission .. casser du Memecoin",
-    "hero-title-2": "Le FIST a porté de mains",
-    "hero-subtitle": "Rejoignez la révolution LFIST avec notre token innovant.",
-    "btn-whitepaper": "Lire le whitepaper",
-    "btn-start-detection": "🔍 Lancer la détection",
-    "btn-vote": "Voter",
-    "features-title": "La routine de LFIST pour être aussi forte !!!",
-    "feature1-title": "Le FIST et la Chimay, la détente avant tout",
-    "feature2-title": "Chasse aux sexistes dans les bas-fonds de la ville",
-    "feature3-title": "Entretien du FIST dès le réveil",
-    "roadmap-q1": "🔥 Lancement & Campagne marketing",
-    "roadmap-q2": "🏗️ Développement de la plateforme LFIST",
-    "roadmap-q3": "🤝 Partenariats & Listings",
-    "roadmap-q4": "🚀 Fonctionnalités avancées & Staking",
-    "team-title": "Équipe",
-    "team-role1": "Dieu de la crypto et mentor",
-    "team-role2": "Dieu des memecoins et ma victime",
-    "faq-title": "FAQ",
-    "faq-q1": "Qu’est-ce que LFIST Token ?",
-    "faq-a1": "LFIST Token est un memecoin innovant conçu pour une communauté engagée et fun.",
-    "faq-q2": "Comment acheter LFIST Token ?",
-    "faq-a2": "Vous pouvez acheter LFIST sur Pancakeswap via le lien \"Acheter\" en haut de la page.",
-    "contact-title": "Contact"
-  },
-  en: {
-    "nav-home": "My mission",
-    "nav-features": "My routines",
-    "nav-roadmap": "Roadmap",
-    "nav-team": "Team",
-    "nav-faq": "FAQ",
-    "btn-buy-token": "Buy",
-    "hero-title": "LFIST’s mission … smashing memecoins",
-    "hero-title-2": "FIST within reach",
-    "hero-subtitle": "Join the LFIST revolution with our innovative token.",
-    "btn-whitepaper": "Read whitepaper",
-    "btn-start-detection": "🔍 Start detection",
-    "btn-vote": "Vote",
-    "features-title": "LFIST’s routine to stay strong !!!",
-    "feature1-title": "FIST & Chimay, relaxation first",
-    "feature2-title": "Hunting sexists in the city’s underbelly",
-    "feature3-title": "FIST maintenance on waking",
-    "roadmap-q1": "🔥 Launch & Marketing",
-    "roadmap-q2": "🏗️ Platform Development",
-    "roadmap-q3": "🤝 Partnerships & Listings",
-    "roadmap-q4": "🚀 Advanced Features & Staking",
-    "team-title": "Team",
-    "team-role1": "Crypto god & mentor",
-    "team-role2": "Memecoin god & my victim",
-    "faq-title": "FAQ",
-    "faq-q1": "What is LFIST Token?",
-    "faq-a1": "LFIST Token is an innovative memecoin for an engaged, fun community.",
-    "faq-q2": "How to buy LFIST Token?",
-    "faq-a2": "You can buy LFIST on Pancakeswap via the “Buy” link above.",
-    "contact-title": "Contact"
+  let currentLang = 'fr';
+
+  // Appliquer les traductions
+  function applyTranslations() {
+    document.querySelectorAll('[data-lang-key]').forEach(el => {
+      const key = el.dataset.langKey;
+      if (translations[currentLang] && translations[currentLang][key]) {
+        el.textContent = translations[currentLang][key];
+      }
+    });
   }
-};
 
-let currentLang = 'fr';
-function applyTranslations() {
-  document.querySelectorAll('[data-lang-key]').forEach(el => {
-    const key = el.dataset.langKey;
-    if (translations[currentLang] && translations[currentLang][key]) {
-      el.textContent = translations[currentLang][key];
-    }
+  // --------------------------------------------------------
+  // (2) Configuration Pusher (remplace par ta clé et cluster)
+  // --------------------------------------------------------
+  // Inclure dans ton HTML : <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
+  const pusher = new Pusher('YOUR_PUSHER_KEY', {  // <-- Remplace par ta clé Pusher
+    cluster: 'YOUR_CLUSTER',                      // <-- Remplace par ton cluster (ex: 'eu')
+    forceTLS: true
   });
-}
 
-// ------------------------------------------------------------------
-// 2) Initialisation Firebase (compat)
-// ------------------------------------------------------------------
-const firebaseConfig = {
-  apiKey: "AIzaSyBoV5tfsn1huWI6uXSudxTSRFDL1-jrnkU",
-  authDomain: "lfistdata.firebaseapp.com",
-  databaseURL: "https://lfistdata-default-rtdb.firebaseio.com",
-  projectId: "lfistdata",
-  storageBucket: "lfistdata.appspot.com",
-  messagingSenderId: "123456789",
-  appId: "1:123456789:web:abcdef"
-};
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
+  // Channel et event pour votes
+  const channel = pusher.subscribe('votes-channel');
 
-// ------------------------------------------------------------------
-// 3) Données & cache hebdo
-// ------------------------------------------------------------------
-const fallback = [
-  { name: "Dogecoin", symbol: "DOGE", price: "$0.068", logo: "https://cryptologos.cc/logos/dogecoin-doge-logo.png" },
-  { name: "Shiba Inu", symbol: "SHIB", price: "$0.000007", logo: "https://cryptologos.cc/logos/shiba-inu-shib-logo.png" },
-  { name: "Pepe Coin", symbol: "PEPE", price: "N/A",      logo: "https://cryptologos.cc/logos/pepecoin-pepe-logo.png" }
-];
-const keywords = ['meme','doge','shib','pepe','floki','bonk','cat','fist'];
-const ONE_WEEK = 7 * 24 * 60 * 60 * 1000;
+  // Objet voteStore pour stocker localement les votes
+  const voteStore = {};
 
-function loadDetectionData() {
-  const t = +localStorage.getItem("lastDetectionTimestamp");
-  const d = localStorage.getItem("memecoinsData");
-  return (t && d && Date.now() - t < ONE_WEEK) ? JSON.parse(d) : null;
-}
-function saveDetectionData(coins) {
-  localStorage.setItem("lastDetectionTimestamp", Date.now());
-  localStorage.setItem("memecoinsData", JSON.stringify(coins));
-}
+  // --------------------------------------------------------
+  // (3) Fonction de création des cartes memecoin (avec logo aligné)
+  // --------------------------------------------------------
+  function createCard(coin) {
+    const card = document.createElement('div');
+    card.className = 'memecoin-card';
+    card.style.cssText = `
+      background: #222; color: #eee; border-radius: 12px; padding: 15px; margin: 10px; width: 280px; 
+      box-shadow: 0 0 12px #ffa500;
+      display: flex; flex-direction: column; align-items: center;
+    `;
 
-// ------------------------------------------------------------------
-// 4) Récupération memecoins via API
-// ------------------------------------------------------------------
-async function fetchFromApis() {
-  const apis = [
-    'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false',
-    'https://api.coinpaprika.com/v1/tickers',
-    'https://api.coinscap.io/v2/assets'
-  ];
-  for (const url of apis) {
+    card.innerHTML = `
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px; width: 100%;">
+        <img src="${coin.image}" alt="${coin.name} logo" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+        <h3 style="margin:0;">${coin.name} (${coin.symbol.toUpperCase()})</h3>
+      </div>
+      <p><strong>${translations[currentLang]['price-label'] || 'Prix'} :</strong> $${coin.price}</p>
+      <p><strong>${translations[currentLang]['volume-label'] || 'Volume'} :</strong> $${coin.volume}</p>
+      <p><strong>${translations[currentLang]['votes-label']}</strong> <span class="votes-count" data-symbol="${coin.symbol}">${voteStore[coin.symbol] || 0}</span></p>
+      <button class="vote-btn" data-symbol="${coin.symbol}">${translations[currentLang]['btn-vote']}</button>
+    `;
+
+    // Gestionnaire du vote
+    card.querySelector('.vote-btn').addEventListener('click', async (e) => {
+      const symbol = e.target.dataset.symbol;
+      voteStore[symbol] = (voteStore[symbol] || 0) + 1;
+      updateVoteDisplay(symbol);
+
+      // Envoi vers backend Firestore (adapter selon ta logique)
+      try {
+        // await updateVoteInFirestore(symbol, voteStore[symbol]);
+      } catch (error) {
+        console.error("Erreur Firestore vote:", error);
+      }
+
+      // Envoi vote via Pusher (backend)
+      sendVoteViaPusher(symbol, voteStore[symbol]);
+    });
+
+    return card;
+  }
+
+  // --------------------------------------------------------
+  // (4) Mettre à jour affichage votes
+  // --------------------------------------------------------
+  function updateVoteDisplay(symbol) {
+    document.querySelectorAll(`.votes-count[data-symbol="${symbol}"]`).forEach(span => {
+      span.textContent = voteStore[symbol];
+    });
+  }
+
+  // --------------------------------------------------------
+  // (5) Envoyer vote via Pusher (à faire via backend)
+  // --------------------------------------------------------
+  async function sendVoteViaPusher(symbol, votes) {
     try {
-      const res = await fetch(url);
-      if (!res.ok) continue;
-      const data = await res.json();
-      const list = url.includes('coinscap') ? data.data : data;
-      const coins = list
-        .filter(c => keywords.some(kw =>
-          c.name.toLowerCase().includes(kw) ||
-          c.symbol.toLowerCase().includes(kw)
-        ))
-        .slice(0, 3)
-        .map(c => ({
-          name: c.name,
-          symbol: c.symbol,
-          price: "$" + (
-            c.current_price ||
-            c.quotes?.USD?.price ||
-            c.priceUsd ||
-            0
-          ).toFixed(6),
-          logo: c.image || "https://cryptologos.cc/logos/default-crypto-logo.png"
-        }));
-      if (coins.length === 3) return coins;
-    } catch (e) {
-      console.warn("API error", url, e);
+      await fetch('/api/send-vote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ symbol, votes })
+      });
+    } catch (err) {
+      console.error('Erreur envoi vote Pusher:', err);
     }
   }
-  return fallback;
-}
 
-// ------------------------------------------------------------------
-// 5) Création carte memecoin + vote
-// ------------------------------------------------------------------
-function createCard(coin) {
-  const card = document.createElement('div');
-  card.className = 'memecoin-card';
-  card.style.cssText = `
-    background:#222;color:#eee;border-radius:10px;padding:15px;
-    margin:10px;width:200px;text-align:center;font-family:Arial,sans-serif;
-    box-shadow:0 0 12px #000;display:inline-block;vertical-align:top;
-  `;
-  card.innerHTML = `
-    <img src="${coin.logo}" alt="${coin.name}" style="width:80px;height:80px;object-fit:contain;margin-bottom:10px;">
-    <h3 style="margin:5px 0;font-size:1.1em;">${coin.name}</h3>
-    <p style="color:#aaa;margin:3px 0;font-weight:bold;">${coin.symbol}</p>
-    <p style="margin:5px 0;font-size:1.2em;color:#4caf50;">${coin.price}</p>
-    <button class="vote-btn" style="
-      background:#4caf50;color:white;border:none;padding:5px 10px;margin-top:10px;
-      border-radius:5px;cursor:pointer;font-weight:bold;">
-      ${translations[currentLang]["btn-vote"]}
-    </button>
-    <div class="vote-count" style="margin-top:5px;font-size:0.9em;color:#aaa;">
-      Votes : 0
-    </div>
-  `;
-  const key = `votes/${coin.name.replace(/\s+/g,'_')}`;
-  const btn = card.querySelector('.vote-btn');
-  const count = card.querySelector('.vote-count');
-  db.ref(key).on('value', snap => {
-    count.textContent = 'Votes : ' + (snap.val() || 0);
+  // --------------------------------------------------------
+  // (6) Ecouter événements votes Pusher (mise à jour temps réel)
+  // --------------------------------------------------------
+  channel.bind('vote-event', data => {
+    const { symbol, votes } = data;
+    voteStore[symbol] = votes;
+    updateVoteDisplay(symbol);
   });
-  btn.addEventListener('click', () => {
-    db.ref(key).transaction(v => (v || 0) + 1);
-  });
-  return card;
-}
 
-// ------------------------------------------------------------------
-// 6) startDetection : affiche les 3 memecoins
-// ------------------------------------------------------------------
-async function startDetection() {
-  const container = document.getElementById('memecoins-container');
-  if (!container) return console.error('#memecoins-container introuvable');
-  let coins = loadDetectionData();
-  if (!coins) {
-    coins = await fetchFromApis();
-    saveDetectionData(coins);
+  // --------------------------------------------------------
+  // (7) Initialisation et chargement memecoins avec logos
+  // --------------------------------------------------------
+  async function fetchMemecoins() {
+    try {
+      const response = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=4&page=1&sparkline=false');
+      const data = await response.json();
+
+      const container = document.getElementById('memecoins-container');
+      container.innerHTML = ''; // vider le container
+
+      data.forEach(coin => {
+        // Initialiser votes localement à zéro si inexistant
+        if (!voteStore[coin.symbol]) voteStore[coin.symbol] = 0;
+
+        const card = createCard({
+          name: coin.name,
+          symbol: coin.symbol,
+          price: coin.current_price,
+          volume: coin.total_volume,
+          image: coin.image
+
+        });
+
+        container.appendChild(card);
+      });
+
+    } catch (err) {
+      console.error("Erreur chargement memecoins :", err);
+      document.getElementById('memecoins-container').textContent = translations[currentLang]['no-coins-msg'];
+    }
   }
-  container.innerHTML = '';
-  coins.forEach(c => container.appendChild(createCard(c)));
-}
 
-// ------------------------------------------------------------------
-// 7) Overlay plein écran avant détection
-// ------------------------------------------------------------------
-function showOverlay() {
-  const o = document.createElement('div');
-  o.id = 'detection-overlay';
-  o.style.cssText = `
-    position:fixed;top:0;left:0;width:100%;height:100%;
-    background:url('detection_image.gif') no-repeat center center;
-    background-size:cover;z-index:2000;
-  `;
-  document.body.appendChild(o);
-  setTimeout(() => {
-    o.remove();
-    startDetection();
-  }, 5000);
-}
+  // --------------------------------------------------------
+  // (8) Gestion du changement de langue
+  // --------------------------------------------------------
+  const langSwitch = document.getElementById('lang-switch');
+  langSwitch.addEventListener('click', () => {
+    currentLang = currentLang === 'fr' ? 'en' : 'fr';
+    applyTranslations();
+    fetchMemecoins();
+  });
 
-// ------------------------------------------------------------------
-// 8) Initialisation
-// ------------------------------------------------------------------
-(function init() {
+  // --------------------------------------------------------
+  // (9) Initialisation à l'ouverture
+  // --------------------------------------------------------
   applyTranslations();
-  startDetection();
-
-  // Bouton 🔍 Lancer la détection
-  const btn = document.getElementById('startButton');
-  if (btn) {
-    btn.textContent = translations[currentLang]["btn-start-detection"];
-    btn.addEventListener('click', showOverlay);
-  }
-
-  // Bascule FR/EN
-  document.getElementById('lang-switch')
-    .addEventListener('click', () => {
-      currentLang = currentLang === 'fr' ? 'en' : 'fr';
-      document.getElementById('lang-switch').textContent = currentLang.toUpperCase();
-      applyTranslations();
-    });
-
-  // Menu hamburger
-  const toggle = document.getElementById('hamburger-toggle');
-  const nav = document.querySelector('nav ul');
-  if (toggle && nav) {
-    toggle.addEventListener('click', () => {
-      toggle.classList.toggle('open');
-      nav.classList.toggle('open');
-    });
-  }
+  fetchMemecoins();
+});
