@@ -185,15 +185,15 @@ function sendVote(symbol) {
       voteStore[symbol] = (voteStore[symbol] || 0) + 1;
       updateVoteDisplay(symbol);
 
-      try {
-        await fetch('/api/send-vote', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ symbol, votes: voteStore[symbol] })
-        });
-      } catch (err) {
-        console.error('Erreur envoi vote Pusher:', err);
-      }
+	try {
+	await fetch('/.netlify/functions/send-vote', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ symbol, votes: voteStore[symbol] })
+  });
+} catch (err) {
+  console.error('Erreur envoi vote Pusher:', err);
+}
     });
 
     return card;
