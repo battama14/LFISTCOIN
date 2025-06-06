@@ -3,11 +3,11 @@
 const Pusher = require("pusher");
 
 const pusher = new Pusher({
-  appId: "2004404",
-  key: "2adaefe3456db8023516",
-  secret: "872d62a9f173401fdbec",
-  cluster: "eu",
-  useTLS: true
+  appId: process.env.PUSHER_APP_ID,
+  key: process.env.PUSHER_KEY,
+  secret: process.env.PUSHER_SECRET,
+  cluster: process.env.PUSHER_CLUSTER,
+  useTLS: true,
 });
 
 exports.handler = async function(event) {
