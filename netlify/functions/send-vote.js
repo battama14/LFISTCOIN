@@ -10,10 +10,29 @@ const pusher = new Pusher({
 
 exports.handler = async (event) => {
   try {
+    console.log('Event reçu:', event);
+    if (!event.body) {
+      console.error('Erreur : event.body est vide');
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ message: 'Body manquant' }),
+      };
+    }
+
     const data = JSON.parse(event.body);
+    console.log('Données parsées:', data);
     const { symbol, votes } = data;
 
+    if (!symbol || votes === undefined) {
+      console.error('Erreur : symbol ou votes manquant', data);
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ message: 'symbol ou votes manquant' }),
+      };
+    }
+
     await pusher.trigger('votes-channel', 'vote-event', { symbol, votes });
+    console.log(`Vote envoyé: ${symbol} - ${votes}`);
 
     return {
       statusCode: 200,
