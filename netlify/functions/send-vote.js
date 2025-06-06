@@ -1,6 +1,18 @@
+const admin = require('firebase-admin');
 const Pusher = require('pusher');
 
-// Configuration Pusher
+// Une seule initialisation
+if (!admin.apps.length) {
+  const serviceAccount = require('./chemin/vers/ton-fichier.json'); // <- adapte ici
+
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: 'https://<TON_PROJECT_ID>.firebaseio.com' // adapte ici
+  });
+}
+
+const db = admin.database();
+
 const pusher = new Pusher({
   appId: '2004404',
   key: '2adaefe3456db8023516',
@@ -10,10 +22,6 @@ const pusher = new Pusher({
 });
 
 exports.handler = async (event) => {
-  // Log complet pour debug
-  console.log("EVENT REÇU:", JSON.stringify(event, null, 2));
-
-  // Vérifie que c’est bien un POST
   if (event.httpMethod !== 'POST') {
     return {
       statusCode: 405,
@@ -21,7 +29,6 @@ exports.handler = async (event) => {
     };
   }
 
-  // Vérifie que le body est bien là
   if (!event.body) {
     return {
       statusCode: 400,
@@ -31,20 +38,27 @@ exports.handler = async (event) => {
 
   try {
     const data = JSON.parse(event.body);
-    const { symbol, votes } = data;
+    const { symbol } = data;
 
-    // Log des données reçues
-    console.log("Données reçues:", symbol, votes);
+    // 🔥 Incrémenter le vote dans Firebase
+    const ref = db.ref(`votes/${symbol}`);
+    const snapshot = await ref.once('value');
+    const currentVotes = snapshot.val() || 0;
+    const updatedVotes = currentVotes + 1;
+    await ref.set(updatedVotes);
 
-    // Envoie via Pusher
-    await pusher.trigger('votes-channel', 'vote-event', { symbol, votes });
+    // ✅ Envoyer aux clients via Pusher
+    await pusher.trigger('votes-channel', 'vote-event', {
+      symbol,
+      votes: updatedVotes,
+    });
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ message: 'Vote envoyé avec succès' }),
+      body: JSON.stringify({ message: 'Vote enregistré', votes: updatedVotes }),
     };
   } catch (error) {
-    console.error('Erreur fonction send-vote:', error);
+    console.error('Erreur serveur:', error);
     return {
       statusCode: 500,
       body: JSON.stringify({ message: 'Erreur serveur' }),
