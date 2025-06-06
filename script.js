@@ -48,7 +48,6 @@ document.addEventListener("DOMContentLoaded", () => {
       "faq-a2": "Vous pouvez acheter sur Pancakeswap via le lien “Acheter” en haut de la page.",
       "contact-title": "Contact",
       "contact-email": "lfistcoin@gmail.com",
-      "footer-copyright": "© 2025 LFIST Token. Tous droits réservés.",
       "btn-vote": "👍 Voter",
       "leaderboard-title": "Classement :",
       "no-coins-msg": "Aucun memecoin détecté.",
@@ -100,7 +99,6 @@ document.addEventListener("DOMContentLoaded", () => {
       "faq-a2": "You can buy on Pancakeswap via the “Buy” link at the top of the page.",
       "contact-title": "Contact",
       "contact-email": "lfistcoin@gmail.com",
-      "footer-copyright": "© 2025 LFIST Token. All rights reserved.",
       "btn-vote": "👍 Vote",
       "leaderboard-title": "Leaderboard:",
       "no-coins-msg": "No memecoin detected.",
@@ -113,7 +111,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let currentLang = 'fr';
 
-  // Appliquer les traductions
   function applyTranslations() {
     document.querySelectorAll('[data-lang-key]').forEach(el => {
       const key = el.dataset.langKey;
@@ -123,24 +120,46 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // --------------------------------------------------------
-  // (2) Configuration Pusher (remplace par ta clé et cluster)
-  // --------------------------------------------------------
-  // Inclure dans ton HTML : <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
-  const pusher = new Pusher('YOUR_PUSHER_KEY', {  // <-- Remplace par ta clé Pusher
-    cluster: 'YOUR_CLUSTER',                      // <-- Remplace par ton cluster (ex: 'eu')
-    forceTLS: true
-  });
-
-  // Channel et event pour votes
-  const channel = pusher.subscribe('votes-channel');
-
-  // Objet voteStore pour stocker localement les votes
+  // Initialiser voteStore
   const voteStore = {};
 
-  // --------------------------------------------------------
-  // (3) Fonction de création des cartes memecoin (avec logo aligné)
-  // --------------------------------------------------------
+ // Configuration Pusher
+const pusher = new Pusher('2adaefe3456db8023516', {
+  cluster: 'eu',
+  forceTLS: true
+});
+
+const channel = pusher.subscribe('votes-channel');
+channel.bind('vote-event', data => {
+  const { symbol, votes } = data;
+  voteStore[symbol] = votes;
+  updateVoteDisplay(symbol);
+});
+
+function updateVoteDisplay(symbol) {
+  document.querySelectorAll(`.votes-count[data-symbol="${symbol}"]`).forEach(span => {
+    span.textContent = voteStore[symbol];
+  });
+}
+
+// Fonction pour envoyer un vote à la fonction Netlify
+function sendVote(symbol) {
+  fetch('/.netlify/functions/send-vote', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ symbol: symbol, votes: 1 })
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log('✅ Vote envoyé avec succès:', data);
+  })
+  .catch(error => {
+    console.error('❌ Erreur lors de l\'envoi du vote:', error);
+  });
+}
+
   function createCard(coin) {
     const card = document.createElement('div');
     card.className = 'memecoin-card';
@@ -161,72 +180,34 @@ document.addEventListener("DOMContentLoaded", () => {
       <button class="vote-btn" data-symbol="${coin.symbol}">${translations[currentLang]['btn-vote']}</button>
     `;
 
-    // Gestionnaire du vote
     card.querySelector('.vote-btn').addEventListener('click', async (e) => {
       const symbol = e.target.dataset.symbol;
       voteStore[symbol] = (voteStore[symbol] || 0) + 1;
       updateVoteDisplay(symbol);
 
-      // Envoi vers backend Firestore (adapter selon ta logique)
       try {
-        // await updateVoteInFirestore(symbol, voteStore[symbol]);
-      } catch (error) {
-        console.error("Erreur Firestore vote:", error);
+        await fetch('/api/send-vote', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ symbol, votes: voteStore[symbol] })
+        });
+      } catch (err) {
+        console.error('Erreur envoi vote Pusher:', err);
       }
-
-      // Envoi vote via Pusher (backend)
-      sendVoteViaPusher(symbol, voteStore[symbol]);
     });
 
     return card;
   }
 
-  // --------------------------------------------------------
-  // (4) Mettre à jour affichage votes
-  // --------------------------------------------------------
-  function updateVoteDisplay(symbol) {
-    document.querySelectorAll(`.votes-count[data-symbol="${symbol}"]`).forEach(span => {
-      span.textContent = voteStore[symbol];
-    });
-  }
-
-  // --------------------------------------------------------
-  // (5) Envoyer vote via Pusher (à faire via backend)
-  // --------------------------------------------------------
-  async function sendVoteViaPusher(symbol, votes) {
-    try {
-      await fetch('/api/send-vote', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ symbol, votes })
-      });
-    } catch (err) {
-      console.error('Erreur envoi vote Pusher:', err);
-    }
-  }
-
-  // --------------------------------------------------------
-  // (6) Ecouter événements votes Pusher (mise à jour temps réel)
-  // --------------------------------------------------------
-  channel.bind('vote-event', data => {
-    const { symbol, votes } = data;
-    voteStore[symbol] = votes;
-    updateVoteDisplay(symbol);
-  });
-
-  // --------------------------------------------------------
-  // (7) Initialisation et chargement memecoins avec logos
-  // --------------------------------------------------------
   async function fetchMemecoins() {
     try {
       const response = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=4&page=1&sparkline=false');
       const data = await response.json();
 
       const container = document.getElementById('memecoins-container');
-      container.innerHTML = ''; // vider le container
+      container.innerHTML = '';
 
       data.forEach(coin => {
-        // Initialiser votes localement à zéro si inexistant
         if (!voteStore[coin.symbol]) voteStore[coin.symbol] = 0;
 
         const card = createCard({
@@ -235,7 +216,6 @@ document.addEventListener("DOMContentLoaded", () => {
           price: coin.current_price,
           volume: coin.total_volume,
           image: coin.image
-
         });
 
         container.appendChild(card);
@@ -247,9 +227,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // --------------------------------------------------------
-  // (8) Gestion du changement de langue
-  // --------------------------------------------------------
   const langSwitch = document.getElementById('lang-switch');
   langSwitch.addEventListener('click', () => {
     currentLang = currentLang === 'fr' ? 'en' : 'fr';
@@ -257,9 +234,6 @@ document.addEventListener("DOMContentLoaded", () => {
     fetchMemecoins();
   });
 
-  // --------------------------------------------------------
-  // (9) Initialisation à l'ouverture
-  // --------------------------------------------------------
   applyTranslations();
   fetchMemecoins();
 });
