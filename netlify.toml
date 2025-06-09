@@ -1,9 +1,3 @@
 [build]
-  publish = "public"  # dossier avec index.html
-  functions = "netlify/functions"
-
-[[plugins]]
-  package = "@netlify/plugin-functions-core"  # plugin recommandé pour fonctions
-
-# Optionnel: config cron pour Netlify Edge Functions (version beta),
-# sinon tu peux utiliser un service externe comme cron-job.org
+  publish = "public"
+  # ou "." si ton HTML est à la racine
