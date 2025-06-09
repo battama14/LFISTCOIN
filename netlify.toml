@@ -1,3 +1,2 @@
 [build]
-  publish = "public"
-  # ou "." si ton HTML est à la racine
+  publish = "."
