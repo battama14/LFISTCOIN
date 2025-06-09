@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FIST-DETECTOR</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <span>LFIST</span>
+    </div>
+    <nav class="nav-menu">
+      <a href="/">Accueil</a>
+      <a href="/vote.html">Fist-Detector</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h1>FIST <span class="highlight">DETECTOR</span></h1>
+    <p>Vote chaque semaine pour le memecoin qui va tout péter ! 💥</p>
+    <div class="fun-emoji">🧠</div>
+  </section>
+
+  <section class="section neon-section">
+    <h2>Les 3 Memecoins détectés cette semaine</h2>
+
+    <!-- 🔽 Ce conteneur sera rempli dynamiquement par le JS -->
+    <div id="memecoins-container" class="card-container"></div>
+
+    <p class="meme-text">Tu ne peux voter qu'une seule fois par semaine. Reviens lundi !</p>
+  </section>
+
+  <footer>
+    Powered by <span class="meme-footer">LFIST</span> 🧠
+  </footer>
+
+  <!-- 🔽 Ton script JS principal avec Firebase -->
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
