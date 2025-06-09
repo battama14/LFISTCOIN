@@ -1,11 +1,22 @@
 import { db } from './firebase-config.js';
 import { ref, set, remove, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-// 🔐 ID unique pour l'utilisateur
-let userId = localStorage.getItem("userId");
-if (!userId) {
-  userId = "user-" + Math.random().toString(36).substring(2, 10);
-  localStorage.setItem("userId", userId);
+// 🔐 ID unique pour l'utilisateur basé sur son adresse IP
+let userId = localStorage.getItem("userIpId");
+
+async function fetchUserIp() {
+  try {
+    const res = await fetch('https://api.ipify.org?format=json');
+    const data = await res.json();
+    const ip = data.ip.replace(/\./g, "-"); // Firebase-safe ID
+    userId = "ip-" + ip;
+    localStorage.setItem("userIpId", userId);
+    return userId;
+  } catch (e) {
+    console.error("❌ Impossible d’obtenir l’adresse IP :", e);
+    userId = "ip-unknown-" + Math.random().toString(36).substring(2, 10);
+    return userId;
+  }
 }
 
 // 🕒 Calcule le numéro de la semaine ISO
@@ -13,8 +24,8 @@ function getWeekNumber(d) {
   d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
   const dayNum = d.getUTCDay() || 7;
   d.setUTCDate(d.getUTCDate() + 4 - dayNum);
-  const yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
-  return Math.ceil((((d - yearStart) / 86400000) + 1)/7);
+  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+  return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
 }
 
 // 🔁 Réinitialise les votes chaque semaine
@@ -35,9 +46,10 @@ function resetVotesIfNeeded() {
   }
 }
 
-// 📥 Enregistre le vote utilisateur
-function enregistrerVote(memecoinId) {
-  set(ref(db, 'votes/' + memecoinId + '/' + userId), true)
+// 📥 Enregistre le vote utilisateur (IP-based)
+async function enregistrerVote(memecoinId) {
+  const uid = await fetchUserIp();
+  set(ref(db, 'votes/' + memecoinId + '/' + uid), true)
     .then(() => {
       console.log("✅ Vote enregistré pour", memecoinId);
       document.querySelectorAll(".vote-button").forEach(btn => btn.disabled = true);
@@ -93,7 +105,6 @@ function afficherMemecoins(memecoins) {
     container.appendChild(card);
   });
 
-  // Gestion des clics sur les boutons vote
   document.querySelectorAll(".vote-button").forEach(button => {
     button.addEventListener("click", () => {
       const memecoinId = button.getAttribute("data-id");
@@ -101,14 +112,12 @@ function afficherMemecoins(memecoins) {
     });
   });
 
-  // Démarre l'écoute des votes
   ecouterVotes(memecoins);
 }
 
 // 📡 Fetch avec fallback sur plusieurs APIs gratuites memecoins uniquement
 async function fetchMemecoins() {
   const apis = [
-    // CoinGecko - trending memecoins
     async () => {
       const res = await fetch('https://api.coingecko.com/api/v3/search/trending');
       if (!res.ok) throw new Error('CoinGecko API failed');
@@ -127,8 +136,6 @@ async function fetchMemecoins() {
         description: `#${c.item.market_cap_rank ?? '∞'} sur CoinGecko`
       }));
     },
-
-    // GeckoTerminal - search memecoins (exemple, peut être adapté selon doc API)
     async () => {
       const res = await fetch('https://api.geckoterminal.com/api/v2/search?query=memecoin');
       if (!res.ok) throw new Error('GeckoTerminal API failed');
@@ -137,13 +144,11 @@ async function fetchMemecoins() {
       return data.data.slice(0, 3).map(p => ({
         id: p.id,
         nom: p.attributes.name,
-        logo: "https://via.placeholder.com/80", // Pas d'url logo fourni, à ajuster si possible
+        logo: "https://via.placeholder.com/80",
         prix: "N/A",
         description: "Détecté via GeckoTerminal"
       }));
     },
-
-    // DexTools - example fallback, à adapter selon doc API DexTools si possible
     async () => {
       const res = await fetch('https://api.dextools.io/api/v1/tokens?search=memecoin'); 
       if (!res.ok) throw new Error('DexTools API failed');
@@ -168,7 +173,6 @@ async function fetchMemecoins() {
     }
   }
 
-  // Fallback si toutes les APIs échouent
   return [{
     id: "fallback1",
     nom: "FallbackCoin",
@@ -181,7 +185,7 @@ async function fetchMemecoins() {
 // ▶️ Lancement
 document.addEventListener("DOMContentLoaded", async () => {
   resetVotesIfNeeded();
-
   const memecoins = await fetchMemecoins();
   afficherMemecoins(memecoins);
 });
+
