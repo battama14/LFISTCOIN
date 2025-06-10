@@ -20,7 +20,7 @@ window.sendNewsletter = async function (messageContent) {
       return emailjs.send("service_keqvfcw", "template_4jz4w3e", {
         user_email: entry.email,
         message: messageContent
-      }, "IKFVXB-BD1-DJsPCV"); // Remplace cette valeur par ta clé publique si différente
+      }, "IKFVXB-BD1-DJsPCV");
     });
 
     await Promise.all(envois);
@@ -54,18 +54,16 @@ window.subscribeEmail = async function () {
 
   try {
     const userId = generateUserId();
-    // Enregistrement de l'adresse email dans Firebase
     await set(ref(db, `newsletter/${userId}`), { email: email });
-    
-    // Envoi automatique d'un email de bienvenue
+
     await emailjs.send(
-      "service_keqvfcw",         // Remplace par l'ID de ton service pour le mail de bienvenue
-      "template_4jz4w3e",        // Remplace par l'ID de ton template de mail de bienvenue
+      "service_keqvfcw",
+      "template_4jz4w3e",
       {
-        user_email: email,       // Assure-toi que ton template utilise bien {{user_email}}
+        user_email: email,
         message: "Bienvenue sur notre plateforme ! Merci pour ton inscription." 
       },
-      "IKFVXB-BD1-DJsPCV"        // Remplace par ta clé publique EmailJS si différente
+      "IKFVXB-BD1-DJsPCV"
     );
 
     emailMsg.textContent = "✅ Merci ! Tu es inscrit à la newsletter. Un mail de bienvenue a été envoyé.";
@@ -103,20 +101,25 @@ function getWeekNumber(d) {
   return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
 }
 
+// ✅ MODIFICATION ICI UNIQUEMENT
 function resetVotesIfNeeded() {
   const now = new Date();
   const currentWeek = now.getFullYear() + "-W" + getWeekNumber(now);
-  const lastReset = localStorage.getItem("lastVoteReset");
 
-  if (lastReset !== currentWeek) {
-    remove(ref(db, 'votes'))
-      .then(() => {
-        console.log("✅ Votes réinitialisés (semaine : " + currentWeek + ")");
-        localStorage.setItem("lastVoteReset", currentWeek);
-      })
-      .catch((error) => {
-        console.error("❌ Erreur réinitialisation votes :", error);
-      });
+  try {
+    const lastReset = localStorage.getItem("lastVoteReset") || "";
+    if (lastReset !== currentWeek) {
+      remove(ref(db, 'votes'))
+        .then(() => {
+          console.log("✅ Votes réinitialisés (semaine : " + currentWeek + ")");
+          localStorage.setItem("lastVoteReset", currentWeek);
+        })
+        .catch((error) => {
+          console.error("❌ Erreur réinitialisation votes :", error);
+        });
+    }
+  } catch (e) {
+    console.warn("⚠️ localStorage inaccessible ou bloqué :", e);
   }
 }
 
