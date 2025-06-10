@@ -1,5 +1,5 @@
 import { db } from './firebase-config.js';
-import { ref, set, remove, onValue, push, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import { ref, set, remove, onValue, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
 // ✉️ Envoi de message à tous les inscrits via EmailJS
 window.sendNewsletter = async function (messageContent) {
@@ -20,7 +20,7 @@ window.sendNewsletter = async function (messageContent) {
       return emailjs.send("service_keqvfcw", "template_4jz4w3e", {
         user_email: entry.email,
         message: messageContent
-      }, "IKFVXB-BD1-DJsPCV");
+      }, "IKFVXB-BD1-DJsPCV"); // Remplace cette valeur par ta clé publique si différente
     });
 
     await Promise.all(envois);
@@ -54,16 +54,18 @@ window.subscribeEmail = async function () {
 
   try {
     const userId = generateUserId();
+    // Enregistrement de l'adresse email dans Firebase
     await set(ref(db, `newsletter/${userId}`), { email: email });
-
+    
+    // Envoi automatique d'un email de bienvenue
     await emailjs.send(
-      "service_keqvfcw",
-      "template_4jz4w3e",
+      "service_keqvfcw",         // Remplace par l'ID de ton service pour le mail de bienvenue
+      "template_4jz4w3e",        // Remplace par l'ID de ton template de mail de bienvenue
       {
-        user_email: email,
+        user_email: email,       // Assure-toi que ton template utilise bien {{user_email}}
         message: "Bienvenue sur notre plateforme ! Merci pour ton inscription." 
       },
-      "IKFVXB-BD1-DJsPCV"
+      "IKFVXB-BD1-DJsPCV"        // Remplace par ta clé publique EmailJS si différente
     );
 
     emailMsg.textContent = "✅ Merci ! Tu es inscrit à la newsletter. Un mail de bienvenue a été envoyé.";
@@ -79,6 +81,7 @@ window.subscribeEmail = async function () {
 let userId = localStorage.getItem("userIpId");
 
 async function fetchUserIp() {
+  if (userId) return userId;  // Garde l'ID déjà en localStorage si présent
   try {
     const res = await fetch('https://api.ipify.org?format=json');
     const data = await res.json();
@@ -101,48 +104,64 @@ function getWeekNumber(d) {
   return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
 }
 
-// ✅ MODIFICATION ICI UNIQUEMENT
 function resetVotesIfNeeded() {
   const now = new Date();
   const currentWeek = now.getFullYear() + "-W" + getWeekNumber(now);
+  const lastReset = localStorage.getItem("lastVoteReset");
 
-  try {
-    const lastReset = localStorage.getItem("lastVoteReset") || "";
-    if (lastReset !== currentWeek) {
-      remove(ref(db, 'votes'))
-        .then(() => {
-          console.log("✅ Votes réinitialisés (semaine : " + currentWeek + ")");
-          localStorage.setItem("lastVoteReset", currentWeek);
-        })
-        .catch((error) => {
-          console.error("❌ Erreur réinitialisation votes :", error);
-        });
-    }
-  } catch (e) {
-    console.warn("⚠️ localStorage inaccessible ou bloqué :", e);
+  if (lastReset !== currentWeek) {
+    remove(ref(db, 'votes'))
+      .then(() => {
+        console.log("✅ Votes réinitialisés (semaine : " + currentWeek + ")");
+        localStorage.setItem("lastVoteReset", currentWeek);
+      })
+      .catch((error) => {
+        console.error("❌ Erreur réinitialisation votes :", error);
+      });
   }
 }
 
 async function enregistrerVote(memecoinId) {
   const uid = await fetchUserIp();
-  set(ref(db, 'votes/' + memecoinId + '/' + uid), true)
-    .then(() => {
-      console.log("✅ Vote enregistré pour", memecoinId);
-      document.querySelectorAll(".vote-button").forEach(btn => btn.disabled = true);
-    })
-    .catch((error) => {
-      console.error("❌ Erreur d'enregistrement du vote :", error);
-    });
+  const userVoteRef = ref(db, 'votes/' + uid);
+
+  // Vérifie si l'utilisateur a déjà voté cette semaine
+  get(userVoteRef).then(snapshot => {
+    if (snapshot.exists()) {
+      alert("❌ Tu as déjà voté cette semaine !");
+    } else {
+      set(userVoteRef, memecoinId)
+        .then(() => {
+          console.log("✅ Vote enregistré pour", memecoinId);
+          document.querySelectorAll(".vote-button").forEach(btn => btn.disabled = true);
+        })
+        .catch((error) => {
+          console.error("❌ Erreur d'enregistrement du vote :", error);
+        });
+    }
+  });
 }
 
 function ecouterVotes(memecoins) {
   const totalRef = ref(db, 'votes');
   onValue(totalRef, (snapshot) => {
     const data = snapshot.val() || {};
-    const totalVotes = Object.values(data).reduce((sum, votes) => sum + Object.keys(votes).length, 0);
+
+    // Compte total de votes (nombre total d'utilisateurs ayant voté)
+    const totalVotes = Object.keys(data).length;
+
+    // Compte votes par memecoin
+    const votesParMemecoin = {};
+    memecoins.forEach(m => votesParMemecoin[m.id] = 0);
+
+    Object.values(data).forEach(votedMemecoinId => {
+      if (votesParMemecoin.hasOwnProperty(votedMemecoinId)) {
+        votesParMemecoin[votedMemecoinId]++;
+      }
+    });
 
     memecoins.forEach(memecoin => {
-      const votes = data[memecoin.id] ? Object.keys(data[memecoin.id]).length : 0;
+      const votes = votesParMemecoin[memecoin.id] || 0;
       const pourcentage = totalVotes ? Math.round((votes / totalVotes) * 100) : 0;
 
       const bar = document.querySelector(`.progress[data-id="${memecoin.id}"]`);
@@ -231,7 +250,7 @@ async function fetchMemecoins() {
         id: p.address || p.id,
         nom: p.name,
         logo: p.logo || "https://via.placeholder.com/80",
-        prix: "N/A",
+        prix: p.price_usd || "N/A",
         description: "Détecté via DexTools"
       }));
     }
@@ -240,21 +259,28 @@ async function fetchMemecoins() {
   for (const apiFunc of apis) {
     try {
       const memecoins = await apiFunc();
-      if (memecoins.length) return memecoins;
+      if (memecoins && memecoins.length >= 3) {
+        return memecoins;
+      }
     } catch (e) {
       console.warn(e.message);
     }
   }
 
-  return [{
-    id: "fallback1",
-    nom: "FallbackCoin",
-    description: "Aucune API memecoin n'a répondu, version de secours.",
-    prix: "N/A",
-    logo: "https://via.placeholder.com/100"
-  }];
+  return [];
 }
 
-// Initialisation
-resetVotesIfNeeded();
-fetchMemecoins().then(afficherMemecoins);
+async function init() {
+  resetVotesIfNeeded();
+  const memecoins = await fetchMemecoins();
+
+  if (!memecoins.length) {
+    document.getElementById("memecoins-container").textContent = "Aucun memecoin détecté cette semaine.";
+    return;
+  }
+
+  afficherMemecoins(memecoins);
+}
+
+init();
+
