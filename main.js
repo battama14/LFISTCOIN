@@ -20,7 +20,7 @@ window.sendNewsletter = async function (messageContent) {
       return emailjs.send("service_keqvfcw", "template_4jz4w3e", {
         user_email: entry.email,
         message: messageContent
-      });
+      }, "IKFVXB-BD1-DJsPCV"); // Remplace cette valeur par ta clé publique si différente
     });
 
     await Promise.all(envois);
@@ -31,7 +31,7 @@ window.sendNewsletter = async function (messageContent) {
   }
 };
 
-// 📧 Fonction d'inscription newsletter
+// 📧 Fonction d'inscription newsletter et envoi d'un email de bienvenue automatique
 function validateEmail(email) {
   return /\S+@\S+\.\S+/.test(email);
 }
@@ -54,12 +54,25 @@ window.subscribeEmail = async function () {
 
   try {
     const userId = generateUserId();
+    // Enregistrement de l'adresse email dans Firebase
     await set(ref(db, `newsletter/${userId}`), { email: email });
-    emailMsg.textContent = "✅ Merci ! Tu es inscrit à la newsletter.";
+    
+    // Envoi automatique d'un email de bienvenue
+    await emailjs.send(
+      "service_keqvfcw",         // Remplace par l'ID de ton service pour le mail de bienvenue
+      "template_4jz4w3e",        // Remplace par l'ID de ton template de mail de bienvenue
+      {
+        user_email: email,       // Assure-toi que ton template utilise bien {{user_email}}
+        message: "Bienvenue sur notre plateforme ! Merci pour ton inscription." 
+      },
+      "IKFVXB-BD1-DJsPCV"        // Remplace par ta clé publique EmailJS si différente
+    );
+
+    emailMsg.textContent = "✅ Merci ! Tu es inscrit à la newsletter. Un mail de bienvenue a été envoyé.";
     emailMsg.style.color = "green";
     emailInput.value = "";
   } catch (error) {
-    console.error("Erreur Firebase :", error);
+    console.error("Erreur Firebase/emailJS :", error);
     emailMsg.textContent = "❌ Une erreur s'est produite. Réessaie plus tard.";
   }
 };
@@ -242,5 +255,3 @@ async function fetchMemecoins() {
 // Initialisation
 resetVotesIfNeeded();
 fetchMemecoins().then(afficherMemecoins);
-
-
