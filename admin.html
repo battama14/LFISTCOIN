@@ -1,0 +1,44 @@
+<button id="btnSendNewsletter">Envoyer newsletter test</button>
+<p id="sendStatus"></p>
+
+<script type="module">
+  import { get, ref } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+  import { db } from './firebase-config.js';  // adapte le chemin selon ton projet
+
+  window.sendNewsletter = async function (messageContent) {
+    const newsletterRef = ref(db, 'newsletter');
+    const sendStatus = document.getElementById("sendStatus");
+
+    try {
+      const snapshot = await get(newsletterRef);
+      const data = snapshot.val();
+
+      if (!data) {
+        sendStatus.textContent = "Aucun email inscrit trouvé.";
+        return;
+      }
+
+      const emails = Object.values(data);
+
+      const envois = emails.map(entry => {
+        return emailjs.send("service_keqvfcw", "template_4jz4w3e", {
+          user_email: entry.email,
+          message: messageContent
+        });
+      });
+
+      await Promise.all(envois);
+      sendStatus.textContent = "✅ Message envoyé à tous les inscrits.";
+    } catch (error) {
+      console.error("Erreur envoi newsletter :", error);
+      sendStatus.textContent = "❌ Erreur lors de l'envoi.";
+    }
+  };
+
+  document.getElementById("btnSendNewsletter").addEventListener("click", () => {
+    sendNewsletter("Message test de bienvenue de LFIST !");
+  });
+</script>
+
+
+
