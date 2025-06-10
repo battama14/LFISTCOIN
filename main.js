@@ -1,5 +1,35 @@
 import { db } from './firebase-config.js';
-import { ref, set, remove, onValue, push } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import { ref, set, remove, onValue, push, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+// ✉️ Envoi de message à tous les inscrits via EmailJS
+window.sendNewsletter = async function (messageContent) {
+  const newsletterRef = ref(db, 'newsletter');
+
+  try {
+    const snapshot = await get(newsletterRef);
+    const data = snapshot.val();
+
+    if (!data) {
+      alert("Aucun email inscrit trouvé.");
+      return;
+    }
+
+    const emails = Object.values(data);
+
+    const envois = emails.map(entry => {
+      return emailjs.send("service_keqvfcw", "template_4jz4w3e", {
+        user_email: entry.email,
+        message: messageContent
+      });
+    });
+
+    await Promise.all(envois);
+    alert("✅ Message envoyé à tous les inscrits.");
+  } catch (error) {
+    console.error("❌ Erreur d'envoi :", error);
+    alert("❌ Une erreur s’est produite pendant l’envoi.");
+  }
+};
 
 // 📧 Fonction d'inscription newsletter
 function validateEmail(email) {
@@ -212,4 +242,5 @@ async function fetchMemecoins() {
 // Initialisation
 resetVotesIfNeeded();
 fetchMemecoins().then(afficherMemecoins);
+
 
