@@ -2,15 +2,21 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <title>Admin - Envoi Newsletter</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Newsletter</title>
 
-  <!-- Firebase SDK modules -->
+  <!-- Chargement d'EmailJS via une balise script classique -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+  <!-- Script principal utilisant les modules ES pour Firebase -->
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-    import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
+    // Import de Firebase (v9 version modulaire)
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
 
-    // Expose firebase pour utilisation globale
-    window.firebaseApp = initializeApp({
+    // Configuration Firebase (remplacez par vos identifiants)
+    const firebaseConfig = {
       apiKey: "AIzaSyDo6bGH2ofNNhL6SBB9rJ3ZaBMzldp0qp8",
       authDomain: "lfistdur.firebaseapp.com",
       databaseURL: "https://lfistdur-default-rtdb.firebaseio.com",
@@ -18,62 +24,62 @@
       storageBucket: "lfistdur.firebasestorage.app",
       messagingSenderId: "3612454131",
       appId: "1:3612454131:web:dc3eeab8ded57a40671b86"
+    };
+
+    // Initialisation de Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    // Une fois le DOM chargé, on initialise EmailJS (disponible via l'objet global emailjs)
+    window.addEventListener("DOMContentLoaded", () => {
+      if (window.emailjs) {
+        emailjs.init("ikFvXb-BD1-DJsPCV");
+      } else {
+        console.error("Le chargement de EmailJS a échoué.");
+      }
     });
-    window.db = getDatabase(window.firebaseApp);
-  </script>
 
-  <!-- EmailJS classique (pas module) -->
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    // Fonction d’envoi de la newsletter
+    window.sendNewsletter = async function() {
+      const messageContent = document.getElementById("message").value.trim();
+      if (!messageContent) {
+        alert("Merci de saisir un message avant d'envoyer.");
+        return;
+      }
 
-  <script>
-    // Initialise EmailJS dans le contexte global
-    emailjs.init('ikFvXb-BD1-DJsPCV');
-
-    // Fonction d'envoi newsletter (accès à Firebase via window.db)
-    async function sendNewsletter(messageContent) {
       try {
-        const newsletterRef = window.firebase.database().ref('newsletter');
-        const snapshot = await window.firebase.database().get(ref(window.db, 'newsletter'));
+        // Récupération des emails de la base de données
+        const newsletterRef = ref(db, "newsletter");
+        const snapshot = await get(newsletterRef);
         const data = snapshot.val();
 
         if (!data) {
-          console.log("Aucun email trouvé dans la newsletter.");
+          alert("Aucun email trouvé dans la newsletter.");
           return;
         }
 
         const emails = Object.values(data);
 
-        const envois = emails.map(entry =>
-          emailjs.send('service_keqvfcw', 'template_4jz4w3e', {
+        // Envoi du message à chaque email récuperé
+        const envois = emails.map((entry) =>
+          emailjs.send("service_keqvfcw", "template_4jz4w3e", {
             user_email: entry.email,
             message: messageContent
           })
         );
 
         await Promise.all(envois);
-        alert("Newsletter envoyée avec succès !");
-      } catch (err) {
-        console.error("Erreur envoi newsletter :", err);
-        alert("Erreur lors de l'envoi de la newsletter.");
+        alert("Newsletter envoyée avec succès à " + emails.length + " contacts.");
+      } catch (error) {
+        console.error("Erreur envoi newsletter :", error);
+        alert("Erreur lors de l'envoi de la newsletter. Voir la console pour plus d'informations.");
       }
-    }
-
-    window.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('sendBtn').addEventListener('click', () => {
-        const message = document.getElementById('messageInput').value.trim();
-        if (message) {
-          sendNewsletter(message);
-        } else {
-          alert("Veuillez écrire un message avant d'envoyer.");
-        }
-      });
-    });
+    };
   </script>
-
 </head>
 <body>
-  <h1>Admin - Envoi Newsletter</h1>
-  <textarea id="messageInput" rows="6" cols="60" placeholder="Tapez ici le message à envoyer..."></textarea><br/>
-  <button id="sendBtn">Envoyer la newsletter</button>
+  <h1>Admin Newsletter</h1>
+  <textarea id="message" rows="6" cols="50" placeholder="Tapez ici votre message de newsletter..."></textarea><br />
+  <button onclick="sendNewsletter()">Envoyer la newsletter</button>
 </body>
 </html>
