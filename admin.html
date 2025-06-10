@@ -2,57 +2,87 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <title>Admin Newsletter</title>
+  <title>Admin - Envoi Newsletter</title>
+  <script type="module">
+
+    // Import des fonctions Firebase nécessaires (à adapter si besoin)
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+    import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
+
+    // Import EmailJS SDK corrigé en module ES
+    import { init, send } from 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
+
+    // Initialisation Firebase (mets ta config ici)
+   const firebaseConfig = {
+  apiKey: "AIzaSyDo6bGH2ofNNhL6SBB9rJ3ZaBMzldp0qp8",
+  authDomain: "lfistdur.firebaseapp.com",
+  databaseURL: "https://lfistdur-default-rtdb.firebaseio.com",
+  projectId: "lfistdur",
+  storageBucket: "lfistdur.appspot.com",
+  messagingSenderId: "3612454131",
+  appId: "1:3612454131:web:dc3eeab8ded57a40671b86"
+};
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    // Initialisation EmailJS (ta clé publique)
+    init('ikFvXb-BD1-DJsPCV');
+
+    // Fonction d'envoi newsletter
+    window.sendNewsletter = async function(messageContent) {
+      try {
+        const newsletterRef = ref(db, 'newsletter');
+        const snapshot = await get(newsletterRef);
+        const data = snapshot.val();
+
+        if (!data) {
+          console.log("Aucun email trouvé dans la newsletter.");
+          return;
+        }
+
+        // On extrait les emails des entrées
+        const emails = Object.values(data);
+
+        const envois = emails.map(entry => {
+          return send('service_keqvfcw', 'template_4jz4w3e', {
+            user_email: entry.email,
+            message: messageContent
+          });
+        });
+
+        await Promise.all(envois);
+        console.log("Tous les messages ont été envoyés !");
+        alert("Newsletter envoyée avec succès.");
+
+      } catch (err) {
+        console.error("Erreur envoi newsletter :", err);
+        alert("Erreur lors de l'envoi de la newsletter. Voir console.");
+      }
+    };
+
+    // Exécution exemple quand le DOM est prêt (à adapter)
+    window.addEventListener('DOMContentLoaded', () => {
+      const btn = document.getElementById('sendBtn');
+      btn.addEventListener('click', () => {
+        const message = document.getElementById('messageInput').value.trim();
+        if (message) {
+          sendNewsletter(message);
+        } else {
+          alert("Veuillez écrire un message avant d'envoyer.");
+        }
+      });
+    });
+
+  </script>
 </head>
 <body>
-
-<button id="btnSendNewsletter">Envoyer newsletter test</button>
-<p id="sendStatus"></p>
-
-<script type="module">
-  import { get, ref } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-  import { db } from './firebase-config.js';
-  import emailjs from 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
-
-  emailjs.init('ikFvXb-BD1-DJsPCV');
-
-  window.sendNewsletter = async function (messageContent) {
-    const newsletterRef = ref(db, 'newsletter');
-    const sendStatus = document.getElementById("sendStatus");
-
-    try {
-      const snapshot = await get(newsletterRef);
-      const data = snapshot.val();
-
-      if (!data) {
-        sendStatus.textContent = "Aucun email inscrit trouvé.";
-        return;
-      }
-
-      const emails = Object.values(data);
-
-      const envois = emails.map(entry => {
-        return emailjs.send("service_keqvfcw", "template_4jz4w3e", {
-          user_email: entry.email,
-          message: messageContent
-        });
-      });
-
-      await Promise.all(envois);
-      sendStatus.textContent = "✅ Message envoyé à tous les inscrits.";
-    } catch (error) {
-      console.error("Erreur envoi newsletter :", error);
-      sendStatus.textContent = "❌ Erreur lors de l'envoi.";
-    }
-  };
-
-  document.getElementById("btnSendNewsletter").addEventListener("click", () => {
-    sendNewsletter("Message test de bienvenue de LFIST !");
-  });
-</script>
-
+  <h1>Admin - Envoi Newsletter</h1>
+  <textarea id="messageInput" rows="6" cols="60" placeholder="Tapez ici le message à envoyer..."></textarea><br/>
+  <button id="sendBtn">Envoyer la newsletter</button>
 </body>
 </html>
+
 
 
 
