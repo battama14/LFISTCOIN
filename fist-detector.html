@@ -6,11 +6,13 @@
   <title>FIST-DETECTOR</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Press+Start+2P&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
+  <script type="module" src="main.js"></script>
+
 </head>
 <body>
   <header>
     <div class="logo">
-      <span>LFIST</span>
+      <span>LFIST 💥</span>
     </div>
     <nav class="nav-menu">
       <a href="/">Accueil</a>
@@ -20,18 +22,53 @@
 
   <section class="hero">
     <h1>FIST <span class="highlight">DETECTOR</span></h1>
-    <p>Vote chaque semaine pour le memecoin qui va tout péter ! 💥</p>
-    <div class="fun-emoji">🧠</div>
+    <p>Vote chaque semaine pour le memecoin qui predre cher ! 💥</p>
+    <div class="fun-emoji"><img src="fifi.png" alt="LFIST fun" style="height: 80px;"></div>
+	<div class="fun-emoji">
+        <img src="presentation.png" alt="LFIST fun" style="height: 400px;">
+      </div>
   </section>
-
   <section class="section neon-section">
-    <h2>Les 3 Memecoins détectés cette semaine</h2>
+    <h2>Les 3 victimes détectés cette semaine</h2>
 
     <!-- 🔽 Ce conteneur sera rempli dynamiquement par le JS -->
     <div id="memecoins-container" class="card-container"></div>
 
-    <p class="meme-text">Tu ne peux voter qu'une seule fois par semaine. Reviens lundi !</p>
+    <p class="meme-text">Tu ne peux voter qu'une seule fois par semaine mais en attendant rejoins sur sur nos reseaux et inscrit toi a la newsletter.Sinon Reviens lundi !</p>
   </section>
+  <section id="newsletter" style="text-align: center; margin-top: 40px;">
+  <h2>📬 Inscris-toi à notre newsletter</h2>
+  <p>Reste informé des nouveaux memecoins détectés chaque semaine !</p>
+  <input type="email" id="emailInput" placeholder="Ton adresse email" style="padding: 10px; width: 250px; border-radius: 8px; border: 1px solid #ccc;">
+  <button onclick="subscribeEmail()" style="padding: 10px 20px; border-radius: 8px; background-color: #ff4081; color: white; border: none; cursor: pointer;">S'inscrire</button>
+  <p id="emailMsg" style="margin-top: 10px;"></p>
+</section>
+
+  
+  <!-- Section Communauté -->
+<section id="contact" class="section community-section">
+<div class="fun-emoji">
+        <img src="alien.png" alt="LFIST fun" style="height: 400px;">
+  <h2 class="section-title">💬 Rejoins la FISTFAMILY</h2>
+  <p class="community-text">Memecoins, chaos et bienveillance douteuse — ici, c’est chez toi maintenant.</p>
+
+  <div class="community-buttons">
+    <a href="https://x.com/LFISTCOIN" target="_blank" class="btn-social x">
+      <!-- Icone X SVG -->
+      <svg xmlns="http://www.w3.org/2000/svg" fill="white" height="20" width="20" viewBox="0 0 24 24"><path d="M14.47 10.37 22 2h-2.12l-6.39 7.13L8.5 2H2l8.04 11.5L2 22h2.12l6.82-7.61L15.5 22H22l-7.53-11.63Zm-2.01 2.23-.79-1.13L4.64 3.5h2.95l5.11 7.34.79 1.13 6.35 9.1h-2.95l-5.43-7.47Z"/></svg>
+      Rejoins-nous sur X
+    </a>
+    <a href="https://t.me/lfistcoin" target="_blank" class="btn-social telegram">
+      <!-- Icone Telegram SVG -->
+      <svg xmlns="http://www.w3.org/2000/svg" fill="white" height="20" width="20" viewBox="0 0 24 24"><path d="M9.043 16.882l-.403 3.92c.577 0 .825-.246 1.129-.541l2.706-2.555 5.612 4.099c1.03.567 1.769.27 2.038-.956l3.694-17.375h-.001c.33-1.527-.538-2.124-1.54-1.754L1.328 9.442c-1.48.577-1.46 1.4-.252 1.78l5.912 1.846 13.68-8.63c.643-.432 1.229-.2.747.233l-11.372 10.21Z"/></svg>
+      Canal Telegram
+    </a>
+  </div>
+
+  <p class="email-contact">💌 Tu veux causer sérieusement (ou pas) ? Écris-nous :  
+    <a href="mailto:lfistcoin@gmail.com" class="email-link">lfistcoin@gmail.com</a>
+  </p>
+</section>
 
   <footer>
     Powered by <span class="meme-footer">LFIST</span> 🧠
@@ -40,4 +77,8 @@
   <!-- 🔽 Ton script JS principal avec Firebase -->
   <script type="module" src="./main.js"></script>
 </body>
+<!-- Footer -->
+<footer class="footer">
+  <p>© 2025 LFIST Token. Powered by mèmes et conviction. </p>
+</footer>
 </html>

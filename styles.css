@@ -405,3 +405,30 @@ footer {
   border-radius: 10px;
   transition: width 0.3s ease;
 }
+.fun-emoji {
+  font-size: 2.8rem;
+  margin-top: 1.2rem;
+  animation: bounce 1.6s infinite alternate ease-in-out;
+  user-select: none;
+}
+
+@keyframes bounce {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-12px); }
+}
+@keyframes pulseGlow {
+  0% {
+    box-shadow: 0 0 15px rgba(253, 160, 133, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(253, 160, 133, 1);
+  }
+  100% {
+    box-shadow: 0 0 15px rgba(253, 160, 133, 0.7);
+  }
+}
+@keyframes pulseGlow {
+  0% { box-shadow: 0 0 15px rgba(253,160,133,0.7); }
+  50% { box-shadow: 0 0 30px rgba(253,160,133,1); }
+  100% { box-shadow: 0 0 15px rgba(253,160,133,0.7); }
+}

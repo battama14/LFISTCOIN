@@ -1,14 +1,47 @@
 import { db } from './firebase-config.js';
-import { ref, set, remove, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import { ref, set, remove, onValue, push } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-// 🔐 ID unique pour l'utilisateur basé sur son adresse IP
+// 📧 Fonction d'inscription newsletter
+function validateEmail(email) {
+  return /\S+@\S+\.\S+/.test(email);
+}
+
+function generateUserId() {
+  return 'user_' + Date.now();
+}
+
+window.subscribeEmail = async function () {
+  const emailInput = document.getElementById("emailInput");
+  const emailMsg = document.getElementById("emailMsg");
+  const email = emailInput.value.trim();
+
+  emailMsg.style.color = "red";
+
+  if (!validateEmail(email)) {
+    emailMsg.textContent = "❌ Adresse email invalide.";
+    return;
+  }
+
+  try {
+    const userId = generateUserId();
+    await set(ref(db, `newsletter/${userId}`), { email: email });
+    emailMsg.textContent = "✅ Merci ! Tu es inscrit à la newsletter.";
+    emailMsg.style.color = "green";
+    emailInput.value = "";
+  } catch (error) {
+    console.error("Erreur Firebase :", error);
+    emailMsg.textContent = "❌ Une erreur s'est produite. Réessaie plus tard.";
+  }
+};
+
+// 🔐 ID unique utilisateur basé sur IP
 let userId = localStorage.getItem("userIpId");
 
 async function fetchUserIp() {
   try {
     const res = await fetch('https://api.ipify.org?format=json');
     const data = await res.json();
-    const ip = data.ip.replace(/\./g, "-"); // Firebase-safe ID
+    const ip = data.ip.replace(/\./g, "-");
     userId = "ip-" + ip;
     localStorage.setItem("userIpId", userId);
     return userId;
@@ -19,7 +52,6 @@ async function fetchUserIp() {
   }
 }
 
-// 🕒 Calcule le numéro de la semaine ISO
 function getWeekNumber(d) {
   d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
   const dayNum = d.getUTCDay() || 7;
@@ -28,7 +60,6 @@ function getWeekNumber(d) {
   return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
 }
 
-// 🔁 Réinitialise les votes chaque semaine
 function resetVotesIfNeeded() {
   const now = new Date();
   const currentWeek = now.getFullYear() + "-W" + getWeekNumber(now);
@@ -46,7 +77,6 @@ function resetVotesIfNeeded() {
   }
 }
 
-// 📥 Enregistre le vote utilisateur (IP-based)
 async function enregistrerVote(memecoinId) {
   const uid = await fetchUserIp();
   set(ref(db, 'votes/' + memecoinId + '/' + uid), true)
@@ -59,7 +89,6 @@ async function enregistrerVote(memecoinId) {
     });
 }
 
-// 📊 Met à jour l'affichage des barres de votes en temps réel
 function ecouterVotes(memecoins) {
   const totalRef = ref(db, 'votes');
   onValue(totalRef, (snapshot) => {
@@ -83,7 +112,6 @@ function ecouterVotes(memecoins) {
   });
 }
 
-// 📦 Affiche les cartes memecoins
 function afficherMemecoins(memecoins) {
   const container = document.getElementById("memecoins-container");
   container.innerHTML = "";
@@ -115,7 +143,6 @@ function afficherMemecoins(memecoins) {
   ecouterVotes(memecoins);
 }
 
-// 📡 Fetch avec fallback sur plusieurs APIs gratuites memecoins uniquement
 async function fetchMemecoins() {
   const apis = [
     async () => {
@@ -150,7 +177,7 @@ async function fetchMemecoins() {
       }));
     },
     async () => {
-      const res = await fetch('https://api.dextools.io/api/v1/tokens?search=memecoin'); 
+      const res = await fetch('https://api.dextools.io/api/v1/tokens?search=memecoin');
       if (!res.ok) throw new Error('DexTools API failed');
       const data = await res.json();
       if (!data.data || !data.data.length) throw new Error('No memecoins from DexTools');
@@ -182,114 +209,7 @@ async function fetchMemecoins() {
   }];
 }
 
-// ------------------- AJOUT : gestion affichage gagnant à la fin de la semaine ---------------------
+// Initialisation
+resetVotesIfNeeded();
+fetchMemecoins().then(afficherMemecoins);
 
-// 🕒 Récupère la date du début de la semaine ISO à partir d'un string "YYYY-Www"
-function getWeekStartDate(yearWeek) {
-  const [year, weekStr] = yearWeek.split("-W");
-  const week = parseInt(weekStr, 10);
-  const simple = new Date(Date.UTC(parseInt(year), 0, 1 + (week - 1) * 7));
-  const day = simple.getUTCDay();
-  const ISOweekStart = new Date(simple);
-  if (day <= 4) {
-    ISOweekStart.setUTCDate(simple.getUTCDate() - simple.getUTCDay() + 1);
-  } else {
-    ISOweekStart.setUTCDate(simple.getUTCDate() + 8 - simple.getUTCDay());
-  }
-  return ISOweekStart;
-}
-
-// ⏳ Vérifie si la semaine est terminée (on attend lundi minuit UTC passé)
-function isWeekFinished() {
-  const now = new Date();
-  const currentWeek = now.getFullYear() + "-W" + getWeekNumber(now);
-  const nextWeekStart = getWeekStartDate(currentWeek);
-  nextWeekStart.setUTCDate(nextWeekStart.getUTCDate() + 7);
-  return now >= nextWeekStart;
-}
-
-// 🎉 Affiche l’encart gagnant avec animation CSS
-function afficherGagnant(memecoin, votes) {
-  const container = document.getElementById("memecoins-container");
-  
-  // Crée l’encart gagnant
-  const gagnantDiv = document.createElement("div");
-  gagnantDiv.id = "gagnant-encart";
-  gagnantDiv.style.cssText = `
-    background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0 0 15px rgba(253, 160, 133, 0.7);
-    text-align: center;
-    margin: 20px auto;
-    max-width: 400px;
-    font-family: 'Arial Black', Arial, sans-serif;
-    color: #fff;
-    animation: pulseGlow 2s ease-in-out infinite;
-  `;
-  gagnantDiv.innerHTML = `
-    <h2>🎉 MEMECOIN DE LA SEMAINE 🎉</h2>
-    <img src="${memecoin.logo}" alt="${memecoin.nom}" style="width:120px; margin: 10px auto; display:block; border-radius: 50%; border: 4px solid #fff;">
-    <h3>${memecoin.nom}</h3>
-    <p><strong>${votes}</strong> vote${votes > 1 ? 's' : ''}</p>
-    <p>${memecoin.description}</p>
-  `;
-
-  container.innerHTML = ""; // vide container avant affichage gagnant
-  container.appendChild(gagnantDiv);
-}
-
-// 🔄 Charge et affiche le gagnant si la semaine est finie
-function chargerEtAfficherGagnant() {
-  if (!isWeekFinished()) return; // semaine pas finie : on ne montre pas encore
-
-  const votesRef = ref(db, 'votes');
-  onValue(votesRef, (snapshot) => {
-    const votesData = snapshot.val() || {};
-    let maxVotes = 0;
-    let gagnantId = null;
-
-    for (const memecoinId in votesData) {
-      const countVotes = Object.keys(votesData[memecoinId]).length;
-      if (countVotes > maxVotes) {
-        maxVotes = countVotes;
-        gagnantId = memecoinId;
-      }
-    }
-
-    if (!gagnantId) return;
-
-    // Trouve les infos du memecoin gagnant dans la liste affichée ou via fetch
-    fetchMemecoins().then(memecoins => {
-      const gagnant = memecoins.find(m => m.id === gagnantId) || {
-        nom: gagnantId,
-        description: "Memecoin gagnant",
-        logo: "https://via.placeholder.com/120"
-      };
-      afficherGagnant(gagnant, maxVotes);
-    });
-  }, { onlyOnce: true });
-}
-
-// ------------------------- INIT -------------------------
-
-window.addEventListener('DOMContentLoaded', async () => {
-  resetVotesIfNeeded();
-
-  const memecoins = await fetchMemecoins();
-  afficherMemecoins(memecoins);
-
-  // Affiche l’encart gagnant uniquement si la semaine est finie
-  chargerEtAfficherGagnant();
-});
-
-// Animations CSS ajoutée dynamiquement pour le pulse glow
-const style = document.createElement('style');
-style.textContent = `
-  @keyframes pulseGlow {
-    0% { box-shadow: 0 0 10px rgba(253, 160, 133, 0.5); }
-    50% { box-shadow: 0 0 30px rgba(253, 160, 133, 1); }
-    100% { box-shadow: 0 0 10px rgba(253, 160, 133, 0.5); }
-  }
-`;
-document.head.appendChild(style);
