@@ -1,9 +1,21 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Newsletter</title>
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <script>
+    emailjs.init('ikFvXb-BD1-DJsPCV');
+  </script>
+</head>
+<body>
+
 <button id="btnSendNewsletter">Envoyer newsletter test</button>
 <p id="sendStatus"></p>
 
 <script type="module">
   import { get, ref } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-  import { db } from './firebase-config.js';  // adapte le chemin selon ton projet
+  import { db } from './firebase-config.js';  // adapte le chemin si besoin
 
   window.sendNewsletter = async function (messageContent) {
     const newsletterRef = ref(db, 'newsletter');
@@ -39,6 +51,10 @@
     sendNewsletter("Message test de bienvenue de LFIST !");
   });
 </script>
+
+</body>
+</html>
+
 
 
 
