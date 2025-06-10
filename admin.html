@@ -3,10 +3,6 @@
 <head>
   <meta charset="UTF-8" />
   <title>Admin Newsletter</title>
-  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
-  <script>
-    emailjs.init('ikFvXb-BD1-DJsPCV');
-  </script>
 </head>
 <body>
 
@@ -15,7 +11,10 @@
 
 <script type="module">
   import { get, ref } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-  import { db } from './firebase-config.js';  // adapte le chemin si besoin
+  import { db } from './firebase-config.js';
+  import emailjs from 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
+
+  emailjs.init('ikFvXb-BD1-DJsPCV');
 
   window.sendNewsletter = async function (messageContent) {
     const newsletterRef = ref(db, 'newsletter');
@@ -54,6 +53,7 @@
 
 </body>
 </html>
+
 
 
 
