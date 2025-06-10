@@ -182,10 +182,168 @@ async function fetchMemecoins() {
   }];
 }
 
-// ▶️ Lancement
-document.addEventListener("DOMContentLoaded", async () => {
-  resetVotesIfNeeded();
-  const memecoins = await fetchMemecoins();
+// ------------------- AJOUT : gestion affichage gagnant à la fin de la semaine ---------------------
+
+// 🕒 Récupère la date du début de la semaine ISO à partir d'un string "YYYY-Www"
+function getWeekStartDate(yearWeek) {
+  const [year, weekStr] = yearWeek.split("-W");
+  const week = parseInt(weekStr, 10);
+  const simple = new Date(Date.UTC(parseInt(year), 0, 1 + (week - 1) * 7));
+  const day = simple.getUTCDay();
+  const ISOweekStart = new Date(simple);
+  if (day <= 4) {
+    ISOweekStart.setUTCDate(simple.getUTCDate() - simple.getUTCDay() + 1);
+  } else {
+    ISOweekStart.setUTCDate(simple.getUTCDate() + 8 - simple.getUTCDay());
+  }
+  return ISOweekStart;
+}
+
+// ⏳ Vérifie si la semaine est terminée (on attend lundi minuit UTC passé)
+function isWeekFinished() {
+  const now = new Date();
+  const currentWeek = now.getFullYear() + "-W" + getWeekNumber(now);
+  const nextWeekStart = getWeekStartDate(currentWeek);
+  nextWeekStart.setUTCDate(nextWeekStart.getUTCDate() + 7);
+  return now >= nextWeekStart;
+}
+
+// 🎉 Affiche l’encart gagnant avec la classe neon-section
+function afficherGagnant(memecoin, votes) {
+  const container = document.getElementById("memecoins-container");
+  
+  // Crée l’encart gagnant
+  const gagnantDiv = document.createElement("div");
+  gagnantDiv.id = "gagnant-encart";
+
+  // Ajoute la classe neon-section pour fond et bordures lumineuses
+  gagnantDiv.className = "neon-section";
+
+  gagnantDiv.innerHTML = `
+    <h2>🎉 MEMECOIN DE LA SEMAINE 🎉</h2>
+    <img src="${memecoin.logo}" alt="${memecoin.nom}" style="width:120px; margin: 10px auto; display:block; border-radius: 50%; border: 4px solid #fff;">
+    <h3>${memecoin.nom}</h3>
+    <p><strong>${votes}</strong> vote${votes > 1 ? 's' : ''}</p>
+    <p>${memecoin.description}</p>
+  `;
+
+  container.innerHTML = ""; // vide container avant affichage gagnant
+  container.appendChild(gagnantDiv);
+}
+
+// 🔄 Charge et affiche le gagnant si la semaine est finie
+function chargerEtAfficherGagnant() {
+  if (!isWeekFinished()) return; // semaine pas finie : on ne montre pas encore
+
+  const votesRef = ref(db, 'votes');
+  onValue(votesRef, (snapshot) => {
+    const votesData = snapshot.val() || {};
+    let maxVotes = 0;
+    let gagnantId = null;
+
+    for (const memecoinId in votesData) {
+      const countVotes = Object.keys(votesData[memecoinId]).length;
+      if (countVotes > maxVotes) {
+        maxVotes = countVotes;
+        gagnantId = memecoinId;
+      }
+    }
+
+    if (!gagnantId) return; // pas de votes
+
+    fetchMemecoins().then(memecoins => {
+      const gagnant = memecoins.find(m => m.id === gagnantId);
+      if (gagnant) {
+        afficherGagnant(gagnant, maxVotes);
+      }
+    });
+  });
+}
+
+// -------------------------------------
+
+// 🚀 Démarrage
+resetVotesIfNeeded();
+
+fetchMemecoins().then(memecoins => {
   afficherMemecoins(memecoins);
+  chargerEtAfficherGagnant();
 });
 
+// ----------------- CSS dynamique ajouté -----------------
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes pulseGlow {
+    0% { box-shadow: 0 0 10px rgba(253, 160, 133, 0.5); }
+    50% { box-shadow: 0 0 30px rgba(253, 160, 133, 1); }
+    100% { box-shadow: 0 0 10px rgba(253, 160, 133, 0.5); }
+  }
+
+  .neon-section {
+    background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+    padding: 20px;
+    border-radius: 15px;
+    border: 3px solid #fda085;
+    box-shadow: 0 0 15px rgba(253, 160, 133, 0.7);
+    text-align: center;
+    margin: 20px auto;
+    max-width: 400px;
+    font-family: 'Arial Black', Arial, sans-serif;
+    color: #fff;
+    animation: pulseGlow 2s ease-in-out infinite;
+  }
+
+  /* Styles pour les cartes memecoin */
+  .memecoin-card {
+    background: #222;
+    border-radius: 10px;
+    padding: 15px;
+    margin: 10px auto;
+    max-width: 400px;
+    color: #fff;
+    box-shadow: 0 0 8px rgba(253, 160, 133, 0.5);
+  }
+  .memecoin-card img {
+    width: 80px;
+    border-radius: 50%;
+    display: block;
+    margin: 0 auto 10px auto;
+  }
+  .memecoin-card button.vote-button {
+    background: #fd9a70;
+    border: none;
+    color: #fff;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s;
+    margin-top: 10px;
+    width: 100%;
+  }
+  .memecoin-card button.vote-button:disabled {
+    background: #aaa;
+    cursor: not-allowed;
+  }
+  .progress-container {
+    background: #444;
+    border-radius: 8px;
+    width: 100%;
+    height: 12px;
+    margin-top: 10px;
+  }
+  .progress {
+    background: #fda085;
+    height: 100%;
+    width: 0;
+    border-radius: 8px;
+    transition: width 0.5s ease-in-out;
+  }
+  .vote-count {
+    margin-top: 5px;
+    font-size: 0.9em;
+    color: #fda085;
+    text-align: center;
+  }
+`;
+document.head.appendChild(style);
