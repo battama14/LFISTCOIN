@@ -3,37 +3,37 @@
 <head>
   <meta charset="UTF-8" />
   <title>Admin - Envoi Newsletter</title>
-  <script type="module">
 
-    // Import des fonctions Firebase nécessaires (à adapter si besoin)
+  <!-- Firebase SDK modules -->
+  <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
     import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
 
-    // Import EmailJS SDK corrigé en module ES
-    import { init, send } from 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
+    // Expose firebase pour utilisation globale
+    window.firebaseApp = initializeApp({
+      apiKey: "AIzaSyDo6bGH2ofNNhL6SBB9rJ3ZaBMzldp0qp8",
+      authDomain: "lfistdur.firebaseapp.com",
+      databaseURL: "https://lfistdur-default-rtdb.firebaseio.com",
+      projectId: "lfistdur",
+      storageBucket: "lfistdur.firebasestorage.app",
+      messagingSenderId: "3612454131",
+      appId: "1:3612454131:web:dc3eeab8ded57a40671b86"
+    });
+    window.db = getDatabase(window.firebaseApp);
+  </script>
 
-    // Initialisation Firebase (mets ta config ici)
-   const firebaseConfig = {
-  apiKey: "AIzaSyDo6bGH2ofNNhL6SBB9rJ3ZaBMzldp0qp8",
-  authDomain: "lfistdur.firebaseapp.com",
-  databaseURL: "https://lfistdur-default-rtdb.firebaseio.com",
-  projectId: "lfistdur",
-  storageBucket: "lfistdur.appspot.com",
-  messagingSenderId: "3612454131",
-  appId: "1:3612454131:web:dc3eeab8ded57a40671b86"
-};
+  <!-- EmailJS classique (pas module) -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
+  <script>
+    // Initialise EmailJS dans le contexte global
+    emailjs.init('ikFvXb-BD1-DJsPCV');
 
-    // Initialisation EmailJS (ta clé publique)
-    init('ikFvXb-BD1-DJsPCV');
-
-    // Fonction d'envoi newsletter
-    window.sendNewsletter = async function(messageContent) {
+    // Fonction d'envoi newsletter (accès à Firebase via window.db)
+    async function sendNewsletter(messageContent) {
       try {
-        const newsletterRef = ref(db, 'newsletter');
-        const snapshot = await get(newsletterRef);
+        const newsletterRef = window.firebase.database().ref('newsletter');
+        const snapshot = await window.firebase.database().get(ref(window.db, 'newsletter'));
         const data = snapshot.val();
 
         if (!data) {
@@ -41,30 +41,25 @@
           return;
         }
 
-        // On extrait les emails des entrées
         const emails = Object.values(data);
 
-        const envois = emails.map(entry => {
-          return send('service_keqvfcw', 'template_4jz4w3e', {
+        const envois = emails.map(entry =>
+          emailjs.send('service_keqvfcw', 'template_4jz4w3e', {
             user_email: entry.email,
             message: messageContent
-          });
-        });
+          })
+        );
 
         await Promise.all(envois);
-        console.log("Tous les messages ont été envoyés !");
-        alert("Newsletter envoyée avec succès.");
-
+        alert("Newsletter envoyée avec succès !");
       } catch (err) {
         console.error("Erreur envoi newsletter :", err);
-        alert("Erreur lors de l'envoi de la newsletter. Voir console.");
+        alert("Erreur lors de l'envoi de la newsletter.");
       }
-    };
+    }
 
-    // Exécution exemple quand le DOM est prêt (à adapter)
     window.addEventListener('DOMContentLoaded', () => {
-      const btn = document.getElementById('sendBtn');
-      btn.addEventListener('click', () => {
+      document.getElementById('sendBtn').addEventListener('click', () => {
         const message = document.getElementById('messageInput').value.trim();
         if (message) {
           sendNewsletter(message);
@@ -73,8 +68,8 @@
         }
       });
     });
-
   </script>
+
 </head>
 <body>
   <h1>Admin - Envoi Newsletter</h1>
@@ -82,9 +77,3 @@
   <button id="sendBtn">Envoyer la newsletter</button>
 </body>
 </html>
-
-
-
-
-
-
