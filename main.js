@@ -273,77 +273,123 @@ fetchMemecoins().then(memecoins => {
 // ----------------- CSS dynamique ajouté -----------------
 const style = document.createElement('style');
 style.textContent = `
-  @keyframes pulseGlow {
-    0% { box-shadow: 0 0 10px rgba(253, 160, 133, 0.5); }
-    50% { box-shadow: 0 0 30px rgba(253, 160, 133, 1); }
-    100% { box-shadow: 0 0 10px rgba(253, 160, 133, 0.5); }
-  }
+@keyframes pulseGlow {
+  0% { box-shadow: 0 0 10px rgba(253, 160, 133, 0.5); }
+  50% { box-shadow: 0 0 30px rgba(253, 160, 133, 1); }
+  100% { box-shadow: 0 0 10px rgba(253, 160, 133, 0.5); }
+}
 
-  .neon-section {
-    background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
-    padding: 20px;
-    border-radius: 15px;
-    border: 3px solid #fda085;
-    box-shadow: 0 0 15px rgba(253, 160, 133, 0.7);
-    text-align: center;
-    margin: 20px auto;
-    max-width: 400px;
-    font-family: 'Arial Black', Arial, sans-serif;
-    color: #fff;
-    animation: pulseGlow 2s ease-in-out infinite;
-  }
+.neon-section {
+  background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+  padding: 20px;
+  border-radius: 15px;
+  border: 3px solid #fda085;
+  box-shadow: 0 0 15px rgba(253, 160, 133, 0.7);
+  text-align: center;
+  margin: 20px auto;
+  max-width: 400px;
+  font-family: 'Arial Black', Arial, sans-serif;
+  color: #fff;
+  animation: pulseGlow 2s ease-in-out infinite;
+}
 
-  /* Styles pour les cartes memecoin */
-  .memecoin-card {
-    background: #222;
-    border-radius: 10px;
-    padding: 15px;
-    margin: 10px auto;
-    max-width: 400px;
-    color: #fff;
-    box-shadow: 0 0 8px rgba(253, 160, 133, 0.5);
-  }
-  .memecoin-card img {
-    width: 80px;
-    border-radius: 50%;
-    display: block;
-    margin: 0 auto 10px auto;
-  }
-  .memecoin-card button.vote-button {
-    background: #fd9a70;
-    border: none;
-    color: #fff;
-    padding: 10px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: background 0.3s;
-    margin-top: 10px;
-    width: 100%;
-  }
-  .memecoin-card button.vote-button:disabled {
-    background: #aaa;
-    cursor: not-allowed;
-  }
-  .progress-container {
-    background: #444;
-    border-radius: 8px;
-    width: 100%;
-    height: 12px;
-    margin-top: 10px;
-  }
-  .progress {
-    background: #fda085;
-    height: 100%;
-    width: 0;
-    border-radius: 8px;
-    transition: width 0.5s ease-in-out;
-  }
-  .vote-count {
-    margin-top: 5px;
-    font-size: 0.9em;
-    color: #fda085;
-    text-align: center;
-  }
+/* Conteneur des cards memecoins : flex horizontal */
+#memecoins-container {
+  display: flex;
+  flex-wrap: wrap; /* passe à la ligne si trop large */
+  justify-content: center; /* centre horizontalement */
+  gap: 20px; /* espace entre les cards */
+  padding: 20px;
+  background-color: #121212; /* fond très sombre */
+  border-radius: 12px;
+  margin: 20px auto;
+  max-width: 1200px;
+  box-sizing: border-box;
+}
+
+/* Styles pour les cartes memecoin */
+.memecoin-card {
+  background: #1e1e1e; /* fond plus sombre */
+  border-radius: 10px;
+  padding: 20px;
+  flex: 1 1 250px; /* flexible, min 250px largeur */
+  max-width: 300px;
+  color: #fda085; /* couleur texte orange clair */
+  box-shadow: 0 0 12px rgba(253, 160, 133, 0.7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.3s ease;
+}
+
+.memecoin-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 20px rgba(253, 160, 133, 1);
+}
+
+.memecoin-card img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 15px;
+}
+
+.memecoin-card h3 {
+  margin: 0 0 10px 0;
+  color: #fff;
+  text-align: center;
+}
+
+.memecoin-card p {
+  text-align: center;
+  font-size: 0.9em;
+  margin: 5px 0;
+  line-height: 1.3;
+  color: #fda085;
+}
+
+.memecoin-card button.vote-button {
+  background: #fd9a70;
+  border: none;
+  color: #fff;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s;
+  margin-top: auto;
+  width: 100%;
+}
+
+.memecoin-card button.vote-button:disabled {
+  background: #aaa;
+  cursor: not-allowed;
+}
+
+.progress-container {
+  background: #333;
+  border-radius: 8px;
+  width: 100%;
+  height: 12px;
+  margin-top: 15px;
+}
+
+.progress {
+  background: #fda085;
+  height: 100%;
+  width: 0;
+  border-radius: 8px;
+  transition: width 0.5s ease-in-out;
+}
+
+.vote-count {
+  margin-top: 8px;
+  font-size: 0.9em;
+  color: #fda085;
+  text-align: center;
+  font-weight: bold;
+}
+
 `;
 document.head.appendChild(style);
