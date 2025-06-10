@@ -11,11 +11,9 @@
 
   <!-- Script principal utilisant les modules ES pour Firebase -->
   <script type="module">
-    // Import de Firebase (v9 version modulaire)
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
     import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
 
-    // Configuration Firebase (remplacez par vos identifiants)
     const firebaseConfig = {
       apiKey: "AIzaSyDo6bGH2ofNNhL6SBB9rJ3ZaBMzldp0qp8",
       authDomain: "lfistdur.firebaseapp.com",
@@ -26,11 +24,9 @@
       appId: "1:3612454131:web:dc3eeab8ded57a40671b86"
     };
 
-    // Initialisation de Firebase
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    // Une fois le DOM chargé, on initialise EmailJS (disponible via l'objet global emailjs)
     window.addEventListener("DOMContentLoaded", () => {
       if (window.emailjs) {
         emailjs.init("ikFvXb-BD1-DJsPCV");
@@ -39,7 +35,6 @@
       }
     });
 
-    // Fonction d’envoi de la newsletter
     window.sendNewsletter = async function() {
       const messageContent = document.getElementById("message").value.trim();
       if (!messageContent) {
@@ -48,10 +43,10 @@
       }
 
       try {
-        // Récupération des emails de la base de données
         const newsletterRef = ref(db, "newsletter");
         const snapshot = await get(newsletterRef);
         const data = snapshot.val();
+        console.log("Données récupérées depuis Firebase :", data);
 
         if (!data) {
           alert("Aucun email trouvé dans la newsletter.");
@@ -59,11 +54,14 @@
         }
 
         const emails = Object.values(data);
+        emails.forEach((entry, index) => {
+          console.log(`Email ${index} : `, entry.email);
+        });
 
-        // Envoi du message à chaque email récuperé
+        // Adaptez le nom du paramètre ci-dessous selon ce qui est configuré dans votre template EmailJS.
         const envois = emails.map((entry) =>
           emailjs.send("service_keqvfcw", "template_4jz4w3e", {
-            user_email: entry.email,
+            to_email: entry.email,  // Utilisez "to_email" ou le nom attendu par le template
             message: messageContent
           })
         );
