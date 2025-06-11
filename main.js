@@ -1,7 +1,7 @@
 import { db } from './firebase-config.js';
-import { ref, set, remove, onValue, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import { ref, set, remove, onValue, get, update } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-// ✉️ Envoi de message à tous les inscrits via EmailJS
+// ------------------------- Newsletter
 window.sendNewsletter = async function (messageContent) {
   const newsletterRef = ref(db, 'newsletter');
 
@@ -20,7 +20,7 @@ window.sendNewsletter = async function (messageContent) {
       return emailjs.send("service_keqvfcw", "template_4jz4w3e", {
         user_email: entry.email,
         message: messageContent
-      }, "IKFVXB-BD1-DJsPCV"); // Remplace cette valeur par ta clé publique si différente
+      }, "IKFVXB-BD1-DJsPCV");
     });
 
     await Promise.all(envois);
@@ -31,7 +31,6 @@ window.sendNewsletter = async function (messageContent) {
   }
 };
 
-// 📧 Fonction d'inscription newsletter et envoi d'un email de bienvenue automatique
 function validateEmail(email) {
   return /\S+@\S+\.\S+/.test(email);
 }
@@ -54,70 +53,61 @@ window.subscribeEmail = async function () {
 
   try {
     const userId = generateUserId();
-    // Enregistrement de l'adresse email dans Firebase
     await set(ref(db, `newsletter/${userId}`), { email: email });
-    
-    // Envoi automatique d'un email de bienvenue
-    await emailjs.send(
-      "service_keqvfcw",         // Remplace par l'ID de ton service pour le mail de bienvenue
-      "template_4jz4w3e",        // Remplace par l'ID de ton template de mail de bienvenue
-      {
-        user_email: email,       // Assure-toi que ton template utilise bien {{user_email}}
-        message: "Bienvenue sur notre plateforme ! Merci pour ton inscription." 
-      },
-      "IKFVXB-BD1-DJsPCV"        // Remplace par ta clé publique EmailJS si différente
-    );
 
-    emailMsg.textContent = "✅ Merci ! Tu es inscrit à la newsletter. Un mail de bienvenue a été envoyé.";
+    await emailjs.send("service_keqvfcw", "template_4jz4w3e", {
+      user_email: email,
+      message: "Bienvenue sur notre plateforme ! Merci pour ton inscription."
+    }, "IKFVXB-BD1-DJsPCV");
+
+    emailMsg.textContent = "✅ Merci ! Tu es inscrit à la newsletter, regarde t'as boite mail tu a du recevoir un mail de bienvenu";
     emailMsg.style.color = "green";
     emailInput.value = "";
   } catch (error) {
     console.error("Erreur Firebase/emailJS :", error);
-    emailMsg.textContent = "❌ Une erreur s'est produite. Réessaie plus tard.";
+    emailMsg.textContent = "❌ Une erreur s'est produite.";
   }
 };
 
-// 🔐 ID unique utilisateur basé sur IP
+// ------------------------- Gestion des votes
+
 let userId = localStorage.getItem("userIpId");
 
 async function fetchUserIp() {
-  if (userId) return userId;  // Garde l'ID déjà en localStorage si présent
+  if (userId) return userId;
   try {
     const res = await fetch('https://api.ipify.org?format=json');
     const data = await res.json();
-    const ip = data.ip.replace(/\./g, "-");
-    userId = "ip-" + ip;
+    userId = "ip-" + data.ip.replace(/\./g, "-");
     localStorage.setItem("userIpId", userId);
     return userId;
-  } catch (e) {
-    console.error("❌ Impossible d’obtenir l’adresse IP :", e);
-    userId = "ip-unknown-" + Math.random().toString(36).substring(2, 10);
+  } catch {
+    userId = "ip-unknown-" + Math.random().toString(36).slice(2);
     return userId;
   }
 }
 
-function getWeekNumber(d) {
-  d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-  const dayNum = d.getUTCDay() || 7;
-  d.setUTCDate(d.getUTCDate() + 4 - dayNum);
-  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
-  return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+function getWeekKey(date = new Date()) {
+  const year = date.getFullYear();
+  const week = Math.ceil((((date - new Date(year, 0, 1)) / 86400000) + new Date(year, 0, 1).getDay() + 1) / 7);
+  return `${year}-W${week}`;
 }
 
-function resetVotesIfNeeded() {
-  const now = new Date();
-  const currentWeek = now.getFullYear() + "-W" + getWeekNumber(now);
-  const lastReset = localStorage.getItem("lastVoteReset");
+async function resetVotesIfNeeded() {
+  const controlRef = ref(db, 'vote_control');
+  const snapshot = await get(controlRef);
+  const nowWeek = getWeekKey();
 
-  if (lastReset !== currentWeek) {
-    remove(ref(db, 'votes'))
-      .then(() => {
-        console.log("✅ Votes réinitialisés (semaine : " + currentWeek + ")");
-        localStorage.setItem("lastVoteReset", currentWeek);
-      })
-      .catch((error) => {
-        console.error("❌ Erreur réinitialisation votes :", error);
-      });
+  const lastReset = snapshot.val()?.lastResetWeek;
+
+  if (lastReset !== nowWeek) {
+    await Promise.all([
+      remove(ref(db, 'votes')),
+      update(controlRef, { lastResetWeek: nowWeek })
+    ]);
+    console.log("✅ Votes réinitialisés pour la semaine :", nowWeek);
+  } else {
+    console.log("⏳ Votes déjà réinitialisés cette semaine.");
   }
 }
 
@@ -125,54 +115,38 @@ async function enregistrerVote(memecoinId) {
   const uid = await fetchUserIp();
   const userVoteRef = ref(db, 'votes/' + uid);
 
-  // Vérifie si l'utilisateur a déjà voté cette semaine
-  get(userVoteRef).then(snapshot => {
-    if (snapshot.exists()) {
-      alert("❌ Tu as déjà voté cette semaine !");
-    } else {
-      set(userVoteRef, memecoinId)
-        .then(() => {
-          console.log("✅ Vote enregistré pour", memecoinId);
-          document.querySelectorAll(".vote-button").forEach(btn => btn.disabled = true);
-        })
-        .catch((error) => {
-          console.error("❌ Erreur d'enregistrement du vote :", error);
-        });
-    }
-  });
+  const snapshot = await get(userVoteRef);
+  if (snapshot.exists()) {
+    alert("❌ Tu as déjà voté !!! tu veux ton fist ? non ? alors attends la semaine prochaine !!!");
+    return;
+  }
+
+  await set(userVoteRef, memecoinId);
+  alert("✅ Vote a été enregistré !!! FIST a venir  !!!");
+  document.querySelectorAll(".vote-button").forEach(btn => btn.disabled = true);
 }
 
 function ecouterVotes(memecoins) {
-  const totalRef = ref(db, 'votes');
-  onValue(totalRef, (snapshot) => {
+  const votesRef = ref(db, 'votes');
+  onValue(votesRef, (snapshot) => {
     const data = snapshot.val() || {};
-
-    // Compte total de votes (nombre total d'utilisateurs ayant voté)
     const totalVotes = Object.keys(data).length;
 
-    // Compte votes par memecoin
-    const votesParMemecoin = {};
-    memecoins.forEach(m => votesParMemecoin[m.id] = 0);
-
-    Object.values(data).forEach(votedMemecoinId => {
-      if (votesParMemecoin.hasOwnProperty(votedMemecoinId)) {
-        votesParMemecoin[votedMemecoinId]++;
-      }
+    const countPerMemecoin = {};
+    memecoins.forEach(m => countPerMemecoin[m.id] = 0);
+    Object.values(data).forEach(id => {
+      if (countPerMemecoin[id] !== undefined) countPerMemecoin[id]++;
     });
 
     memecoins.forEach(memecoin => {
-      const votes = votesParMemecoin[memecoin.id] || 0;
-      const pourcentage = totalVotes ? Math.round((votes / totalVotes) * 100) : 0;
+      const votes = countPerMemecoin[memecoin.id];
+      const percent = totalVotes ? Math.round((votes / totalVotes) * 100) : 0;
 
       const bar = document.querySelector(`.progress[data-id="${memecoin.id}"]`);
       const count = document.querySelector(`.vote-count[data-id="${memecoin.id}"]`);
 
-      if (bar) {
-        bar.style.width = `${pourcentage}%`;
-      }
-      if (count) {
-        count.textContent = `${votes} vote${votes > 1 ? 's' : ''} (${pourcentage}%)`;
-      }
+      if (bar) bar.style.width = `${percent}%`;
+      if (count) count.textContent = `${votes} vote${votes > 1 ? 's' : ''} (${percent}%)`;
     });
   });
 }
@@ -212,9 +186,7 @@ async function fetchMemecoins() {
   const apis = [
     async () => {
       const res = await fetch('https://api.coingecko.com/api/v3/search/trending');
-      if (!res.ok) throw new Error('CoinGecko API failed');
       const data = await res.json();
-      if (!data.coins || !data.coins.length) throw new Error('No memecoins from CoinGecko');
       const trending = data.coins.slice(0, 3);
       const ids = trending.map(c => c.item.id).join(',');
       const priceRes = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd`);
@@ -230,9 +202,7 @@ async function fetchMemecoins() {
     },
     async () => {
       const res = await fetch('https://api.geckoterminal.com/api/v2/search?query=memecoin');
-      if (!res.ok) throw new Error('GeckoTerminal API failed');
       const data = await res.json();
-      if (!data.data || !data.data.length) throw new Error('No memecoins from GeckoTerminal');
       return data.data.slice(0, 3).map(p => ({
         id: p.id,
         nom: p.attributes.name,
@@ -240,30 +210,15 @@ async function fetchMemecoins() {
         prix: "N/A",
         description: "Détecté via GeckoTerminal"
       }));
-    },
-    async () => {
-      const res = await fetch('https://api.dextools.io/api/v1/tokens?search=memecoin');
-      if (!res.ok) throw new Error('DexTools API failed');
-      const data = await res.json();
-      if (!data.data || !data.data.length) throw new Error('No memecoins from DexTools');
-      return data.data.slice(0, 3).map(p => ({
-        id: p.address || p.id,
-        nom: p.name,
-        logo: p.logo || "https://via.placeholder.com/80",
-        prix: p.price_usd || "N/A",
-        description: "Détecté via DexTools"
-      }));
     }
   ];
 
-  for (const apiFunc of apis) {
+  for (const api of apis) {
     try {
-      const memecoins = await apiFunc();
-      if (memecoins && memecoins.length >= 3) {
-        return memecoins;
-      }
+      const memecoins = await api();
+      if (memecoins.length >= 3) return memecoins;
     } catch (e) {
-      console.warn(e.message);
+      console.warn("⚠️ API échouée :", e.message);
     }
   }
 
@@ -271,7 +226,7 @@ async function fetchMemecoins() {
 }
 
 async function init() {
-  resetVotesIfNeeded();
+  await resetVotesIfNeeded();
   const memecoins = await fetchMemecoins();
 
   if (!memecoins.length) {
