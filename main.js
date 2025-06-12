@@ -182,7 +182,22 @@ function afficherMemecoins(memecoins) {
   ecouterVotes(memecoins);
 }
 
+/* --- Partie modifiée : gestion des memecoins sur une base hebdomadaire --- */
 async function fetchMemecoins() {
+  const memecoinsRef = ref(db, 'memecoins');
+  const controlRef = ref(db, 'vote_control');
+  const nowWeek = getWeekKey();
+
+  const snapshot = await get(memecoinsRef);
+  const controlSnapshot = await get(controlRef);
+
+  // Si les memecoins sont déjà stockés pour la semaine actuelle, on les retourne
+  if (controlSnapshot.val()?.lastResetWeek === nowWeek && snapshot.exists()) {
+    console.log("⏳ Memecoins inchangés cette semaine.");
+    return Object.values(snapshot.val());
+  }
+
+  console.log("🔄 Mise à jour des Memecoins !");
   const apis = [
     async () => {
       const res = await fetch('https://api.coingecko.com/api/v3/search/trending');
@@ -213,16 +228,18 @@ async function fetchMemecoins() {
     }
   ];
 
+  let fetchedMemecoins = [];
   for (const api of apis) {
     try {
-      const memecoins = await api();
-      if (memecoins.length >= 3) return memecoins;
+      fetchedMemecoins = await api();
+      if (fetchedMemecoins.length >= 3) break;
     } catch (e) {
       console.warn("⚠️ API échouée :", e.message);
     }
   }
 
-  return [];
+  await set(memecoinsRef, fetchedMemecoins);
+  return fetchedMemecoins;
 }
 
 async function init() {
@@ -238,4 +255,3 @@ async function init() {
 }
 
 init();
-
