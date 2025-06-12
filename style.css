@@ -340,6 +340,69 @@ footer {
   max-height: 300px; /* assez pour une réponse moyenne */
   padding: 1rem;
 }
+
+/* FAQ Grid Style - Nouveau style pour la grille FAQ */
+.faq-section {
+  padding: 4rem 2rem;
+  background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.faq-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  justify-content: center;
+  place-items: start center;
+  width: 100%;
+}
+
+.faq-grid .faq-item {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 2rem;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  margin-bottom: 0;
+  overflow: visible;
+}
+
+.faq-grid .faq-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  border-color: rgba(0, 255, 136, 0.5);
+}
+
+.faq-section .section-title {
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.faq-grid .faq-item {
+  text-align: left;
+}
+
+.faq-grid .faq-item h3 {
+  color: #00ff88;
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.4;
+  font-family: 'Press Start 2P', cursive;
+}
+
+.faq-grid .faq-item p {
+  color: #ddd;
+  line-height: 1.6;
+  font-size: 0.95rem;
+  margin: 0;
+  padding: 0;
+}
 .community-buttons {
   display: flex;
   gap: 1rem;
@@ -389,4 +452,539 @@ footer {
   color: #FFD700;
   font-weight: bold;
   text-decoration: underline;
+}
+.progress-container {
+  width: 100%;
+  background: #eee;
+  height: 10px;
+  border-radius: 10px;
+  margin-top: 5px;
+}
+
+.progress {
+  height: 10px;
+  background: #4caf50;
+  width: 0%;
+  border-radius: 10px;
+  transition: width 0.3s ease;
+}
+.fun-emoji {
+  font-size: 2.8rem;
+  margin-top: 1.2rem;
+  animation: bounce 1.6s infinite alternate ease-in-out;
+  user-select: none;
+}
+
+@keyframes bounce {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-12px); }
+}
+@keyframes pulseGlow {
+  0% {
+    box-shadow: 0 0 15px rgba(253, 160, 133, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(253, 160, 133, 1);
+  }
+  100% {
+    box-shadow: 0 0 15px rgba(253, 160, 133, 0.7);
+  }
+}
+@keyframes pulseGlow {
+  0% { box-shadow: 0 0 15px rgba(253,160,133,0.7); }
+  50% { box-shadow: 0 0 30px rgba(253,160,133,1); }
+  100% { box-shadow: 0 0 15px rgba(253,160,133,0.7); }
+}
+
+/* ========================================= */
+/* TOKENOMICS SECTION STYLES */
+/* ========================================= */
+
+.tokenomics-section {
+  background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+  padding: 4rem 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.tokenomics-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 20% 50%, rgba(0, 255, 136, 0.1) 0%, transparent 50%),
+              radial-gradient(circle at 80% 20%, rgba(255, 107, 107, 0.1) 0%, transparent 50%),
+              radial-gradient(circle at 40% 80%, rgba(78, 205, 196, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.section-title {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  background: linear-gradient(45deg, #00ff88, #ff6b6b, #4ecdc4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+.section-subtitle {
+  text-align: center;
+  font-size: 1.2rem;
+  margin-bottom: 3rem;
+  color: #bbb;
+  font-style: italic;
+}
+
+/* Contract Info */
+.contract-info {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(0, 255, 136, 0.3);
+  border-radius: 15px;
+  padding: 2rem;
+  margin-bottom: 3rem;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.contract-info h3 {
+  color: #00ff88;
+  margin-bottom: 1.5rem;
+  font-size: 1.3rem;
+}
+
+.contract-address {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.contract-address .label {
+  font-weight: bold;
+  color: #fff;
+}
+
+.contract-address .address {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+  color: #00ff88;
+  border: 1px solid rgba(0, 255, 136, 0.3);
+  flex: 1;
+  min-width: 300px;
+  word-break: break-all;
+}
+
+.copy-btn {
+  background: linear-gradient(45deg, #00ff88, #00cc6a);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.copy-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 255, 136, 0.4);
+}
+
+.contract-links {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.link-btn {
+  background: linear-gradient(45deg, #4ecdc4, #44a08d);
+  padding: 0.8rem 1.5rem;
+  border-radius: 10px;
+  color: white;
+  font-weight: bold;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.link-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(78, 205, 196, 0.4);
+}
+
+/* Tokenomics Grid */
+.tokenomics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.tokenomics-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 2rem;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.tokenomics-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #00ff88, #ff6b6b, #4ecdc4);
+}
+
+.tokenomics-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  border-color: rgba(0, 255, 136, 0.5);
+}
+
+.card-icon {
+  font-size: 3rem;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.tokenomics-card h3 {
+  text-align: center;
+  color: #fff;
+  margin-bottom: 1.5rem;
+  font-size: 1.2rem;
+}
+
+/* Stats */
+.stats {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stat-label {
+  color: #bbb;
+  font-size: 0.9rem;
+}
+
+.stat-value {
+  color: #00ff88;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+/* Distribution Chart */
+.distribution-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.distribution-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.distribution-bar {
+  height: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+}
+
+.bar-fill {
+  height: 100%;
+  border-radius: 10px;
+  transition: width 1s ease;
+  position: relative;
+}
+
+.bar-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.distribution-label {
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+/* Tax Structure */
+.tax-structure {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.tax-item {
+  background: rgba(0, 0, 0, 0.2);
+  padding: 1rem;
+  border-radius: 10px;
+  border-left: 4px solid;
+}
+
+.buy-tax {
+  border-left-color: #00ff88;
+}
+
+.sell-tax {
+  border-left-color: #ff6b6b;
+}
+
+.transfer-tax {
+  border-left-color: #4ecdc4;
+}
+
+.tax-item h4 {
+  color: #fff;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.tax-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding-left: 1rem;
+}
+
+.tax-list span {
+  color: #bbb;
+  font-size: 0.9rem;
+}
+
+.tax-item p {
+  color: #bbb;
+  margin: 0;
+}
+
+/* Utility Roadmap */
+.utility-roadmap {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.utility-phase {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.utility-phase.active {
+  background: rgba(0, 255, 136, 0.1);
+  border: 1px solid rgba(0, 255, 136, 0.3);
+}
+
+.utility-phase:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.phase-number {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(45deg, #00ff88, #4ecdc4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.utility-phase.active .phase-number {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.phase-content h4 {
+  color: #fff;
+  margin-bottom: 0.3rem;
+  font-size: 1rem;
+}
+
+.phase-content p {
+  color: #bbb;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+/* Security Section */
+.security-section {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 15px;
+  padding: 2rem;
+  margin-bottom: 3rem;
+  border: 1px solid rgba(0, 255, 136, 0.2);
+}
+
+.security-section h3 {
+  color: #00ff88;
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 1.5rem;
+}
+
+.security-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.security-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.security-item:hover {
+  background: rgba(0, 255, 136, 0.1);
+  transform: translateX(5px);
+}
+
+.security-icon {
+  font-size: 1.5rem;
+}
+
+.security-text {
+  color: #fff;
+  font-weight: 500;
+}
+
+/* Quick Actions */
+.quick-actions {
+  text-align: center;
+}
+
+.quick-actions h3 {
+  color: #fff;
+  margin-bottom: 3rem;
+  font-size: 1.5rem;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Utilisation des styles de boutons existants du site mais en plus petit */
+.quick-actions .btn {
+  padding: 0.8rem 1.5rem;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .tokenomics-section {
+    padding: 2rem 1rem;
+  }
+  
+  .section-title {
+    font-size: 2rem;
+  }
+  
+  .contract-address {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .contract-address .address {
+    min-width: auto;
+    text-align: center;
+  }
+  
+  .contract-links {
+    justify-content: center;
+  }
+  
+  .tokenomics-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .quick-actions .btn {
+    width: 100%;
+    max-width: 280px;
+  }
+  
+  /* FAQ Responsive */
+  .faq-section {
+    padding: 2rem 1rem;
+  }
+  
+  .faq-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .faq-grid .faq-item {
+    padding: 1.5rem;
+  }
+  
+  .faq-grid .faq-item h3 {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
 }
