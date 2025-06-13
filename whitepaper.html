@@ -543,7 +543,52 @@
                 <a href="https://t.me/lfistcoin">Telegram</a>
                 <a href="https://x.com/LFISTCOIN">Twitter</a>
             </div>
+            <div class="visit-counter">
+                <span>👥 Visiteurs: <span id="visitCount">Loading...</span></span>
+            </div>
         </div>
     </footer>
+    
+    <script>
+    // Système de compteur de visites pour le whitepaper
+    document.addEventListener('DOMContentLoaded', function() {
+        initVisitCounter();
+    });
+    
+    function initVisitCounter() {
+        const visitCountElement = document.getElementById('visitCount');
+        if (!visitCountElement) return;
+        
+        // Récupérer le count actuel depuis le localStorage
+        let currentCount = parseInt(localStorage.getItem('lfist_total_visits')) || 1247;
+        
+        // Afficher le count avec animation
+        animateCounter(visitCountElement, currentCount);
+    }
+
+    function animateCounter(element, targetCount) {
+        const startCount = parseInt(element.textContent.replace(/,/g, '')) || 0;
+        const duration = 1500;
+        const startTime = Date.now();
+        
+        function updateCount() {
+            const elapsed = Date.now() - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            
+            const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+            const currentCount = Math.floor(startCount + (targetCount - startCount) * easeOutQuart);
+            
+            element.textContent = currentCount.toLocaleString();
+            
+            if (progress < 1) {
+                requestAnimationFrame(updateCount);
+            } else {
+                element.textContent = targetCount.toLocaleString();
+            }
+        }
+        
+        updateCount();
+    }
+    </script>
 </body>
 </html>

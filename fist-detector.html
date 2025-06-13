@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>FIST-DETECTOR</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Press+Start+2P&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="style.css" />
   <script type="module" src="main.js"></script>
 
 </head>
@@ -119,7 +119,12 @@
 </section>
 
   <footer>
-    Powered by <span class="meme-footer">LFIST</span> 🧠
+    <div class="footer-content">
+      <p>Powered by <span class="meme-footer">LFIST</span> 🧠</p>
+      <div class="visit-counter">
+        <span>👥 Visiteurs: <span id="visitCount">Loading...</span></span>
+      </div>
+    </div>
   </footer>
 
   <!-- EmailJS CDN -->
@@ -165,12 +170,48 @@
               }
           });
       }
+      
+      // Initialiser le compteur de visites
+      initVisitCounter();
   });
+  
+  // Système de compteur de visites persistant (même que index.html)
+  function initVisitCounter() {
+      const visitCountElement = document.getElementById('visitCount');
+      if (!visitCountElement) return;
+      
+      // Récupérer le count actuel depuis le localStorage
+      let currentCount = parseInt(localStorage.getItem('lfist_total_visits')) || 1247;
+      
+      // Afficher le count avec animation
+      animateCounter(visitCountElement, currentCount);
+  }
+
+  function animateCounter(element, targetCount) {
+      const startCount = parseInt(element.textContent.replace(/,/g, '')) || 0;
+      const duration = 1500;
+      const startTime = Date.now();
+      
+      function updateCount() {
+          const elapsed = Date.now() - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+          
+          const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+          const currentCount = Math.floor(startCount + (targetCount - startCount) * easeOutQuart);
+          
+          element.textContent = currentCount.toLocaleString();
+          
+          if (progress < 1) {
+              requestAnimationFrame(updateCount);
+          } else {
+              element.textContent = targetCount.toLocaleString();
+          }
+      }
+      
+      updateCount();
+  }
   </script>
 
 </body>
-<!-- Footer -->
-<footer class="footer">
-  <p>© 2025 LFIST Token. Powered by mèmes et conviction. </p>
-</footer>
+</html>
 </html>

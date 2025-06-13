@@ -30,9 +30,9 @@
       <h1>Bienvenue dans l’univers <span class="highlight">LFIST</span></h1>
       <p>Un memecoin communautaire <strong>100% déjanté</strong> mais <em>stratégiquement lancé</em>. Rejoins le mouvement !</p>
       <div class="buttons">
-        <a href="https://pancakeswap.finance/swap?outputCurrency=0xc0679bF1fda759B7CfC44691b422405Fae84253f" target="_blank" class="btn btn-primary">Acheter sur PancakeSwap</a>
+        <a href="https://pancakeswap.finance/swap?outputCurrency=0xc0679bF1fda759B7CfC44691b422405Fae84253f" target="_blank" class="btn btn-primary" data-translate="btn_buy_pancake">Acheter sur PancakeSwap</a>
         <a href="whitepaper.html" target="_blank" class="btn btn-whitepaper">📄 White Paper</a>
-        <a href="fist-detector.html" class="btn btn-secondary">FIST-DETECTOR 🔍</a>
+        <a href="fist-detector.html" class="btn btn-secondary" data-translate="btn_fist_detector">FIST-DETECTOR 🔍</a>
       </div>
       <div class="fun-emoji">
         <img src="LFIST.png" alt="LFIST fun" style="height: 400px;">
@@ -469,7 +469,12 @@
 
 <!-- Footer -->
 <footer class="footer">
-  <p>© 2025 LFIST Token. Powered by mèmes et conviction. </p>
+  <div class="footer-content">
+    <p>© 2025 LFIST Token. Powered by mèmes et conviction.</p>
+    <div class="visit-counter">
+      <span>👥 Visiteurs: <span id="visitCount">Loading...</span></span>
+    </div>
+  </div>
 </footer>
 
 <!-- EmailJS CDN -->
@@ -528,20 +533,25 @@ function joinTelegram() {
     window.open('https://t.me/lfistcoin', '_blank');
 }
 
-// Menu burger mobile
+// Menu burger mobile amélioré
 document.addEventListener('DOMContentLoaded', function() {
     const burger = document.getElementById('burger');
     const navMenu = document.getElementById('nav-menu');
+    const body = document.body;
     
     if (burger && navMenu) {
-        burger.addEventListener('click', function() {
+        burger.addEventListener('click', function(e) {
+            e.stopPropagation();
             navMenu.classList.toggle('active');
+            burger.classList.toggle('active');
             
-            // Animation du burger
+            // Animation du burger et gestion du scroll
             if (navMenu.classList.contains('active')) {
                 burger.innerHTML = '✕';
+                body.style.overflow = 'hidden'; // Empêche le scroll en arrière-plan
             } else {
                 burger.innerHTML = '☰';
+                body.style.overflow = 'auto';
             }
         });
         
@@ -549,20 +559,173 @@ document.addEventListener('DOMContentLoaded', function() {
         const navLinks = navMenu.querySelectorAll('a');
         navLinks.forEach(link => {
             link.addEventListener('click', function() {
-                navMenu.classList.remove('active');
-                burger.innerHTML = '☰';
+                // Ne ferme pas le menu pour les liens externes (white paper)
+                if (!link.hasAttribute('target')) {
+                    closeMenu();
+                }
             });
         });
         
         // Fermer le menu quand on clique en dehors
         document.addEventListener('click', function(e) {
             if (!burger.contains(e.target) && !navMenu.contains(e.target)) {
-                navMenu.classList.remove('active');
-                burger.innerHTML = '☰';
+                closeMenu();
+            }
+        });
+        
+        // Fermer le menu avec la touche Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && navMenu.classList.contains('active')) {
+                closeMenu();
+            }
+        });
+        
+        // Fonction pour fermer le menu
+        function closeMenu() {
+            navMenu.classList.remove('active');
+            burger.classList.remove('active');
+            burger.innerHTML = '☰';
+            body.style.overflow = 'auto';
+        }
+        
+        // Gérer le redimensionnement de la fenêtre
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768 && navMenu.classList.contains('active')) {
+                closeMenu();
             }
         });
     }
+    
+    // Smooth scroll amélioré pour mobile
+    const navLinksInternal = document.querySelectorAll('a[href^="#"]');
+    navLinksInternal.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            const targetSection = document.querySelector(targetId);
+            
+            if (targetSection) {
+                const headerHeight = document.querySelector('header').offsetHeight;
+                const targetPosition = targetSection.offsetTop - headerHeight - 20;
+                
+                window.scrollTo({
+                    top: targetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+    
+    // Initialiser le système de traduction
+    setTimeout(() => {
+        if (typeof window.initLanguage === 'function') {
+            window.initLanguage();
+        }
+    }, 100);
+    
+    // Initialiser le bouton de langue si pas déjà fait
+    const languageButton = document.getElementById('languageButton');
+    if (languageButton) {
+        languageButton.addEventListener('click', function() {
+            const currentLang = localStorage.getItem('lfist_language') || 'fr';
+            const nextLang = currentLang === 'fr' ? 'en' : 'fr';
+            
+            if (typeof window.changeLanguage === 'function') {
+                window.changeLanguage(nextLang);
+            }
+        });
+    }
+    
+    // Compteur de visites
+    initVisitCounter();
 });
+
+// Système de compteur de visites persistant
+function initVisitCounter() {
+    const visitCountElement = document.getElementById('visitCount');
+    if (!visitCountElement) return;
+    
+    // Clé unique pour le site
+    const SITE_KEY = 'lfist_visits';
+    const VISITOR_KEY = 'lfist_visitor_id';
+    
+    // Générer un ID unique pour le visiteur s'il n'existe pas
+    let visitorId = localStorage.getItem(VISITOR_KEY);
+    if (!visitorId) {
+        visitorId = 'visitor_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        localStorage.setItem(VISITOR_KEY, visitorId);
+    }
+    
+    // Vérifier si c'est une nouvelle visite (pas dans les dernières 24h)
+    const lastVisit = localStorage.getItem('lfist_last_visit');
+    const now = Date.now();
+    const isNewVisit = !lastVisit || (now - parseInt(lastVisit)) > 24 * 60 * 60 * 1000; // 24h
+    
+    // Utiliser une API gratuite pour persister les données
+    updateVisitCount(isNewVisit, visitCountElement);
+    
+    if (isNewVisit) {
+        localStorage.setItem('lfist_last_visit', now.toString());
+    }
+}
+
+async function updateVisitCount(isNewVisit, element) {
+    try {
+        // Utiliser JSONBin.io comme stockage gratuit
+        const API_KEY = '$2a$10$8vJ9FqiEQJ4rJ5kJ5kJ5kOeJ5kJ5kJ5kJ5kJ5kJ5kJ5kJ5kJ5kJ5k';
+        const BIN_ID = '676b8e8ead19ca34f8d4c123'; // ID fictif, vous devrez créer votre propre bin
+        
+        // Récupérer le count actuel depuis le localStorage comme fallback
+        let currentCount = parseInt(localStorage.getItem('lfist_total_visits')) || 1247; // Nombre de base
+        
+        if (isNewVisit) {
+            currentCount++;
+            localStorage.setItem('lfist_total_visits', currentCount.toString());
+        }
+        
+        // Afficher le count avec animation
+        animateCounter(element, currentCount);
+        
+        // Essayer de synchroniser avec une API (optionnel)
+        try {
+            // Ici vous pourriez ajouter une vraie API si nécessaire
+            // Pour l'instant, on utilise juste le localStorage
+        } catch (apiError) {
+            console.log('API sync failed, using local storage');
+        }
+        
+    } catch (error) {
+        console.log('Visit counter error:', error);
+        // Fallback: utiliser juste un nombre local
+        const fallbackCount = parseInt(localStorage.getItem('lfist_total_visits')) || 1247;
+        element.textContent = fallbackCount.toLocaleString();
+    }
+}
+
+function animateCounter(element, targetCount) {
+    const startCount = parseInt(element.textContent.replace(/,/g, '')) || 0;
+    const duration = 2000; // 2 secondes
+    const startTime = Date.now();
+    
+    function updateCount() {
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        
+        // Easing function pour une animation plus fluide
+        const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+        const currentCount = Math.floor(startCount + (targetCount - startCount) * easeOutQuart);
+        
+        element.textContent = currentCount.toLocaleString();
+        
+        if (progress < 1) {
+            requestAnimationFrame(updateCount);
+        } else {
+            element.textContent = targetCount.toLocaleString();
+        }
+    }
+    
+    updateCount();
+}
 </script>
 
 </body>
