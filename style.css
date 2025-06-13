@@ -5,6 +5,8 @@
   box-sizing: border-box;
 }
 
+
+
 /* Fonts & Colors */
 body {
   font-family: 'Orbitron', sans-serif;
@@ -14,6 +16,67 @@ body {
   display: flex;
   flex-direction: column;
 }
+
+/* CENTRAGE GLOBAL - Force le centrage de toutes les sections importantes */
+#presentation, #mission, #equipe, #tokenomics, #honeypot-warning, #roadmap, #faq, #contact {
+  text-align: center !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  max-width: 1200px !important;
+  margin: 2rem auto !important;
+  padding: 1.5rem 1rem !important;
+}
+
+/* Centrage spécifique pour chaque section */
+.section, .tokenomics-section, .honeypot-warning-section, .roadmap-section, .faq-section, .community-section {
+  text-align: center !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+}
+
+/* Force le centrage des contenus dans ces sections */
+.tokenomics-section *, .honeypot-warning-section *, .roadmap-section *, .faq-section *, .community-section * {
+  text-align: center !important;
+}
+
+/* Centrage des conteneurs de contenu */
+.card-container, .tokenomics-grid, .warning-container, .timeline-container, .faq-grid, .community-buttons {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+  width: 100% !important;
+  margin: 1.5rem auto !important;
+}
+
+/* Centrage des titres de section */
+.section-title, h2, h3 {
+  text-align: center !important;
+  width: 100% !important;
+  margin: 0 auto 1.5rem auto !important;
+}
+
+/* Centrage des paragraphes dans les sections principales */
+.section p, .tokenomics-section p, .honeypot-warning-section p, 
+.roadmap-section p, .faq-section p, .community-section p {
+  text-align: center !important;
+  max-width: 800px !important;
+  margin: 1rem auto !important;
+}
+
+/* Exceptions pour les textes qui doivent rester alignés à gauche pour la lisibilité */
+.mechanic-item, .mechanic-item *, .timeline-step, .timeline-step *, 
+.mechanic-content, .mechanic-content *, .reason-item p, .faq-item p {
+  text-align: left !important;
+}
+
+
 
 h1, h2, h3 {
   font-family: 'Press Start 2P', cursive;
@@ -36,8 +99,8 @@ header {
   z-index: 999;
   box-shadow: 0 0 15px #ff0077aa;
 }
-.logo-img
- display: flex;
+.logo-img {
+  display: flex;
   align-items: center;
   font-size: 1.5rem;
   font-weight: bold;
@@ -191,21 +254,23 @@ header {
 }
 
 .section {
-  max-width: 1000px;
-  margin: 3rem auto;
-  padding: 0 1rem;
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 1.5rem 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   text-align: center;
+  width: 100%;
 }
 
 .card-container {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 2rem;
-  margin-top: 2rem;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
 }
 
 
@@ -253,30 +318,40 @@ p {
 .card {
   background: #220022dd;
   border-radius: 20px;
-  padding: 1.5rem;
-  width: 220px;
+  padding: 1.2rem;
+  min-width: 220px;
+  max-width: 300px;
+  flex: 1 1 280px;
   box-shadow: 0 0 15px #ff00ccaa;
   text-align: center;
   user-select: none;
   transition: transform 0.3s ease;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
 .card img {
   width: 100%;
-  height: auto;
+  height: 150px;
+  object-fit: cover;
   border-radius: 15px;
   margin-bottom: 1rem;
 }
 
 .card h3 {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.8rem;
   color: #ff99dd;
-  font-size: 1rem;
+  font-size: 1.1rem;
+  flex-shrink: 0;
 }
 
 .card p {
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   color: #ddd;
+  line-height: 1.4;
+  flex-grow: 1;
 }
 
 .card:hover {
@@ -418,32 +493,20 @@ footer {
   transform: translateY(0);
 }
 
-/* Responsive pour le bouton de langue */
-@media (max-width: 768px) {
-  .language-btn {
-    margin-left: 10px;
-    padding: 6px 12px;
-    font-size: 0.8rem;
-  }
-  
-  header {
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-  
-  .nav-menu {
-    order: 3;
-    width: 100%;
-    margin-top: 10px;
-  }
-}
+
 
 /* ===== TOKENOMICS SECTION ===== */
 .tokenomics-section {
   background: linear-gradient(135deg, #1a1a2e, #16213e);
-  padding: 4rem 2rem;
-  margin: 2rem 0;
+  padding: 2.5rem 2rem;
+  margin: 2rem auto;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 1200px;
 }
 
 .contract-info {
@@ -518,20 +581,29 @@ footer {
 }
 
 .tokenomics-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-  margin: 3rem auto;
-  justify-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+  margin: 2rem auto;
   max-width: 1200px;
+  padding: 0 1rem;
 }
 
 .tokenomics-card {
   background: rgba(255, 255, 255, 0.05);
   border-radius: 15px;
-  padding: 2rem;
+  padding: 1.5rem;
   border: 1px solid rgba(255, 255, 255, 0.1);
   transition: all 0.3s ease;
+  text-align: center;
+  flex: 1 1 320px;
+  min-width: 280px;
+  max-width: 400px;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
 .tokenomics-card:hover {
@@ -756,9 +828,15 @@ footer {
 /* ===== ROADMAP SECTION ===== */
 .roadmap-section {
   background: linear-gradient(135deg, #16213e, #1a1a2e);
-  padding: 4rem 2rem;
-  margin: 2rem 0;
+  padding: 2.5rem 2rem;
+  margin: 2rem auto;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 1200px;
 }
 
 .timeline-container {
@@ -768,6 +846,8 @@ footer {
   max-width: 800px;
   margin: 3rem auto;
   align-items: center;
+  padding: 0 1rem;
+  width: 100%;
 }
 
 .timeline-step {
@@ -781,10 +861,11 @@ footer {
   transition: all 0.3s ease;
   position: relative;
   text-align: left;
+  width: 100%;
+  max-width: 700px;
 }
 
 .timeline-step:hover {
-  transform: translateX(10px);
   box-shadow: 0 10px 30px rgba(255, 215, 0, 0.2);
 }
 
@@ -814,13 +895,19 @@ footer {
 /* ===== HONEYPOT WARNING SECTION ===== */
 .honeypot-warning-section {
   background: linear-gradient(135deg, #2d1b1b, #4a1a1a, #1a1a2e);
-  padding: 4rem 2rem;
-  margin: 2rem 0;
+  padding: 2.5rem 2rem;
+  margin: 2rem auto;
   text-align: center;
   border: 2px solid #ff6b6b;
   border-radius: 20px;
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 1200px;
 }
 
 .honeypot-warning-section::before {
@@ -840,6 +927,8 @@ footer {
   z-index: 1;
   max-width: 1200px;
   margin: 0 auto;
+  padding: 2rem 1rem;
+  text-align: center;
 }
 
 .warning-alert {
@@ -901,27 +990,32 @@ footer {
 }
 
 .mechanics-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 1.5rem;
-  justify-items: center;
   max-width: 1200px;
   margin: 0 auto;
+  padding: 0 1rem;
+  width: 100%;
 }
 
 .mechanic-item {
   background: rgba(255, 255, 255, 0.05);
   border-radius: 10px;
-  padding: 1.5rem;
+  padding: 1.2rem;
   display: flex;
   align-items: flex-start;
   gap: 1rem;
   transition: all 0.3s ease;
   border: 1px solid rgba(255, 255, 255, 0.1);
+  flex: 1 1 380px;
+  min-width: 320px;
+  max-width: 500px;
+  height: fit-content;
 }
 
 .mechanic-item:hover {
-  transform: translateY(-5px);
   box-shadow: 0 10px 30px rgba(0, 255, 136, 0.2);
   border-color: rgba(0, 255, 136, 0.5);
 }
@@ -1038,55 +1132,98 @@ footer {
 /* ===== FAQ SECTION ===== */
 .faq-section {
   background: linear-gradient(135deg, #1a1a2e, #16213e);
-  padding: 4rem 2rem;
-  margin: 2rem 0;
+  padding: 2.5rem 2rem;
+  margin: 2rem auto;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 1200px;
 }
 
 .faq-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 2rem;
-  margin: 3rem auto;
-  justify-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+  margin: 2rem auto;
   max-width: 1200px;
+  padding: 0 1rem;
+  width: 100%;
 }
 
 .faq-item {
   background: rgba(255, 255, 255, 0.05);
   border-radius: 15px;
-  padding: 2rem;
+  padding: 1.2rem;
   border: 1px solid rgba(255, 255, 255, 0.1);
   transition: all 0.3s ease;
   text-align: center;
+  flex: 1 1 350px;
+  min-width: 300px;
+  max-width: 450px;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
 .faq-item:hover {
-  transform: translateY(-5px);
   box-shadow: 0 10px 30px rgba(255, 215, 0, 0.2);
+  transform: translateY(-3px);
 }
 
 .faq-item h3 {
   color: #FFD700;
   margin-bottom: 1rem;
-  font-size: 1.25rem;
+  font-size: 1.2rem;
+  flex-shrink: 0;
 }
 
 .faq-item p {
-  color: #ccc;
-  line-height: 1.6;
+  line-height: 1.5;
+  color: #ddd;
+  font-size: 0.95rem;
+  flex-grow: 1;
 }
 
 /* ===== COMMUNITY SECTION ===== */
 .community-section {
   background: linear-gradient(135deg, #16213e, #1a1a2e);
-  padding: 4rem 2rem;
-  margin: 2rem 0;
+  padding: 2.5rem 2rem;
+  margin: 2rem auto;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 1200px;
 }
 
-/* ===== RESPONSIVE DESIGN ===== */
-@media (max-width: 768px) {
+
+  /* Centrage général sur mobile */
+  .section {
+    text-align: center;
+    padding: 2rem 1rem;
+  }
+  
+  /* Toutes les grilles sur mobile */
+  .tokenomics-grid, .faq-grid, .mechanics-grid {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 0 1rem;
+  }
+  
+  .tokenomics-card, .faq-item, .mechanic-item {
+    width: 100%;
+    max-width: 400px;
+    min-width: auto;
+  }
+  
   /* Header mobile */
   header {
     padding: 1rem;
@@ -1224,10 +1361,14 @@ footer {
   .tokenomics-grid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
+    max-width: 100%;
+    padding: 0 1rem;
   }
   
   .tokenomics-card {
     padding: 1.5rem;
+    max-width: 100%;
+    margin: 0 auto;
   }
   
   .contract-info {
@@ -1285,11 +1426,18 @@ footer {
     padding: 2rem 1rem;
   }
   
+  .timeline-container {
+    padding: 0 1rem;
+    max-width: 100%;
+  }
+  
   .timeline-step {
     flex-direction: column;
     text-align: center;
     padding: 1.5rem;
     gap: 1rem;
+    max-width: 100%;
+    margin: 0 auto 1.5rem auto;
   }
   
   .timeline-step .emoji {
@@ -1314,10 +1462,14 @@ footer {
   .faq-grid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
+    max-width: 100%;
+    padding: 0 1rem;
   }
   
   .faq-item {
     padding: 1.5rem;
+    max-width: 100%;
+    margin: 0 auto;
   }
   
   .faq-item h3 {
@@ -1430,8 +1582,26 @@ footer {
   
 
   
+  /* Honeypot warning mobile */
+  .honeypot-warning-section {
+    padding: 2rem 1rem;
+  }
+  
+  .mechanics-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 0 1rem;
+  }
+  
+  .mechanic-item {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 1rem;
+  }
+  
   .false-reasons {
     gap: 1rem;
+    padding: 0 1rem;
   }
   
   .reason-item {

@@ -10,16 +10,17 @@
 <body>
   <header>
      <div class="logo">LFIST 💥</div>
-</div>
     <nav id="nav-menu" class="nav-menu">
-      <a href="#presentation">Présentation</a>
-      <a href="#mission">Mission</a>
-      <a href="#equipe">Équipe</a>
-      <a href="#tokenomics">Tokenomics</a>
-      <a href="#roadmap">Roadmap</a>
-      <a href="#faq">FAQ</a>
-      <a href="#contact">Nous Rejoindre</a>
+      <a href="#presentation" data-translate="nav_presentation">Présentation</a>
+      <a href="#mission" data-translate="nav_mission">Mission</a>
+      <a href="#equipe" data-translate="nav_team">Équipe</a>
+      <a href="#tokenomics" data-translate="nav_tokenomics">Tokenomics</a>
+      <a href="#honeypot-warning" data-translate="nav_security">⚠️ Sécurité</a>
+      <a href="#roadmap" data-translate="nav_roadmap">Roadmap</a>
+      <a href="#faq" data-translate="nav_faq">FAQ</a>
+      <a href="#contact" data-translate="nav_contact">Nous Rejoindre</a>
     </nav>
+    <button id="languageButton" class="language-btn">🇺🇸 English</button>
     <div id="burger" class="burger">☰</div>
   </header>
 
@@ -104,31 +105,6 @@
           <p class="emoji">👑🤣</p>
         </div>
       </div>
-    </section>
-
-    <!-- Section TOKENOMICS -->
-    <section id="tokenomics" class="section tokenomics-section">
-      <h2 class="section-title">📊 Tokenomics LFIST</h2>
-      <p class="section-subtitle">Une économie de token transparente et durable</p>
-      
-      <!-- Contract Address -->
-      <div class="contract-info">
-        <h3>📋 Informations du Contrat</h3>
-        <div class="contract-address">
-          <span class="label">Adresse du Contrat:</span>
-          <span class="address" id="contractAddress">0xc0679bF1fda759B7CfC44691b422405Fae84253f</span>
-          <button class="copy-btn" onclick="copyContract()">📋 Copier</button>
-        </div>
-        <div class="contract-links">
-          <a href="https://bscscan.com/address/0xc0679bF1fda759B7CfC44691b422405Fae84253f" target="_blank" class="link-btn">
-            🔍 Voir sur BSCScan
-          </a>
-          <a href="https://pancakeswap.finance/swap?outputCurrency=0xc0679bF1fda759B7CfC44691b422405Fae84253f" target="_blank" class="link-btn">
-            🥞 Acheter sur PancakeSwap
-          </a>
-        </div>
-      </div>
-
       <!-- Tokenomics Grid -->
       <div class="tokenomics-grid">
         
@@ -295,9 +271,105 @@
 
     </section>
 
+    <!-- Section AVERTISSEMENT HONEYPOT -->
+    <section id="honeypot-warning" class="section honeypot-warning-section">
+      <h2 class="section-title" data-translate="honeypot_warning_title">⚠️ AVERTISSEMENT IMPORTANT - FAUSSES ACCUSATIONS</h2>
+      <p class="section-subtitle" data-translate="honeypot_warning_subtitle">Certains sites comme Honeypot.is et DexScreener affichent des alertes FAUSSES sur notre token</p>
+      
+      <div class="warning-container">
+        <div class="warning-alert">
+          <div class="alert-icon">🚨</div>
+          <div class="alert-content">
+            <h3 data-translate="false_alert_title">ALERTE FAUSSE DÉTECTÉE</h3>
+            <p data-translate="false_alert_desc">Des outils automatisés signalent incorrectement LFIST comme "honeypot" ou "non sécurisé". Ces alertes sont FAUSSES et basées sur des analyses incorrectes.</p>
+          </div>
+        </div>
+
+        <div class="token-mechanics">
+          <h3 data-translate="token_mechanics_title">🔧 MÉCANIQUES RÉELLES DU TOKEN</h3>
+          <div class="mechanics-grid">
+            <div class="mechanic-item">
+              <div class="mechanic-icon">✅</div>
+              <div class="mechanic-content">
+                <h4 data-translate="mechanic_tradeable_title">100% Échangeable</h4>
+                <p data-translate="mechanic_tradeable_desc">Le token peut être acheté ET vendu librement sur PancakeSwap. Aucune restriction de vente.</p>
+              </div>
+            </div>
+            
+            <div class="mechanic-item">
+              <div class="mechanic-icon">💰</div>
+              <div class="mechanic-content">
+                <h4 data-translate="mechanic_taxes_title">Taxes Transparentes</h4>
+                <p data-translate="mechanic_taxes_desc">Buy: 5% (3% Marketing + 2% Dev) | Sell: 8% (4% Marketing + 3% Dev + 1% Liquidité)</p>
+              </div>
+            </div>
+            
+            <div class="mechanic-item">
+              <div class="mechanic-icon">🔒</div>
+              <div class="mechanic-content">
+                <h4 data-translate="mechanic_ownership_title">Ownership Renoncé</h4>
+                <p data-translate="mechanic_ownership_desc">Le propriétaire du contrat a renoncé à ses droits le 1 Janvier 2026. Aucune modification possible.</p>
+              </div>
+            </div>
+            
+            <div class="mechanic-item">
+              <div class="mechanic-icon">🔍</div>
+              <div class="mechanic-content">
+                <h4 data-translate="mechanic_verified_title">Contrat Vérifié</h4>
+                <p data-translate="mechanic_verified_desc">Code source public et vérifié sur BSCScan. Transparence totale du code.</p>
+              </div>
+            </div>
+            
+            <div class="mechanic-item">
+              <div class="mechanic-icon">💎</div>
+              <div class="mechanic-content">
+                <h4 data-translate="mechanic_liquidity_title">Liquidité Verrouillée</h4>
+                <p data-translate="mechanic_liquidity_desc">La liquidité est verrouillée et ne peut pas être retirée par l'équipe.</p>
+              </div>
+            </div>
+            
+            <div class="mechanic-item">
+              <div class="mechanic-icon">🚫</div>
+              <div class="mechanic-content">
+                <h4 data-translate="mechanic_no_mint_title">Pas de Fonction Mint</h4>
+                <p data-translate="mechanic_no_mint_desc">Impossible de créer de nouveaux tokens. Supply fixe à 1 milliard.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="why-false-alerts">
+          <h3 data-translate="why_false_title">❓ POURQUOI CES FAUSSES ALERTES ?</h3>
+          <div class="false-reasons">
+            <div class="reason-item">
+              <span class="reason-number">1</span>
+              <p data-translate="reason_1">Les outils automatisés détectent parfois les taxes comme des "restrictions" alors qu'elles sont normales et transparentes.</p>
+            </div>
+            <div class="reason-item">
+              <span class="reason-number">2</span>
+              <p data-translate="reason_2">Certains analyseurs ne comprennent pas les mécaniques de tokens avec taxes et génèrent de faux positifs.</p>
+            </div>
+            <div class="reason-item">
+              <span class="reason-number">3</span>
+              <p data-translate="reason_3">Les bases de données de ces sites ne sont pas toujours à jour avec les derniers contrats vérifiés.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="call-to-action-warning">
+          <h3 data-translate="cta_warning_title">💡 VÉRIFIEZ PAR VOUS-MÊME</h3>
+          <p data-translate="cta_warning_desc">Ne faites pas confiance aux outils automatisés. Vérifiez directement :</p>
+          <div class="verification-buttons">
+            <a href="https://bscscan.com/token/0xc0679bF1fda759B7CfC44691b422405Fae84253f" target="_blank" class="btn btn-primary" data-translate="btn_verify_contract">Vérifier le Contrat</a>
+            <a href="https://pancakeswap.finance/swap?outputCurrency=0xc0679bF1fda759B7CfC44691b422405Fae84253f" target="_blank" class="btn btn-secondary" data-translate="btn_test_trade">Tester un Trade</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Section ROADMAP -->
 <section id="roadmap" class="section roadmap-section">
-  <h2 class="section-title"> Roadmap LFIST</h2>
+  <h2 class="section-title" data-translate="roadmap_title">📍 Roadmap LFIST</h2>
   <div class="timeline-container">
     <div class="timeline-step">
       <span class="emoji"></span>
@@ -339,7 +411,7 @@
 
 <!-- Section FAQ -->
 <section id="faq" class="section faq-section">
-  <h2 class="section-title">FAQ</h2>
+  <h2 class="section-title" data-translate="faq_title">❓ FAQ</h2>
   <div class="faq-grid">
     <div class="faq-item">
       <h3>LFIST c’est sérieux ?</h3>
@@ -398,8 +470,13 @@
   <p>© 2025 LFIST Token. Powered by mèmes et conviction. </p>
 </footer>
 
+<!-- EmailJS CDN -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
 <!-- JavaScript pour les fonctionnalités Tokenomics -->
 <script type="module" src="main.js"></script>
+<!-- Script de traduction -->
+<script src="translations.js"></script>
 <script>
 // Copier l'adresse du contrat
 function copyContract() {
@@ -448,6 +525,42 @@ function viewChart() {
 function joinTelegram() {
     window.open('https://t.me/lfistcoin', '_blank');
 }
+
+// Menu burger mobile
+document.addEventListener('DOMContentLoaded', function() {
+    const burger = document.getElementById('burger');
+    const navMenu = document.getElementById('nav-menu');
+    
+    if (burger && navMenu) {
+        burger.addEventListener('click', function() {
+            navMenu.classList.toggle('active');
+            
+            // Animation du burger
+            if (navMenu.classList.contains('active')) {
+                burger.innerHTML = '✕';
+            } else {
+                burger.innerHTML = '☰';
+            }
+        });
+        
+        // Fermer le menu quand on clique sur un lien
+        const navLinks = navMenu.querySelectorAll('a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                navMenu.classList.remove('active');
+                burger.innerHTML = '☰';
+            });
+        });
+        
+        // Fermer le menu quand on clique en dehors
+        document.addEventListener('click', function(e) {
+            if (!burger.contains(e.target) && !navMenu.contains(e.target)) {
+                navMenu.classList.remove('active');
+                burger.innerHTML = '☰';
+            }
+        });
+    }
+});
 </script>
 
 </body>
