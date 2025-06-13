@@ -78,7 +78,11 @@ async function renderMemecoins() {
 // === Gestion des Votes ===
 async function vote(id, index) {
   const voted = localStorage.getItem("votedThisWeek");
-  if (voted) return alert("Tu as déjà voté cette semaine!");
+  if (voted) {
+    const currentLang = localStorage.getItem('lfist_language') || 'fr';
+    const message = translations[currentLang]['vote_already_done'] || "Tu as déjà voté cette semaine!";
+    return alert(message);
+  }
 
   const ref = db.collection("votes").doc(id);
   await db.runTransaction(async t => {

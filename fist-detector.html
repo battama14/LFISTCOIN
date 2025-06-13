@@ -15,69 +15,78 @@
       <span>LFIST 💥</span>
     </div>
     <nav class="nav-menu">
-      <a href="/">Accueil</a>
-      <a href="/vote.html">Fist-Detector</a>
+      <a href="/" data-translate="nav_home">Accueil</a>
+      <a href="/vote.html" data-translate="nav_fist_detector">Fist-Detector</a>
     </nav>
+    <button id="languageButton" class="language-btn">🇺🇸 English</button>
+    <div class="burger">☰</div>
   </header>
 
   <section class="hero">
-    <h1>FIST <span class="highlight">DETECTOR</span></h1>
-    <p>Vote chaque semaine pour le memecoin qui va prendre cher ! 💥</p>
+    <h1 data-translate="fist_detector_title">FIST <span class="highlight">DETECTOR</span></h1>
+    <p data-translate="fist_detector_subtitle">Vote chaque semaine pour le memecoin qui va prendre cher ! 💥</p>
     <div class="fun-emoji" style="display: flex; justify-content: space-between; align-items: center;">
-  <img src="fifi.png" alt="LFIST fun" style="height: 150px;">
-  <img src="vinnivenere.png" alt="Autre image" style="height: 150px;">
+  <div class="image-container">
+    <img src="fifi.png" alt="LFIST fun" style="height: 150px;" class="floating-fifi">
+  </div>
+  <div class="image-container">
+    <img src="vinnivenere.png" alt="Autre image" style="height: 150px;" class="swaying-vinni">
+  </div>
 </div>
 
 	<div class="fun-emoji">
-        <img src="presentation.png" alt="LFIST fun" style="height: 400px;">
+        <div class="image-container">
+          <img src="presentation.png" alt="LFIST fun" style="height: 400px;" class="bouncing-presentation">
+        </div>
       </div>
   </section>
   <section class="section neon-section">
-    <h2>Les 3 victimes détectées cette semaine</h2>
+    <h2 data-translate="victims_title">Les 3 victimes détectées cette semaine</h2>
     
     <!-- Countdown Timer -->
     <div class="vote-countdown">
-      <h3>⏰ Temps restant pour voter :</h3>
-      <div id="countdown">Chargement...</div>
+      <h3 data-translate="countdown_title">⏰ Temps restant pour voter :</h3>
+      <div id="countdown" data-translate="countdown_loading">Chargement...</div>
     </div>
 
     <!-- 🔽 Ce conteneur sera rempli dynamiquement par le JS -->
     <div id="memecoins-container" class="card-container"></div>
 
-    <p class="meme-text">Tu ne peux voter qu'une seule fois par semaine mais en attendant rejoins sur sur nos reseaux et inscrit toi a la newsletter.Sinon Reviens lundi !</p>
+    <p class="meme-text" data-translate="vote_message">Tu ne peux voter qu'une seule fois par semaine mais en attendant rejoins sur sur nos reseaux et inscrit toi a la newsletter.Sinon Reviens lundi !</p>
   </section>
 
   <!-- Section de recherche de sécurité -->
   <section class="section security-search-section">
-    <h2>🔍 Analyse de Sécurité Personnalisée</h2>
-    <p>Vérifie la sécurité de n'importe quel token en saisissant son adresse de contrat :</p>
+    <h2 data-translate="security_search_title">🔍 Analyse de Sécurité Personnalisée</h2>
+    <p data-translate="security_search_subtitle">Vérifie la sécurité de n'importe quel token en saisissant son adresse de contrat :</p>
     
     <div class="search-container">
       <div class="search-input-group">
         <input 
           type="text" 
           id="contractAddressInput" 
+          data-translate-placeholder="contract_placeholder"
           placeholder="0x... (Adresse du contrat)"
           class="contract-input"
         />
         <select id="chainSelect" class="chain-select">
-          <option value="1">Ethereum</option>
-          <option value="56">BSC</option>
-          <option value="137">Polygon</option>
-          <option value="43114">Avalanche</option>
-          <option value="250">Fantom</option>
+          <option value="1" data-translate="blockchain_ethereum">Ethereum</option>
+          <option value="56" data-translate="blockchain_bsc">BSC</option>
+          <option value="137" data-translate="blockchain_polygon">Polygon</option>
+          <option value="43114" data-translate="blockchain_avalanche">Avalanche</option>
+          <option value="250" data-translate="blockchain_fantom">Fantom</option>
         </select>
-        <button onclick="analyzeContract()" class="analyze-btn">🔍 Analyser</button>
+        <button onclick="analyzeContract()" class="analyze-btn" data-translate="btn_analyze">🔍 Analyser</button>
       </div>
     </div>
     
     <div id="analysisResult" class="analysis-result"></div>
   </section>
   <section id="newsletter" style="text-align: center; margin-top: 40px;">
-  <h2>📬 Inscris-toi à notre newsletter</h2>
-  <p>Reste informé des nouveaux memecoins détectés chaque semaine !</p>
-  <input type="email" id="emailInput" placeholder="Ton adresse email" style="padding: 10px; width: 250px; border-radius: 8px; border: 1px solid #ccc;">
-  <button onclick="subscribeEmail()" style="padding: 10px 20px; border-radius: 8px; background-color: #ff4081; color: white; border: none; cursor: pointer;">S'inscrire</button>
+  <h2 data-translate="newsletter_title">📬 Inscris-toi à notre newsletter</h2>
+  <p data-translate="newsletter_subtitle">Reste informé des nouveaux memecoins détectés chaque semaine !</p>
+  <input type="email" id="emailInput" data-translate-placeholder="newsletter_placeholder" placeholder="Ton adresse email" style="padding: 10px; width: 250px; border-radius: 8px; border: 1px solid #ccc;">
+  <button onclick="subscribeEmail()" data-translate="btn_subscribe" style="padding: 10px 20px; border-radius: 8px; background-color: #ff4081; color: white; border: none; cursor: pointer;">S'inscrire</button>
   <p id="emailMsg" style="margin-top: 10px;"></p>
 </section>
 
@@ -85,7 +94,9 @@
   <!-- Section Communauté -->
 <section id="contact" class="section community-section">
 <div class="fun-emoji">
-        <img src="alien.png" alt="LFIST fun" style="height: 400px;">
+        <div class="image-container">
+          <img src="alien.png" alt="LFIST fun" style="height: 400px;" class="wiggling-alien">
+        </div>
   <h2 class="section-title">💬 Rejoins la FISTFAMILY</h2>
   <p class="community-text">Memecoins, chaos et bienveillance douteuse — ici, c’est chez toi maintenant.</p>
 
@@ -116,6 +127,46 @@
   
   <!-- 🔽 Ton script JS principal avec Firebase -->
   <script type="module" src="./main.js"></script>
+  <!-- Script de traduction -->
+  <script src="translations.js"></script>
+  
+  <script>
+  // Menu burger mobile pour fist-detector
+  document.addEventListener('DOMContentLoaded', function() {
+      const burger = document.querySelector('.burger');
+      const navMenu = document.querySelector('.nav-menu');
+      
+      if (burger && navMenu) {
+          burger.addEventListener('click', function() {
+              navMenu.classList.toggle('active');
+              
+              // Animation du burger
+              if (navMenu.classList.contains('active')) {
+                  burger.innerHTML = '✕';
+              } else {
+                  burger.innerHTML = '☰';
+              }
+          });
+          
+          // Fermer le menu quand on clique sur un lien
+          const navLinks = navMenu.querySelectorAll('a');
+          navLinks.forEach(link => {
+              link.addEventListener('click', function() {
+                  navMenu.classList.remove('active');
+                  burger.innerHTML = '☰';
+              });
+          });
+          
+          // Fermer le menu quand on clique en dehors
+          document.addEventListener('click', function(e) {
+              if (!burger.contains(e.target) && !navMenu.contains(e.target)) {
+                  navMenu.classList.remove('active');
+                  burger.innerHTML = '☰';
+              }
+          });
+      }
+  });
+  </script>
 
 </body>
 <!-- Footer -->
