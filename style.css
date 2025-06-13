@@ -151,6 +151,26 @@ header {
   width: 100%;
 }
 
+.whitepaper-link {
+  background: linear-gradient(135deg, #ff6b6b, #4ecdc4) !important;
+  color: white !important;
+  padding: 0.5rem 1rem !important;
+  border-radius: 20px !important;
+  font-weight: bold !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3) !important;
+}
+
+.whitepaper-link:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4) !important;
+  background: linear-gradient(135deg, #4ecdc4, #ff6b6b) !important;
+}
+
+.whitepaper-link::after {
+  display: none !important;
+}
+
 .burger {
   display: none;
   font-size: 2rem;
@@ -239,6 +259,18 @@ header {
   background: #00ccaa;
   box-shadow: 0 0 30px #00ccaa;
   transform: scale(1.05) rotate(2deg);
+}
+
+.btn-whitepaper {
+  background: linear-gradient(135deg, #ffd700, #ffb347);
+  color: #111;
+  box-shadow: 0 0 20px #ffd700;
+}
+
+.btn-whitepaper:hover {
+  background: linear-gradient(135deg, #ffb347, #ffd700);
+  box-shadow: 0 0 30px #ffd700;
+  transform: scale(1.05) rotate(-1deg);
 }
 
 .fun-emoji {

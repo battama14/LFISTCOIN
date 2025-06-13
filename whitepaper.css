@@ -1,0 +1,640 @@
+/* Reset et base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Orbitron', sans-serif;
+  background: linear-gradient(135deg, #0f1419, #1a1f2e, #2c3e50);
+  color: #e8e8e8;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* Header */
+.wp-header {
+  background: linear-gradient(135deg, #1a1a2e, #16213e);
+  padding: 1.5rem 0;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.wp-nav {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.back-btn {
+  color: #00ffe7;
+  text-decoration: none;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  border: 2px solid #00ffe7;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+  background: #00ffe7;
+  color: #1a1a2e;
+  transform: translateY(-2px);
+}
+
+.wp-nav h1 {
+  font-family: 'Press Start 2P', cursive;
+  color: #ff00cc;
+  font-size: 1.5rem;
+  text-shadow: 0 0 10px #ff00cc;
+}
+
+.version {
+  color: #888;
+  font-size: 0.9rem;
+}
+
+/* Container principal */
+.wp-main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.wp-container {
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 20px;
+  padding: 3rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Page de couverture */
+.cover-section {
+  text-align: center;
+  padding: 4rem 0;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 3rem;
+}
+
+.wp-title {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 3rem;
+  color: #ff00cc;
+  text-shadow: 0 0 20px #ff00cc;
+  margin-bottom: 1rem;
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from { text-shadow: 0 0 20px #ff00cc; }
+  to { text-shadow: 0 0 30px #ff00cc, 0 0 40px #ff00cc; }
+}
+
+.wp-subtitle {
+  font-size: 1.5rem;
+  color: #00ffe7;
+  margin-bottom: 2rem;
+}
+
+.wp-tagline {
+  font-size: 1.2rem;
+  color: #ffd700;
+  font-style: italic;
+  margin-bottom: 3rem;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.wp-meta {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 2rem;
+  display: inline-block;
+  text-align: left;
+}
+
+.wp-meta p {
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+/* Table des matières */
+.toc-section {
+  margin-bottom: 3rem;
+  padding-bottom: 2rem;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.toc-section h2 {
+  color: #ff00cc;
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+}
+
+.toc ol {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 2rem;
+  max-width: 600px;
+}
+
+.toc li {
+  margin-bottom: 0.8rem;
+  font-size: 1.1rem;
+}
+
+.toc a {
+  color: #00ffe7;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.toc a:hover {
+  color: #ffd700;
+}
+
+/* Sections */
+.wp-section {
+  margin-bottom: 4rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.wp-section:last-child {
+  border-bottom: none;
+}
+
+.wp-section h2 {
+  color: #ff00cc;
+  font-size: 2.2rem;
+  margin-bottom: 2rem;
+  text-shadow: 0 0 10px #ff00cc;
+}
+
+.wp-section h3 {
+  color: #00ffe7;
+  font-size: 1.5rem;
+  margin: 2rem 0 1rem 0;
+}
+
+.wp-section h4 {
+  color: #ffd700;
+  font-size: 1.2rem;
+  margin: 1.5rem 0 0.8rem 0;
+}
+
+.wp-section p {
+  margin-bottom: 1.2rem;
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+.wp-section ul, .wp-section ol {
+  margin-bottom: 1.5rem;
+  padding-left: 2rem;
+}
+
+.wp-section li {
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+/* Boîtes de mise en évidence */
+.highlight-box {
+  background: linear-gradient(135deg, rgba(255, 0, 204, 0.1), rgba(0, 255, 231, 0.1));
+  border: 2px solid #ff00cc;
+  border-radius: 15px;
+  padding: 2rem;
+  margin: 2rem 0;
+}
+
+.highlight-box h3 {
+  color: #ff00cc;
+  margin-bottom: 1rem;
+}
+
+/* Grilles de valeur */
+.value-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.value-item {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.value-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(255, 0, 204, 0.2);
+}
+
+.value-item h4 {
+  color: #ffd700;
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+}
+
+/* Graphiques tokenomics */
+.tokenomics-chart {
+  margin: 2rem 0;
+}
+
+.chart-item {
+  margin-bottom: 1rem;
+}
+
+.chart-bar {
+  background: linear-gradient(90deg, #ff00cc, #00ffe7);
+  height: 40px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.chart-label {
+  font-weight: bold;
+  color: white;
+  z-index: 2;
+}
+
+.chart-value {
+  font-weight: bold;
+  color: white;
+  z-index: 2;
+}
+
+/* Répartition des taxes */
+.tax-breakdown {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.tax-breakdown h4 {
+  color: #00ffe7;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background: rgba(0, 255, 231, 0.1);
+  border-radius: 10px;
+  text-align: center;
+}
+
+/* Stack technologique */
+.tech-stack {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 2rem;
+  margin: 2rem 0;
+}
+
+.code-block {
+  background: #1a1a1a;
+  border-radius: 10px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  border-left: 4px solid #00ffe7;
+}
+
+/* Tiers NFT */
+.nft-tiers {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.tier {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 2rem;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.tier:nth-child(1) { border-color: #cd7f32; }
+.tier:nth-child(2) { border-color: #c0c0c0; }
+.tier:nth-child(3) { border-color: #ffd700; }
+
+.tier:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(255, 215, 0, 0.2);
+}
+
+/* Timeline roadmap */
+.roadmap-timeline {
+  margin: 2rem 0;
+}
+
+.timeline-item {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  border-left: 4px solid #666;
+  position: relative;
+}
+
+.timeline-item.completed {
+  border-left-color: #00ff88;
+  background: rgba(0, 255, 136, 0.1);
+}
+
+.timeline-item.current {
+  border-left-color: #ffd700;
+  background: rgba(255, 215, 0, 0.1);
+}
+
+.timeline-item h3 {
+  color: #ffd700;
+  margin-bottom: 1rem;
+}
+
+/* Structure équipe */
+.team-structure {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.team-role {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.team-role h4 {
+  color: #00ffe7;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+/* Mesures de sécurité */
+.security-measures {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.security-item {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 2rem;
+  border: 2px solid #00ff88;
+}
+
+.security-item h4 {
+  color: #00ff88;
+  margin-bottom: 1rem;
+}
+
+/* Analyse des risques */
+.risk-analysis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.risk-item {
+  background: rgba(255, 107, 107, 0.1);
+  border-radius: 15px;
+  padding: 2rem;
+  border: 2px solid #ff6b6b;
+}
+
+.risk-item h4 {
+  color: #ff6b6b;
+  margin-bottom: 1rem;
+}
+
+/* Call to action */
+.call-to-action {
+  background: linear-gradient(135deg, rgba(255, 0, 204, 0.2), rgba(0, 255, 231, 0.2));
+  border-radius: 20px;
+  padding: 3rem;
+  text-align: center;
+  margin: 3rem 0;
+  border: 2px solid #ff00cc;
+}
+
+.call-to-action h3 {
+  color: #ff00cc;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.cta-buttons {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+}
+
+.cta-btn {
+  padding: 1rem 2rem;
+  border-radius: 30px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.cta-btn.primary {
+  background: linear-gradient(135deg, #ff00cc, #ff6b6b);
+  color: white;
+  box-shadow: 0 4px 15px rgba(255, 0, 204, 0.3);
+}
+
+.cta-btn.secondary {
+  background: linear-gradient(135deg, #00ffe7, #4ecdc4);
+  color: #1a1a2e;
+  box-shadow: 0 4px 15px rgba(0, 255, 231, 0.3);
+}
+
+.cta-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(255, 0, 204, 0.4);
+}
+
+/* Disclaimer */
+.disclaimer-section {
+  background: rgba(255, 107, 107, 0.1);
+  border: 2px solid #ff6b6b;
+  border-radius: 15px;
+  padding: 2rem;
+  margin-top: 3rem;
+}
+
+.disclaimer-section h2 {
+  color: #ff6b6b;
+  margin-bottom: 1rem;
+}
+
+.disclaimer-section p {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+/* Footer */
+.wp-footer {
+  background: #1a1a2e;
+  padding: 2rem 0;
+  margin-top: 4rem;
+  border-top: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.footer-links {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.footer-links a {
+  color: #00ffe7;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+  color: #ffd700;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .wp-container {
+    padding: 1.5rem;
+  }
+  
+  .wp-title {
+    font-size: 2rem;
+  }
+  
+  .wp-nav {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .wp-nav h1 {
+    font-size: 1.2rem;
+  }
+  
+  .value-grid,
+  .nft-tiers,
+  .team-structure,
+  .security-measures,
+  .risk-analysis {
+    grid-template-columns: 1fr;
+  }
+  
+  .cta-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .footer-content {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+  
+  .chart-bar {
+    flex-direction: column;
+    height: auto;
+    padding: 1rem;
+    text-align: center;
+  }
+  
+  .tax-breakdown {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .wp-main {
+    padding: 1rem;
+  }
+  
+  .wp-title {
+    font-size: 1.5rem;
+  }
+  
+  .wp-section h2 {
+    font-size: 1.8rem;
+  }
+  
+  .call-to-action {
+    padding: 2rem 1rem;
+  }
+  
+  .cta-btn {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+  }
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Print styles */
+@media print {
+  body {
+    background: white;
+    color: black;
+  }
+  
+  .wp-header,
+  .wp-footer,
+  .back-btn,
+  .cta-buttons {
+    display: none;
+  }
+  
+  .wp-container {
+    box-shadow: none;
+    border: none;
+    background: white;
+  }
+  
+  .wp-section {
+    page-break-inside: avoid;
+  }
+}

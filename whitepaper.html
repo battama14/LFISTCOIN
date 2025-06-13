@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LFIST Token - White Paper</title>
+    <link rel="stylesheet" href="whitepaper.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="wp-header">
+        <div class="wp-nav">
+            <a href="index.html" class="back-btn">← Retour au site</a>
+            <h1>LFIST TOKEN</h1>
+            <div class="version">Version 1.0 - Janvier 2025</div>
+        </div>
+    </header>
+
+    <main class="wp-main">
+        <div class="wp-container">
+            <!-- Page de couverture -->
+            <section class="cover-section">
+                <div class="cover-content">
+                    <h1 class="wp-title">LFIST TOKEN</h1>
+                    <h2 class="wp-subtitle">White Paper Technique</h2>
+                    <div class="wp-tagline">
+                        "Le Memecoin qui Révolutionne l'Écosystème DeFi avec Humour et Innovation"
+                    </div>
+                    <div class="wp-meta">
+                        <p><strong>Version:</strong> 1.0</p>
+                        <p><strong>Date:</strong> Janvier 2025</p>
+                        <p><strong>Blockchain:</strong> Binance Smart Chain (BSC)</p>
+                        <p><strong>Contrat:</strong> 0xc0679bF1fda759B7CfC44691b422405Fae84253f</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Table des matières -->
+            <section class="toc-section">
+                <h2>Table des Matières</h2>
+                <div class="toc">
+                    <ol>
+                        <li><a href="#abstract">Résumé Exécutif</a></li>
+                        <li><a href="#introduction">Introduction</a></li>
+                        <li><a href="#problem">Problématique du Marché</a></li>
+                        <li><a href="#solution">Solution LFIST</a></li>
+                        <li><a href="#tokenomics">Tokenomics</a></li>
+                        <li><a href="#technology">Architecture Technique</a></li>
+                        <li><a href="#ecosystem">Écosystème et Utilités</a></li>
+                        <li><a href="#roadmap">Roadmap de Développement</a></li>
+                        <li><a href="#team">Équipe et Gouvernance</a></li>
+                        <li><a href="#security">Sécurité et Audits</a></li>
+                        <li><a href="#risks">Analyse des Risques</a></li>
+                        <li><a href="#conclusion">Conclusion</a></li>
+                    </ol>
+                </div>
+            </section>
+
+            <!-- 1. Résumé Exécutif -->
+            <section id="abstract" class="wp-section">
+                <h2>1. Résumé Exécutif</h2>
+                <p>LFIST Token représente une nouvelle génération de memecoins qui combine l'engagement communautaire avec des utilités concrètes dans l'écosystème DeFi. Contrairement aux memecoins traditionnels qui reposent uniquement sur la spéculation, LFIST propose un écosystème complet d'outils et de services.</p>
+                
+                <div class="highlight-box">
+                    <h3>Points Clés</h3>
+                    <ul>
+                        <li><strong>Supply Total:</strong> 1,000,000,000 LFIST (fixe, non-mintable)</li>
+                        <li><strong>Taxes:</strong> 8% achat / 8% vente (répartition transparente)</li>
+                        <li><strong>Blockchain:</strong> Binance Smart Chain (BSC)</li>
+                        <li><strong>Utilités:</strong> FIST-DETECTOR, NFTs, Staking, Gouvernance</li>
+                        <li><strong>Sécurité:</strong> Contrat vérifié, ownership renoncé, liquidité verrouillée</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- 2. Introduction -->
+            <section id="introduction" class="wp-section">
+                <h2>2. Introduction</h2>
+                <p>Le marché des cryptomonnaies a connu une évolution significative avec l'émergence des memecoins. Cependant, la plupart de ces projets manquent d'utilité réelle et de vision à long terme. LFIST Token a été conçu pour combler cette lacune en proposant un memecoin avec des fondamentaux solides et des utilités concrètes.</p>
+                
+                <h3>2.1 Vision</h3>
+                <p>Notre vision est de créer un écosystème où l'humour et la technologie se rencontrent pour offrir des solutions pratiques aux utilisateurs de DeFi. LFIST vise à devenir la référence en matière de memecoins utilitaires.</p>
+                
+                <h3>2.2 Mission</h3>
+                <p>Démocratiser l'accès aux outils d'analyse DeFi tout en maintenant une communauté engagée et divertissante. Nous croyons que la finance décentralisée peut être à la fois sérieuse et amusante.</p>
+            </section>
+
+            <!-- 3. Problématique du Marché -->
+            <section id="problem" class="wp-section">
+                <h2>3. Problématique du Marché</h2>
+                
+                <h3>3.1 Défis des Memecoins Actuels</h3>
+                <ul>
+                    <li><strong>Manque d'utilité:</strong> La plupart des memecoins n'offrent aucune valeur ajoutée</li>
+                    <li><strong>Volatilité extrême:</strong> Prix basés uniquement sur la spéculation</li>
+                    <li><strong>Projets éphémères:</strong> Absence de roadmap et d'engagement long terme</li>
+                    <li><strong>Risques de sécurité:</strong> Nombreux rugpulls et honeypots</li>
+                </ul>
+                
+                <h3>3.2 Problèmes de l'Écosystème DeFi</h3>
+                <ul>
+                    <li><strong>Complexité technique:</strong> Barrière à l'entrée élevée pour les nouveaux utilisateurs</li>
+                    <li><strong>Outils d'analyse coûteux:</strong> Services premium inaccessibles</li>
+                    <li><strong>Manque de transparence:</strong> Difficulté à évaluer la sécurité des projets</li>
+                    <li><strong>Fragmentation:</strong> Outils dispersés sur différentes plateformes</li>
+                </ul>
+            </section>
+
+            <!-- 4. Solution LFIST -->
+            <section id="solution" class="wp-section">
+                <h2>4. Solution LFIST</h2>
+                
+                <h3>4.1 Approche Innovante</h3>
+                <p>LFIST propose une approche unique qui combine:</p>
+                <ul>
+                    <li><strong>Engagement communautaire:</strong> Culture memecoin forte</li>
+                    <li><strong>Utilités concrètes:</strong> Outils DeFi pratiques</li>
+                    <li><strong>Transparence totale:</strong> Code open-source et audits publics</li>
+                    <li><strong>Gouvernance décentralisée:</strong> Décisions communautaires</li>
+                </ul>
+                
+                <h3>4.2 Proposition de Valeur</h3>
+                <div class="value-grid">
+                    <div class="value-item">
+                        <h4>🔍 FIST-DETECTOR</h4>
+                        <p>Outil d'analyse automatisé pour détecter les honeypots et évaluer la sécurité des tokens</p>
+                    </div>
+                    <div class="value-item">
+                        <h4>🎨 NFT Ecosystem</h4>
+                        <p>Collection exclusive avec utilités réelles et avantages pour les holders</p>
+                    </div>
+                    <div class="value-item">
+                        <h4>💰 Staking Rewards</h4>
+                        <p>Mécanisme de staking avec récompenses attractives pour les long-term holders</p>
+                    </div>
+                    <div class="value-item">
+                        <h4>🗳️ DAO Governance</h4>
+                        <p>Système de gouvernance décentralisée pour les décisions importantes</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5. Tokenomics -->
+            <section id="tokenomics" class="wp-section">
+                <h2>5. Tokenomics</h2>
+                
+                <h3>5.1 Distribution des Tokens</h3>
+                <div class="tokenomics-chart">
+                    <div class="chart-item">
+                        <div class="chart-bar" style="width: 85%;">
+                            <span class="chart-label">Liquidity Pool (85%)</span>
+                            <span class="chart-value">850,000,000 LFIST</span>
+                        </div>
+                    </div>
+                    <div class="chart-item">
+                        <div class="chart-bar" style="width: 10%;">
+                            <span class="chart-label">Marketing (10%)</span>
+                            <span class="chart-value">100,000,000 LFIST</span>
+                        </div>
+                    </div>
+                    <div class="chart-item">
+                        <div class="chart-bar" style="width: 5%;">
+                            <span class="chart-label">Development (5%)</span>
+                            <span class="chart-value">50,000,000 LFIST</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3>5.2 Mécanisme de Taxes</h3>
+                <div class="tax-breakdown">
+                    <h4>Taxes d'Achat (8%)</h4>
+                    <ul>
+                        <li>3% → Liquidity Pool</li>
+                        <li>2% → Marketing & Development</li>
+                        <li>2% → Rewards Pool</li>
+                        <li>1% → Burn Mechanism</li>
+                    </ul>
+                    
+                    <h4>Taxes de Vente (8%)</h4>
+                    <ul>
+                        <li>3% → Liquidity Pool</li>
+                        <li>2% → Marketing & Development</li>
+                        <li>2% → Rewards Pool</li>
+                        <li>1% → Burn Mechanism</li>
+                    </ul>
+                </div>
+                
+                <h3>5.3 Mécanismes Déflationnistes</h3>
+                <ul>
+                    <li><strong>Burn automatique:</strong> 1% de chaque transaction</li>
+                    <li><strong>Burn communautaire:</strong> Votes périodiques pour brûler des tokens</li>
+                    <li><strong>Supply fixe:</strong> Aucune fonction de mint, supply maximum de 1 milliard</li>
+                </ul>
+            </section>
+
+            <!-- 6. Architecture Technique -->
+            <section id="technology" class="wp-section">
+                <h2>6. Architecture Technique</h2>
+                
+                <h3>6.1 Smart Contract</h3>
+                <div class="code-block">
+                    <h4>Spécifications Techniques</h4>
+                    <ul>
+                        <li><strong>Standard:</strong> BEP-20 (compatible ERC-20)</li>
+                        <li><strong>Blockchain:</strong> Binance Smart Chain</li>
+                        <li><strong>Langage:</strong> Solidity ^0.8.19</li>
+                        <li><strong>Sécurité:</strong> OpenZeppelin libraries</li>
+                    </ul>
+                </div>
+                
+                <h3>6.2 Fonctionnalités du Contrat</h3>
+                <ul>
+                    <li><strong>Anti-Bot Protection:</strong> Mécanismes contre les bots de trading</li>
+                    <li><strong>Max Transaction:</strong> Limite de 2% du supply par transaction</li>
+                    <li><strong>Max Wallet:</strong> Limite de 3% du supply par wallet</li>
+                    <li><strong>Cooldown Period:</strong> Délai entre les transactions pour éviter le spam</li>
+                    <li><strong>Blacklist Function:</strong> Possibilité de blacklister les adresses malveillantes</li>
+                </ul>
+                
+                <h3>6.3 Infrastructure FIST-DETECTOR</h3>
+                <div class="tech-stack">
+                    <h4>Stack Technologique</h4>
+                    <ul>
+                        <li><strong>Backend:</strong> Node.js + Express</li>
+                        <li><strong>Database:</strong> MongoDB + Redis Cache</li>
+                        <li><strong>Blockchain Integration:</strong> Web3.js + Ethers.js</li>
+                        <li><strong>API:</strong> RESTful + GraphQL</li>
+                        <li><strong>Frontend:</strong> React.js + TypeScript</li>
+                        <li><strong>Hosting:</strong> AWS + CloudFlare</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- 7. Écosystème et Utilités -->
+            <section id="ecosystem" class="wp-section">
+                <h2>7. Écosystème et Utilités</h2>
+                
+                <h3>7.1 FIST-DETECTOR</h3>
+                <p>Notre outil phare d'analyse de tokens qui permet aux utilisateurs de:</p>
+                <ul>
+                    <li>Analyser automatiquement les contrats de tokens</li>
+                    <li>Détecter les honeypots et les rugpulls potentiels</li>
+                    <li>Évaluer la sécurité et la légitimité des projets</li>
+                    <li>Accéder à des métriques avancées de trading</li>
+                </ul>
+                
+                <h3>7.2 NFT Collection</h3>
+                <div class="nft-tiers">
+                    <div class="tier">
+                        <h4>🥉 Bronze FIST (Common)</h4>
+                        <ul>
+                            <li>Accès aux analyses basiques</li>
+                            <li>5% de réduction sur les frais</li>
+                            <li>Accès au Discord VIP</li>
+                        </ul>
+                    </div>
+                    <div class="tier">
+                        <h4>🥈 Silver FIST (Rare)</h4>
+                        <ul>
+                            <li>Analyses avancées illimitées</li>
+                            <li>15% de réduction sur les frais</li>
+                            <li>Alerts personnalisées</li>
+                            <li>Accès aux bêta features</li>
+                        </ul>
+                    </div>
+                    <div class="tier">
+                        <h4>🥇 Gold FIST (Legendary)</h4>
+                        <ul>
+                            <li>Accès complet à tous les outils</li>
+                            <li>30% de réduction sur les frais</li>
+                            <li>API access privée</li>
+                            <li>Consultation 1-on-1 avec l'équipe</li>
+                            <li>Droit de vote renforcé dans la DAO</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <h3>7.3 Staking & Rewards</h3>
+                <ul>
+                    <li><strong>Flexible Staking:</strong> Pas de période de lock, rewards quotidiens</li>
+                    <li><strong>Fixed Staking:</strong> Périodes de 30, 90, 180 jours avec APY croissant</li>
+                    <li><strong>LP Staking:</strong> Rewards supplémentaires pour les fournisseurs de liquidité</li>
+                    <li><strong>NFT Boosters:</strong> Multiplicateurs de rewards selon le tier NFT</li>
+                </ul>
+                
+                <h3>7.4 DAO Governance</h3>
+                <ul>
+                    <li><strong>Proposals:</strong> Soumission de propositions par la communauté</li>
+                    <li><strong>Voting Power:</strong> Basé sur le nombre de tokens stakés</li>
+                    <li><strong>Execution:</strong> Implémentation automatique des décisions votées</li>
+                    <li><strong>Treasury:</strong> Gestion communautaire des fonds de développement</li>
+                </ul>
+            </section>
+
+            <!-- 8. Roadmap -->
+            <section id="roadmap" class="wp-section">
+                <h2>8. Roadmap de Développement</h2>
+                
+                <div class="roadmap-timeline">
+                    <div class="timeline-item completed">
+                        <h3>Q4 2024 - Phase 1: Foundation</h3>
+                        <ul>
+                            <li>✅ Développement et déploiement du smart contract</li>
+                            <li>✅ Audit de sécurité initial</li>
+                            <li>✅ Lancement du site web et whitepaper</li>
+                            <li>✅ Création des réseaux sociaux</li>
+                            <li>✅ Listing sur PancakeSwap</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="timeline-item current">
+                        <h3>Q1 2025 - Phase 2: Growth</h3>
+                        <ul>
+                            <li>🔄 Développement FIST-DETECTOR v1.0</li>
+                            <li>🔄 Lancement de la collection NFT</li>
+                            <li>🔄 Implémentation du staking</li>
+                            <li>🔄 Partenariats stratégiques</li>
+                            <li>🔄 Listing CoinMarketCap & CoinGecko</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <h3>Q2 2025 - Phase 3: Expansion</h3>
+                        <ul>
+                            <li>🔮 FIST-DETECTOR v2.0 avec API publique</li>
+                            <li>🔮 Lancement de la DAO</li>
+                            <li>🔮 Marketplace NFT intégré</li>
+                            <li>🔮 Mobile App (iOS/Android)</li>
+                            <li>🔮 Premiers listings CEX</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <h3>Q3 2025 - Phase 4: Innovation</h3>
+                        <ul>
+                            <li>🔮 Cross-chain expansion (Ethereum, Polygon)</li>
+                            <li>🔮 Advanced DeFi tools suite</li>
+                            <li>🔮 Institutional partnerships</li>
+                            <li>🔮 FIST-DETECTOR AI integration</li>
+                            <li>🔮 Major CEX listings</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <h3>Q4 2025 - Phase 5: Domination</h3>
+                        <ul>
+                            <li>🔮 Global marketing campaign</li>
+                            <li>🔮 Enterprise solutions</li>
+                            <li>🔮 FIST-DETECTOR white-label licensing</li>
+                            <li>🔮 Metaverse integration</li>
+                            <li>🔮 LFIST ecosystem maturity</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 9. Équipe et Gouvernance -->
+            <section id="team" class="wp-section">
+                <h2>9. Équipe et Gouvernance</h2>
+                
+                <h3>9.1 Structure de l'Équipe</h3>
+                <div class="team-structure">
+                    <div class="team-role">
+                        <h4>🚀 Core Development Team</h4>
+                        <ul>
+                            <li>Lead Developer (Blockchain & Smart Contracts)</li>
+                            <li>Full-Stack Developer (FIST-DETECTOR)</li>
+                            <li>Frontend Developer (UI/UX)</li>
+                            <li>DevOps Engineer (Infrastructure)</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="team-role">
+                        <h4>📈 Business & Marketing</h4>
+                        <ul>
+                            <li>Project Manager</li>
+                            <li>Marketing Specialist</li>
+                            <li>Community Manager</li>
+                            <li>Business Development</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="team-role">
+                        <h4>🔒 Security & Compliance</h4>
+                        <ul>
+                            <li>Security Auditor</li>
+                            <li>Legal Advisor</li>
+                            <li>Risk Management</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <h3>9.2 Modèle de Gouvernance</h3>
+                <ul>
+                    <li><strong>Phase 1 (Actuelle):</strong> Gouvernance centralisée par l'équipe fondatrice</li>
+                    <li><strong>Phase 2 (Q2 2025):</strong> Transition vers une gouvernance hybride</li>
+                    <li><strong>Phase 3 (Q3 2025):</strong> DAO complètement décentralisée</li>
+                    <li><strong>Ownership Renouncement:</strong> 1er janvier 2026</li>
+                </ul>
+            </section>
+
+            <!-- 10. Sécurité et Audits -->
+            <section id="security" class="wp-section">
+                <h2>10. Sécurité et Audits</h2>
+                
+                <h3>10.1 Mesures de Sécurité</h3>
+                <div class="security-measures">
+                    <div class="security-item">
+                        <h4>🔐 Smart Contract Security</h4>
+                        <ul>
+                            <li>Code basé sur OpenZeppelin standards</li>
+                            <li>Pas de fonctions de mint ou de pause</li>
+                            <li>Ownership renoncé après stabilisation</li>
+                            <li>Limites de transaction anti-whale</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="security-item">
+                        <h4>🔒 Liquidity Security</h4>
+                        <ul>
+                            <li>Liquidité verrouillée sur DxSale</li>
+                            <li>Lock period: 2 ans minimum</li>
+                            <li>Certificat de lock public</li>
+                            <li>Impossible de retirer la liquidité</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="security-item">
+                        <h4>🛡️ Infrastructure Security</h4>
+                        <ul>
+                            <li>Serveurs sécurisés AWS</li>
+                            <li>Chiffrement end-to-end</li>
+                            <li>Monitoring 24/7</li>
+                            <li>Backups automatiques</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <h3>10.2 Audits Prévus</h3>
+                <ul>
+                    <li><strong>Audit Initial:</strong> CertiK ou Hacken (Q1 2025)</li>
+                    <li><strong>Audit FIST-DETECTOR:</strong> Spécialisé sécurité web (Q2 2025)</li>
+                    <li><strong>Audit DAO:</strong> Gouvernance et smart contracts (Q3 2025)</li>
+                    <li><strong>Audits périodiques:</strong> Tous les 6 mois</li>
+                </ul>
+            </section>
+
+            <!-- 11. Analyse des Risques -->
+            <section id="risks" class="wp-section">
+                <h2>11. Analyse des Risques</h2>
+                
+                <h3>11.1 Risques Techniques</h3>
+                <div class="risk-analysis">
+                    <div class="risk-item">
+                        <h4>⚠️ Smart Contract Bugs</h4>
+                        <p><strong>Probabilité:</strong> Faible</p>
+                        <p><strong>Impact:</strong> Élevé</p>
+                        <p><strong>Mitigation:</strong> Audits multiples, tests extensifs, code open-source</p>
+                    </div>
+                    
+                    <div class="risk-item">
+                        <h4>⚠️ Attaques sur l'Infrastructure</h4>
+                        <p><strong>Probabilité:</strong> Moyenne</p>
+                        <p><strong>Impact:</strong> Moyen</p>
+                        <p><strong>Mitigation:</strong> Sécurité renforcée, monitoring, backups</p>
+                    </div>
+                </div>
+                
+                <h3>11.2 Risques de Marché</h3>
+                <div class="risk-analysis">
+                    <div class="risk-item">
+                        <h4>📉 Volatilité des Cryptomonnaies</h4>
+                        <p><strong>Probabilité:</strong> Élevée</p>
+                        <p><strong>Impact:</strong> Élevé</p>
+                        <p><strong>Mitigation:</strong> Utilités réelles, communauté forte, développement continu</p>
+                    </div>
+                    
+                    <div class="risk-item">
+                        <h4>📊 Concurrence</h4>
+                        <p><strong>Probabilité:</strong> Élevée</p>
+                        <p><strong>Impact:</strong> Moyen</p>
+                        <p><strong>Mitigation:</strong> Innovation continue, first-mover advantage, partenariats</p>
+                    </div>
+                </div>
+                
+                <h3>11.3 Risques Réglementaires</h3>
+                <div class="risk-analysis">
+                    <div class="risk-item">
+                        <h4>⚖️ Changements Réglementaires</h4>
+                        <p><strong>Probabilité:</strong> Moyenne</p>
+                        <p><strong>Impact:</strong> Variable</p>
+                        <p><strong>Mitigation:</strong> Veille juridique, compliance proactive, adaptabilité</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 12. Conclusion -->
+            <section id="conclusion" class="wp-section">
+                <h2>12. Conclusion</h2>
+                
+                <p>LFIST Token représente une évolution naturelle dans l'écosystème des memecoins, combinant l'engagement communautaire avec des utilités concrètes et une vision technique solide. Notre approche unique nous positionne pour capturer une part significative du marché en croissance des outils DeFi.</p>
+                
+                <h3>12.1 Avantages Compétitifs</h3>
+                <ul>
+                    <li><strong>First-Mover Advantage:</strong> Premier memecoin avec un outil d'analyse intégré</li>
+                    <li><strong>Communauté Engagée:</strong> Base de fans loyale et active</li>
+                    <li><strong>Équipe Expérimentée:</strong> Développeurs et marketeurs chevronnés</li>
+                    <li><strong>Tokenomics Durables:</strong> Mécanismes déflationnistes et rewards attractifs</li>
+                    <li><strong>Transparence Totale:</strong> Code open-source et communication régulière</li>
+                </ul>
+                
+                <h3>12.2 Objectifs à Long Terme</h3>
+                <p>Notre vision à long terme est de faire de LFIST la référence en matière de memecoins utilitaires, avec un écosystème complet d'outils DeFi accessibles à tous. Nous visons une adoption massive et une reconnaissance institutionnelle.</p>
+                
+                <div class="call-to-action">
+                    <h3>Rejoignez la Révolution LFIST</h3>
+                    <p>L'avenir de la DeFi se construit aujourd'hui. Rejoignez notre communauté et participez à la création d'un écosystème innovant qui combine fun et utilité.</p>
+                    <div class="cta-buttons">
+                        <a href="https://pancakeswap.finance/swap?outputCurrency=0xc0679bF1fda759B7CfC44691b422405Fae84253f" class="cta-btn primary">Acheter LFIST</a>
+                        <a href="https://t.me/lfistcoin" class="cta-btn secondary">Rejoindre Telegram</a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Disclaimer -->
+            <section class="disclaimer-section">
+                <h2>Avertissement</h2>
+                <p>Ce document est fourni à des fins d'information uniquement et ne constitue pas un conseil en investissement. Les cryptomonnaies sont des actifs volatils et risqués. Investissez uniquement ce que vous pouvez vous permettre de perdre. Consultez un conseiller financier avant tout investissement.</p>
+                
+                <p>Les informations contenues dans ce white paper sont sujettes à modification sans préavis. L'équipe LFIST ne garantit pas l'exactitude ou l'exhaustivité des informations présentées.</p>
+                
+                <p><strong>Date de dernière mise à jour:</strong> Janvier 2025</p>
+            </section>
+        </div>
+    </main>
+
+    <footer class="wp-footer">
+        <div class="footer-content">
+            <p>&copy; 2025 LFIST Token. Tous droits réservés.</p>
+            <div class="footer-links">
+                <a href="index.html">Site Principal</a>
+                <a href="https://bscscan.com/token/0xc0679bF1fda759B7CfC44691b422405Fae84253f">Contrat BSC</a>
+                <a href="https://t.me/lfistcoin">Telegram</a>
+                <a href="https://x.com/LFISTCOIN">Twitter</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
