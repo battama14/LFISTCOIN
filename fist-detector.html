@@ -46,6 +46,33 @@
 
     <p class="meme-text">Tu ne peux voter qu'une seule fois par semaine mais en attendant rejoins sur sur nos reseaux et inscrit toi a la newsletter.Sinon Reviens lundi !</p>
   </section>
+
+  <!-- Section de recherche de sécurité -->
+  <section class="section security-search-section">
+    <h2>🔍 Analyse de Sécurité Personnalisée</h2>
+    <p>Vérifie la sécurité de n'importe quel token en saisissant son adresse de contrat :</p>
+    
+    <div class="search-container">
+      <div class="search-input-group">
+        <input 
+          type="text" 
+          id="contractAddressInput" 
+          placeholder="0x... (Adresse du contrat)"
+          class="contract-input"
+        />
+        <select id="chainSelect" class="chain-select">
+          <option value="1">Ethereum</option>
+          <option value="56">BSC</option>
+          <option value="137">Polygon</option>
+          <option value="43114">Avalanche</option>
+          <option value="250">Fantom</option>
+        </select>
+        <button onclick="analyzeContract()" class="analyze-btn">🔍 Analyser</button>
+      </div>
+    </div>
+    
+    <div id="analysisResult" class="analysis-result"></div>
+  </section>
   <section id="newsletter" style="text-align: center; margin-top: 40px;">
   <h2>📬 Inscris-toi à notre newsletter</h2>
   <p>Reste informé des nouveaux memecoins détectés chaque semaine !</p>
@@ -84,6 +111,9 @@
     Powered by <span class="meme-footer">LFIST</span> 🧠
   </footer>
 
+  <!-- EmailJS CDN -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  
   <!-- 🔽 Ton script JS principal avec Firebase -->
   <script type="module" src="./main.js"></script>
 

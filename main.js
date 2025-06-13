@@ -1,6 +1,258 @@
 import { db } from './firebase-config.js';
 import { ref, set, remove, onValue, get, update } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
+// Configuration EmailJS
+const EMAILJS_CONFIG = {
+  PUBLIC_KEY: 'ikFvXb-BD1-DJsPCV',
+  SERVICE_ID: 'service_keqvfcw',
+  TEMPLATE_ID: 'template_4jz4w3e'
+};
+
+// Initialisation d'EmailJS
+(function() {
+  if (typeof emailjs !== 'undefined') {
+    emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
+    console.log('✅ EmailJS initialisé avec succès');
+  } else {
+    console.warn('⚠️ EmailJS non chargé');
+  }
+})();
+
+// ------------------------- GoPlus Security API
+const GOPLUS_API_BASE = 'https://api.gopluslabs.io/api/v1';
+
+// Fonction pour obtenir les informations de sécurité GoPlus
+async function getGoPlusSecurityInfo(contractAddress, chainId = '1') {
+  try {
+    const response = await fetch(`${GOPLUS_API_BASE}/token_security/${chainId}?contract_addresses=${contractAddress}`);
+    const data = await response.json();
+    
+    if (data.code === 1 && data.result && data.result[contractAddress.toLowerCase()]) {
+      return data.result[contractAddress.toLowerCase()];
+    }
+    return null;
+  } catch (error) {
+    console.error('Erreur GoPlus API:', error);
+    return null;
+  }
+}
+
+// Fonction pour formater les informations de sécurité
+function formatSecurityInfo(securityData) {
+  if (!securityData) {
+    return '<div class="security-info"><span class="security-unknown">❓ Informations non disponibles</span></div>';
+  }
+
+  const risks = [];
+  const warnings = [];
+  const goods = [];
+  const infos = [];
+
+  // Vérifications critiques (ROUGE)
+  if (securityData.is_honeypot === '1') {
+    risks.push('🍯 HONEYPOT');
+  }
+  
+  if (securityData.can_take_back_ownership === '1') {
+    risks.push('🚨 Ownership récupérable');
+  }
+  
+  if (securityData.cannot_buy === '1') {
+    risks.push('🚫 Achat impossible');
+  }
+  
+  if (securityData.cannot_sell_all === '1') {
+    risks.push('🚫 Vente limitée');
+  }
+
+  // Vérifications d'avertissement (ORANGE)
+  if (securityData.is_mintable === '1') {
+    warnings.push('⚠️ Mintable');
+  }
+  
+  if (securityData.is_proxy === '1') {
+    warnings.push('🔄 Proxy');
+  }
+  
+  if (securityData.is_blacklisted === '1') {
+    warnings.push('⛔ Blacklist');
+  }
+  
+  if (securityData.is_whitelisted === '1') {
+    warnings.push('📝 Whitelist');
+  }
+  
+  if (securityData.is_anti_whale === '1') {
+    warnings.push('🐋 Anti-whale');
+  }
+  
+  if (securityData.trading_cooldown === '1') {
+    warnings.push('⏰ Cooldown');
+  }
+
+  // Taxes
+  const buyTax = parseFloat(securityData.buy_tax || 0);
+  const sellTax = parseFloat(securityData.sell_tax || 0);
+  
+  if (buyTax > 0) {
+    if (buyTax > 0.1) { // Plus de 10%
+      warnings.push(`💸 Buy: ${(buyTax * 100).toFixed(1)}%`);
+    } else {
+      infos.push(`💰 Buy: ${(buyTax * 100).toFixed(1)}%`);
+    }
+  }
+  
+  if (sellTax > 0) {
+    if (sellTax > 0.1) { // Plus de 10%
+      warnings.push(`💸 Sell: ${(sellTax * 100).toFixed(1)}%`);
+    } else {
+      infos.push(`💰 Sell: ${(sellTax * 100).toFixed(1)}%`);
+    }
+  }
+
+  // Vérifications positives (VERT)
+  if (securityData.is_open_source === '1') {
+    goods.push('✅ Open Source');
+  }
+  
+  if (securityData.owner_address === '0x0000000000000000000000000000000000000000') {
+    goods.push('✅ Ownership renoncé');
+  }
+  
+  if (securityData.is_in_dex === '1') {
+    goods.push('✅ Listé DEX');
+  }
+
+  // Informations générales
+  if (securityData.holder_count) {
+    const holders = parseInt(securityData.holder_count);
+    if (holders > 1000) {
+      infos.push(`👥 ${holders.toLocaleString()} holders`);
+    }
+  }
+
+  let html = '<div class="security-info">';
+  
+  // Titre avec le nom du token
+  if (securityData.token_name && securityData.token_symbol) {
+    html += `<div class="token-header">${securityData.token_name} (${securityData.token_symbol})</div>`;
+  }
+  
+  if (risks.length > 0) {
+    html += `<div class="security-risks">🚨 ${risks.join(' • ')}</div>`;
+  }
+  
+  if (warnings.length > 0) {
+    html += `<div class="security-warnings">⚠️ ${warnings.join(' • ')}</div>`;
+  }
+  
+  if (goods.length > 0) {
+    html += `<div class="security-goods">${goods.join(' • ')}</div>`;
+  }
+  
+  if (infos.length > 0) {
+    html += `<div class="security-infos">${infos.join(' • ')}</div>`;
+  }
+  
+  if (risks.length === 0 && warnings.length === 0) {
+    html += '<div class="security-safe">✅ Aucun risque majeur détecté</div>';
+  }
+  
+  html += '</div>';
+  return html;
+}
+
+// Fonction pour analyser un contrat personnalisé
+window.analyzeContract = async function() {
+  const contractAddress = document.getElementById('contractAddressInput').value.trim();
+  const chainId = document.getElementById('chainSelect').value;
+  const resultDiv = document.getElementById('analysisResult');
+  
+  // Validation de l'adresse
+  if (!contractAddress) {
+    resultDiv.innerHTML = '<div class="analysis-error">❌ Veuillez saisir une adresse de contrat</div>';
+    return;
+  }
+  
+  if (!contractAddress.startsWith('0x') || contractAddress.length !== 42) {
+    resultDiv.innerHTML = '<div class="analysis-error">❌ Format d\'adresse invalide (doit commencer par 0x et faire 42 caractères)</div>';
+    return;
+  }
+  
+  // Afficher le chargement
+  resultDiv.innerHTML = `
+    <div class="analysis-loading">
+      <h3>🔍 Analyse en cours...</h3>
+      <p>Vérification de la sécurité du contrat ${contractAddress}</p>
+      <div class="loading-spinner">⏳</div>
+    </div>
+  `;
+  
+  try {
+    const securityData = await getGoPlusSecurityInfo(contractAddress, chainId);
+    
+    if (securityData) {
+      const chainNames = {
+        '1': 'Ethereum',
+        '56': 'BSC',
+        '137': 'Polygon',
+        '43114': 'Avalanche',
+        '250': 'Fantom'
+      };
+      
+      resultDiv.innerHTML = `
+        <div class="analysis-success">
+          <h3>📊 Résultats de l'analyse</h3>
+          <div class="contract-info">
+            <p><strong>Contrat:</strong> ${contractAddress}</p>
+            <p><strong>Blockchain:</strong> ${chainNames[chainId] || 'Inconnue'}</p>
+            <p><strong>Token:</strong> ${securityData.token_name || 'N/A'} (${securityData.token_symbol || 'N/A'})</p>
+          </div>
+          ${formatSecurityInfo(securityData)}
+          <div class="detailed-info">
+            <h4>📋 Informations détaillées :</h4>
+            <div class="info-grid">
+              <div class="info-item">
+                <span class="info-label">Créateur:</span>
+                <span class="info-value">${securityData.creator_address || 'N/A'}</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Propriétaire:</span>
+                <span class="info-value">${securityData.owner_address || 'N/A'}</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Total Supply:</span>
+                <span class="info-value">${securityData.total_supply || 'N/A'}</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Holders:</span>
+                <span class="info-value">${securityData.holder_count || 'N/A'}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    } else {
+      resultDiv.innerHTML = `
+        <div class="analysis-error">
+          <h3>❌ Aucune donnée trouvée</h3>
+          <p>Impossible de récupérer les informations de sécurité pour ce contrat.</p>
+          <p>Vérifiez que l'adresse est correcte et que le token existe sur la blockchain sélectionnée.</p>
+        </div>
+      `;
+    }
+  } catch (error) {
+    console.error('Erreur lors de l\'analyse:', error);
+    resultDiv.innerHTML = `
+      <div class="analysis-error">
+        <h3>❌ Erreur d'analyse</h3>
+        <p>Une erreur s'est produite lors de l'analyse du contrat.</p>
+        <p>Veuillez réessayer plus tard.</p>
+      </div>
+    `;
+  }
+};
+
 // ------------------------- Newsletter
 window.sendNewsletter = async function (messageContent) {
   const newsletterRef = ref(db, 'newsletter');
@@ -16,14 +268,64 @@ window.sendNewsletter = async function (messageContent) {
 
     const emails = Object.values(data);
 
-    // EmailJS désactivé - affichage du nombre d'emails seulement
     console.log("Emails inscrits:", emails.length);
-    alert("✅ " + emails.length + " emails trouvés dans la base (envoi désactivé).");
+
+    // Envoi de la newsletter via EmailJS
+    let successCount = 0;
+    let errorCount = 0;
+
+    for (const subscriber of emails) {
+      try {
+        await emailjs.send(
+          EMAILJS_CONFIG.SERVICE_ID,
+          EMAILJS_CONFIG.TEMPLATE_ID,
+          {
+            user_email: subscriber.email,
+            user_name: subscriber.email.split('@')[0],
+            subject: "🚀 Newsletter LFIST - Dernières nouvelles !",
+            message: messageContent || "Voici les dernières nouvelles de LFIST !",
+            from_name: "LFIST Team"
+          }
+        );
+        successCount++;
+        console.log(`✅ Email envoyé à: ${subscriber.email}`);
+      } catch (error) {
+        errorCount++;
+        console.error(`❌ Erreur envoi à ${subscriber.email}:`, error);
+      }
+      
+      // Pause entre les envois pour éviter le spam
+      await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+
+    alert(`📧 Newsletter envoyée !\n✅ Succès: ${successCount}\n❌ Erreurs: ${errorCount}`);
   } catch (error) {
     console.error("❌ Erreur d'envoi :", error);
     alert("❌ Une erreur s’est produite pendant l’envoi.");
   }
 };
+
+// Fonction pour envoyer un email de bienvenue
+async function sendWelcomeEmail(email) {
+  try {
+    await emailjs.send(
+      EMAILJS_CONFIG.SERVICE_ID,
+      EMAILJS_CONFIG.TEMPLATE_ID,
+      {
+        user_email: email,
+        user_name: email.split('@')[0],
+        subject: "🎉 Bienvenue dans la communauté LFIST !",
+        message: "Bienvenue dans la communauté LFIST ! 🎉\n\nTu vas recevoir toutes les dernières nouvelles sur notre memecoin déjanté.\n\nPrépare-toi pour le voyage vers la lune ! 🚀",
+        from_name: "LFIST Team"
+      }
+    );
+    console.log(`✅ Email de bienvenue envoyé à: ${email}`);
+    return true;
+  } catch (error) {
+    console.error(`❌ Erreur envoi email de bienvenue à ${email}:`, error);
+    return false;
+  }
+}
 
 function validateEmail(email) {
   return /\S+@\S+\.\S+/.test(email);
@@ -81,7 +383,14 @@ window.subscribeEmail = async function () {
     
     console.log("✅ Email sauvegardé dans Firebase");
 
-    emailMsg.textContent = "✅ Parfait ! Tu es inscrit à la newsletter LFIST ! 🚀";
+    // Envoyer l'email de bienvenue
+    const welcomeEmailSent = await sendWelcomeEmail(email);
+    
+    if (welcomeEmailSent) {
+      emailMsg.textContent = "✅ Parfait ! Tu es inscrit à la newsletter LFIST ! Un email de bienvenue t'a été envoyé 🚀";
+    } else {
+      emailMsg.textContent = "✅ Parfait ! Tu es inscrit à la newsletter LFIST ! 🚀";
+    }
     emailMsg.style.color = "green";
     emailInput.value = "";
     
@@ -280,18 +589,23 @@ function ecouterVotes(memecoins) {
   });
 }
 
-function afficherMemecoins(memecoins) {
+async function afficherMemecoins(memecoins) {
   const container = document.getElementById("memecoins-container");
   container.innerHTML = "";
 
-  memecoins.forEach(memecoin => {
+  for (const memecoin of memecoins) {
     const card = document.createElement("div");
     card.className = "memecoin-card";
+    
+    // HTML de base de la carte
     card.innerHTML = `
       <img src="${memecoin.logo}" alt="${memecoin.nom}" />
       <h3>${memecoin.nom}</h3>
       <p>${memecoin.description}</p>
       <p><strong>Prix:</strong> ${memecoin.prix} $</p>
+      <div class="security-container" data-id="${memecoin.id}">
+        <div class="security-loading">🔍 Analyse de sécurité en cours...</div>
+      </div>
       <button class="vote-button" data-id="${memecoin.id}">Voter</button>
       <div class="progress-container">
         <div class="progress" data-id="${memecoin.id}" style="width: 0%;"></div>
@@ -299,7 +613,10 @@ function afficherMemecoins(memecoins) {
       <p class="vote-count" data-id="${memecoin.id}">0 vote</p>
     `;
     container.appendChild(card);
-  });
+
+    // Charger les informations de sécurité de manière asynchrone
+    loadSecurityInfo(memecoin);
+  }
 
   document.querySelectorAll(".vote-button").forEach(button => {
     button.addEventListener("click", () => {
@@ -312,6 +629,55 @@ function afficherMemecoins(memecoins) {
   checkIfUserVoted();
   
   ecouterVotes(memecoins);
+}
+
+// Fonction pour charger les informations de sécurité
+async function loadSecurityInfo(memecoin) {
+  const securityContainer = document.querySelector(`.security-container[data-id="${memecoin.id}"]`);
+  
+  if (!securityContainer) return;
+  
+  // Simuler un délai pour éviter les appels trop rapides
+  await new Promise(resolve => setTimeout(resolve, 500));
+  
+  try {
+    // Essayer d'extraire une adresse de contrat depuis l'ID ou d'autres propriétés
+    let contractAddress = null;
+    
+    // Si l'ID ressemble à une adresse Ethereum
+    if (memecoin.id && memecoin.id.startsWith('0x') && memecoin.id.length === 42) {
+      contractAddress = memecoin.id;
+    }
+    // Ou si il y a une propriété contract_address
+    else if (memecoin.contract_address) {
+      contractAddress = memecoin.contract_address;
+    }
+    // Ou si il y a une propriété address
+    else if (memecoin.address) {
+      contractAddress = memecoin.address;
+    }
+    
+    if (contractAddress) {
+      // Utiliser BSC par défaut pour les tests (chainId 56)
+      const chainId = '56';
+      const securityData = await getGoPlusSecurityInfo(contractAddress, chainId);
+      const securityHtml = formatSecurityInfo(securityData);
+      securityContainer.innerHTML = securityHtml;
+    } else {
+      // Pour les memecoins sans adresse de contrat, afficher un message informatif
+      securityContainer.innerHTML = `
+        <div class="security-info">
+          <span class="security-unknown">📊 Token listé sur exchange</span>
+          <div style="font-size: 0.8rem; color: #888; margin-top: 5px;">
+            Analyse de sécurité non disponible pour les tokens listés sur les exchanges centralisés
+          </div>
+        </div>
+      `;
+    }
+  } catch (error) {
+    console.error('Erreur lors du chargement des infos de sécurité:', error);
+    securityContainer.innerHTML = '<div class="security-info"><span class="security-error">❌ Erreur de chargement</span></div>';
+  }
 }
 
 /* --- Partie modifiée : gestion des memecoins sur une base hebdomadaire --- */
@@ -368,6 +734,36 @@ async function fetchMemecoins() {
     } catch (e) {
       console.warn("⚠️ API échouée :", e.message);
     }
+  }
+
+  // Si aucun memecoin n'est trouvé, utiliser des données de test avec des adresses de contrat
+  if (fetchedMemecoins.length === 0) {
+    fetchedMemecoins = [
+      {
+        id: "test1",
+        nom: "SafeMoon",
+        logo: "https://assets.coingecko.com/coins/images/14362/small/safemoon.png",
+        prix: "0.0001",
+        description: "Token de test avec analyse de sécurité",
+        contract_address: "0x8076c74c5e3f5852037f31ff0093eeb8c8add8d3" // SafeMoon sur BSC
+      },
+      {
+        id: "test2", 
+        nom: "PancakeSwap",
+        logo: "https://assets.coingecko.com/coins/images/12632/small/pancakeswap-cake-logo.png",
+        prix: "2.45",
+        description: "Token DeFi populaire",
+        contract_address: "0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82" // CAKE sur BSC
+      },
+      {
+        id: "test3",
+        nom: "Binance USD",
+        logo: "https://assets.coingecko.com/coins/images/9576/small/BUSD.png", 
+        prix: "1.00",
+        description: "Stablecoin de test",
+        contract_address: "0xe9e7cea3dedca5984780bafc599bd69add087d56" // BUSD sur BSC
+      }
+    ];
   }
 
   await set(memecoinsRef, fetchedMemecoins);
@@ -479,7 +875,7 @@ async function init() {
     return;
   }
 
-  afficherMemecoins(memecoins);
+  await afficherMemecoins(memecoins);
   
   // Vérifier s'il faut afficher le gagnant
   await checkForWeekEnd();
