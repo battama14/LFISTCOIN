@@ -10,122 +10,157 @@
 <body>
   <header>
      <div class="logo">LFIST 💥</div>
-    <nav id="nav-menu" class="nav-menu">
-      <a href="#presentation" data-translate="nav_presentation">Présentation</a>
-      <a href="#mission" data-translate="nav_mission">Mission</a>
-      <a href="#equipe" data-translate="nav_team">Équipe</a>
-      <a href="#tokenomics" data-translate="nav_tokenomics">Tokenomics</a>
-      <a href="#honeypot-warning" data-translate="nav_security">⚠️ Sécurité</a>
-      <a href="#roadmap" data-translate="nav_roadmap">Roadmap</a>
-      <a href="#faq" data-translate="nav_faq">FAQ</a>
+    <nav class="nav-menu">
+      <a href="Index.html" data-translate="nav_home">Accueil</a>
+      <a href="fist-detector.html" data-translate="nav_fist_detector">Fist-Detector</a>
       <a href="whitepaper.html" target="_blank" class="whitepaper-link">📄 White Paper</a>
-      <a href="#contact" data-translate="nav_contact">Nous Rejoindre</a>
     </nav>
-    <button id="languageButton" class="language-btn">🇺🇸 English</button>
-    <div id="burger" class="burger">☰</div>
+    <div class="header-controls">
+      <button id="languageButton" class="language-btn">🇺🇸 English</button>
+      <div id="burger" class="burger">☰</div>
+    </div>
   </header>
+
+  <!-- Menu de raccourcis vers les sections -->
+  <nav class="quick-nav">
+    <div class="quick-nav-container">
+      <a href="#presentation" class="quick-nav-item" data-translate="nav_presentation">📋 Présentation</a>
+      <a href="#mission" class="quick-nav-item" data-translate="nav_mission">🎯 Mission</a>
+      <a href="#equipe" class="quick-nav-item" data-translate="nav_team">👥 Équipe</a>
+      <a href="#tokenomics" class="quick-nav-item" data-translate="nav_tokenomics">💰 Tokenomics</a>
+      <a href="#security-alert" class="quick-nav-item" data-translate="nav_security">🚨 Alerte</a>
+      <a href="#roadmap" class="quick-nav-item" data-translate="nav_roadmap">🗺️ Roadmap</a>
+      <a href="#faq" class="quick-nav-item" data-translate="nav_faq">❓ FAQ</a>
+      <a href="#contact" class="quick-nav-item" data-translate="nav_contact">📞 Contact</a>
+    </div>
+  </nav>
 
   <main>
     <section class="hero">
-      <h1>Bienvenue dans l’univers <span class="highlight">LFIST</span></h1>
-      <p>Un memecoin communautaire <strong>100% déjanté</strong> mais <em>stratégiquement lancé</em>. Rejoins le mouvement !</p>
+      <h1 data-translate="hero_title">Bienvenue dans l'univers <span class="highlight">LFIST</span></h1>
+      <p data-translate="hero_subtitle">Un memecoin communautaire <strong>100% déjanté</strong> mais <em>stratégiquement lancé</em>. Rejoins le mouvement !</p>
       <div class="buttons">
         <a href="https://pancakeswap.finance/swap?outputCurrency=0xc0679bF1fda759B7CfC44691b422405Fae84253f" target="_blank" class="btn btn-primary" data-translate="btn_buy_pancake">Acheter sur PancakeSwap</a>
-        <a href="whitepaper.html" target="_blank" class="btn btn-whitepaper">📄 White Paper</a>
+        <a href="whitepaper.html" target="_blank" class="btn btn-whitepaper" data-translate="btn_whitepaper">📄 White Paper</a>
         <a href="fist-detector.html" class="btn btn-secondary" data-translate="btn_fist_detector">FIST-DETECTOR 🔍</a>
       </div>
       <div class="fun-emoji">
-        <img src="LFIST.png" alt="LFIST fun" style="height: 400px;">
+        <img src="LFIST.png" alt="LFIST fun" loading="lazy">
       </div>
     </section>
 
     <section id="presentation" class="section neon-section">
-      <h2>Présentation</h2>
-      <p>LFIST est bien plus qu’un memecoin. C’est une communauté, une blague sérieuse, et une révolution décentralisée.  
-      <span class="meme-text">(Si tu cherches du sérieux, t’es au bon endroit… ou pas 😜)</span></p>
+      <h2 data-translate="presentation_title">Présentation</h2>
+      <p data-translate="presentation_subtitle">LFIST est bien plus qu'un memecoin. C'est une communauté, une blague sérieuse, et une révolution décentralisée.  
+      <span class="meme-text">(Si tu cherches du sérieux, t'es au bon endroit… ou pas 😜)</span></p>
       <div class="card-container">
         <div class="card">
-          <img src="LFIST1.png" alt="Histoire" />
-          <h3>Notre Histoire</h3>
-          <p>Un délire devenu un projet crypto viral basé sur Laurie.</p>
+          <img src="LFIST1.png" alt="Histoire" loading="lazy" />
+          <h3 data-translate="card_history_title">Notre Histoire</h3>
+          <p data-translate="card_history_desc">Un délire devenu un projet crypto viral basé sur Laurie.</p>
         </div>
         <div class="card">
-          <img src="LFIST2.png" alt="Philosophie" />
-          <h3>Philosophie</h3>
-          <p>Un memecoin drôle mais ambitieux, guidé par la communauté.</p>
+          <img src="LFIST2.png" alt="Philosophie" loading="lazy" />
+          <h3 data-translate="card_philosophy_title">Philosophie</h3>
+          <p data-translate="card_philosophy_desc">Un memecoin drôle mais ambitieux, guidé par la communauté.</p>
         </div>
         <div class="card">
-          <img src="LFIST3.png" alt="Valeurs" />
-          <h3>Valeurs</h3>
-          <p>Transparence, créativité et autodérision sont nos piliers, Laurie s'entraîne très dur pour cela.</p>
+          <img src="LFIST3.png" alt="Valeurs" loading="lazy" />
+          <h3 data-translate="card_values_title">Valeurs</h3>
+          <p data-translate="card_values_desc">Transparence, créativité et autodérision sont nos piliers, Laurie s'entraîne très dur pour cela.</p>
         </div>
       </div>
     </section>
 
     <section id="mission" class="section">
-      <h2>Notre Mission</h2>
-      <p>Combiner humour, finance décentralisée, et puissance communautaire pour créer un token unique, disruptif et irrésistible.  
+      <h2 data-translate="mission_title">Notre Mission</h2>
+      <p data-translate="mission_subtitle">Combiner humour, finance décentralisée, et puissance communautaire pour créer un token unique, disruptif et irrésistible.  
       <span class="meme-text">#FistPower 💪</span></p>
       <div class="card-container">
         <div class="card">
-          <img src="FIST-PEPE.png" alt="Humour" />
-          <h3>Humour</h3>
-          <p>Chaque punchline est pensée pour marquer les esprits (et les memes).</p>
+          <img src="FIST-PEPE.png" alt="Humour" loading="lazy" />
+          <h3 data-translate="mission_humor_title">Humour</h3>
+          <p data-translate="mission_humor_desc">Chaque punchline est pensée pour marquer les esprits (et les memes).</p>
         </div>
         <div class="card">
-          <img src="LFIST-POULPO.jpeg" alt="DeFi" />
-          <h3>Communauté</h3>
-          <p>Notre plus grande force : ceux qui fistent avec passion chaque jour.</p>
+          <img src="LFIST-POULPO.jpeg" alt="DeFi" loading="lazy" />
+          <h3 data-translate="mission_community_title">Communauté</h3>
+          <p data-translate="mission_community_desc">Notre plus grande force : ceux qui fistent avec passion chaque jour.</p>
         </div>
         <div class="card">
-          <img src="LFIST-SHIBA.jpeg" alt="Communauté" />
-          <h3>No limit</h3>
-          <p>LFIST ( LaurieFIST ) n'a aucune limite et cest ce qui nous fait rire.</p>
+          <img src="LFIST-SHIBA.jpeg" alt="Communauté" loading="lazy" />
+          <h3 data-translate="mission_nolimit_title">No limit</h3>
+          <p data-translate="mission_nolimit_desc">LFIST ( LaurieFIST ) n'a aucune limite et c'est ce qui nous fait rire.</p>
         </div>
       </div>
     </section>
 
     <section id="equipe" class="section neon-section">
-      <h2>L’équipe derrière LFIST</h2>
+      <h2 data-translate="team_title">L'équipe derrière LFIST</h2>
       <div class="card-container">
         <div class="card">
-          <img src="logoLFIST.png" alt="Laurie" />
-          <h3>Laurie</h3>
-          <p>Fondatrice mystique. Stratège memecoin intergalactique.</p>
+          <img src="logoLFIST.png" alt="Laurie" loading="lazy" />
+          <h3 data-translate="team_laurie_name">Laurie</h3>
+          <p data-translate="team_laurie_desc">Fondatrice mystique. Stratège memecoin intergalactique.</p>
           <p class="emoji">🌌✨</p>
         </div>
         <div class="card">
-          <img src="kamkam.jpeg" alt="Julien" />
-          <h3>KamKam</h3>
-          <p>Développeur de conneries.Fait tout et fait rien.</p>
+          <img src="kamkam.jpeg" alt="Julien" loading="lazy" />
+          <h3 data-translate="team_kamkam_name">KamKam</h3>
+          <p data-translate="team_kamkam_desc">Développeur de conneries.Fait tout et fait rien.</p>
           <p class="emoji">🛠️⭐</p>
         </div>
         <div class="card">
-          <img src="vinni.jpeg" alt="Sasha" />
-          <h3>Vinni</h3>
-          <p>Community Manager. Roi du meme et du vol de banane.</p>
+          <img src="vinni.jpeg" alt="Sasha" loading="lazy" />
+          <h3 data-translate="team_vinni_name">Vinni</h3>
+          <p data-translate="team_vinni_desc">Community Manager. Roi du meme et du vol de banane.</p>
           <p class="emoji">👑🤣</p>
         </div>
       </div>
+    </section>
+
+    <!-- Section TOKENOMICS -->
+    <section id="tokenomics" class="section tokenomics-section">
+      <h2 class="section-title" data-translate="tokenomics_title">📊 Tokenomics LFIST</h2>
+      <p class="section-subtitle" data-translate="tokenomics_subtitle">Une économie de token transparente et durable</p>
+      
+      <!-- Contract Address -->
+      <div class="contract-info">
+        <h3 data-translate="contract_info_title">📋 Informations du Contrat</h3>
+        <div class="contract-address">
+          <span class="label" data-translate="contract_address_label">Adresse du Contrat:</span>
+          <span class="address" id="contractAddress">0xc0679bF1fda759B7CfC44691b422405Fae84253f</span>
+          <button class="copy-btn" onclick="copyContract()" data-translate="btn_copy">📋 Copier</button>
+        </div>
+        <div class="contract-links">
+          <a href="https://bscscan.com/address/0xc0679bF1fda759B7CfC44691b422405Fae84253f" target="_blank" class="link-btn" data-translate="btn_bscscan">
+            🔍 Voir sur BSCScan
+          </a>
+          <a href="https://pancakeswap.finance/swap?outputCurrency=0xc0679bF1fda759B7CfC44691b422405Fae84253f" target="_blank" class="link-btn" data-translate="btn_pancakeswap">
+            🥞 Acheter sur PancakeSwap
+          </a>
+        </div>
+      </div>
+
       <!-- Tokenomics Grid -->
       <div class="tokenomics-grid">
         
         <!-- Supply Info -->
         <div class="tokenomics-card">
           <div class="card-icon">🔢</div>
-          <h3>Supply</h3>
+          <h3 data-translate="supply_title">Supply</h3>
           <div class="stats">
             <div class="stat-item">
-              <span class="stat-label">Total Supply:</span>
-              <span class="stat-value">1,000,000,000 LFIST</span>
+              <span class="stat-label" data-translate="supply_total">Total Supply:</span>
+              <span class="stat-value" data-translate="total_supply_value">1,000,000,000 LFIST</span>
             </div>
             <div class="stat-item">
-              <span class="stat-label">Circulating:</span>
-              <span class="stat-value">900,000,000 LFIST</span>
+              <span class="stat-label" data-translate="supply_circulating">Circulating:</span>
+              <span class="stat-value" data-translate="circulating_value">900,000,000 LFIST</span>
             </div>
             <div class="stat-item">
-              <span class="stat-label">Burned:</span>
-              <span class="stat-value">0 LFIST</span>
+              <span class="stat-label" data-translate="supply_burned">Burned:</span>
+              <span class="stat-value" data-translate="burned_value">0 LFIST</span>
             </div>
           </div>
         </div>
@@ -133,25 +168,25 @@
         <!-- Distribution -->
         <div class="tokenomics-card">
           <div class="card-icon">💰</div>
-          <h3>Distribution</h3>
+          <h3 data-translate="distribution_title">Distribution</h3>
           <div class="distribution-chart">
             <div class="distribution-item">
               <div class="distribution-bar">
                 <div class="bar-fill" style="width: 80%; background: #00ff88;"></div>
               </div>
-              <span class="distribution-label">Liquidity Pool: 80%</span>
+              <span class="distribution-label" data-translate="distribution_liquidity">Liquidity Pool: 80%</span>
             </div>
             <div class="distribution-item">
               <div class="distribution-bar">
                 <div class="bar-fill" style="width: 10%; background: #ff6b6b;"></div>
               </div>
-              <span class="distribution-label">Development: 10%</span>
+              <span class="distribution-label" data-translate="distribution_development">Development: 10%</span>
             </div>
             <div class="distribution-item">
               <div class="distribution-bar">
                 <div class="bar-fill" style="width: 10%; background: #4ecdc4;"></div>
               </div>
-              <span class="distribution-label">Marketing: 10%</span>
+              <span class="distribution-label" data-translate="distribution_marketing">Marketing: 10%</span>
             </div>
           </div>
         </div>
@@ -159,26 +194,26 @@
         <!-- Tax Structure -->
         <div class="tokenomics-card">
           <div class="card-icon">💸</div>
-          <h3>Taxes</h3>
+          <h3 data-translate="taxes_title">Taxes</h3>
           <div class="tax-structure">
             <div class="tax-item buy-tax">
-              <h4>🛒 Buy Tax: 5%</h4>
+              <h4 data-translate="buy_tax_title">🛒 Buy Tax: 5%</h4>
               <div class="tax-list">
-                <span>3% Marketing</span>
-                <span>2% Development</span>
+                <span data-translate="buy_tax_marketing">3% Marketing</span>
+                <span data-translate="buy_tax_development">2% Development</span>
               </div>
             </div>
             <div class="tax-item sell-tax">
-              <h4>📤 Sell Tax: 8%</h4>
+              <h4 data-translate="sell_tax_title">📤 Sell Tax: 8%</h4>
               <div class="tax-list">
-                <span>4% Marketing</span>
-                <span>3% Development</span>
-                <span>1% Liquidity</span>
+                <span data-translate="sell_tax_marketing">4% Marketing</span>
+                <span data-translate="sell_tax_development">3% Development</span>
+                <span data-translate="sell_tax_liquidity">1% Liquidity</span>
               </div>
             </div>
             <div class="tax-item transfer-tax">
-              <h4>🔄 Transfer: 0%</h4>
-              <p>Pas de taxes entre wallets</p>
+              <h4 data-translate="transfer_tax_title">🔄 Transfer: 0%</h4>
+              <p data-translate="transfer_tax_desc">Pas de taxes entre wallets</p>
             </div>
           </div>
         </div>
@@ -186,34 +221,34 @@
         <!-- Utility -->
         <div class="tokenomics-card">
           <div class="card-icon">🎯</div>
-          <h3>Utilité</h3>
+          <h3 data-translate="utility_title">Utilité</h3>
           <div class="utility-roadmap">
             <div class="utility-phase active">
               <span class="phase-number">1</span>
               <div class="phase-content">
-                <h4>Trading Token</h4>
-                <p>Échanges sur PancakeSwap</p>
+                <h4 data-translate="utility_phase1_title">Trading Token</h4>
+                <p data-translate="utility_phase1_desc">Échanges sur PancakeSwap</p>
               </div>
             </div>
             <div class="utility-phase">
               <span class="phase-number">2</span>
               <div class="phase-content">
-                <h4>Governance</h4>
-                <p>Votes communautaires</p>
+                <h4 data-translate="utility_phase2_title">Governance</h4>
+                <p data-translate="utility_phase2_desc">Votes communautaires</p>
               </div>
             </div>
             <div class="utility-phase">
               <span class="phase-number">3</span>
               <div class="phase-content">
-                <h4>Staking</h4>
-                <p>Récompenses de staking</p>
+                <h4 data-translate="utility_phase3_title">Staking</h4>
+                <p data-translate="utility_phase3_desc">Récompenses de staking</p>
               </div>
             </div>
             <div class="utility-phase">
               <span class="phase-number">4</span>
               <div class="phase-content">
-                <h4>Ecosystem</h4>
-                <p>Paiements dans l'écosystème</p>
+                <h4 data-translate="utility_phase4_title">Ecosystem</h4>
+                <p data-translate="utility_phase4_desc">Paiements dans l'écosystème</p>
               </div>
             </div>
           </div>
@@ -223,49 +258,49 @@
 
       <!-- Security Features -->
       <div class="security-section">
-        <h3>🔒 Sécurité & Transparence</h3>
+        <h3 data-translate="security_title">🔒 Sécurité & Transparence</h3>
         <div class="security-features">
           <div class="security-item">
             <span class="security-icon">✅</span>
-            <span class="security-text">Contrat vérifié sur BSCScan</span>
+            <span class="security-text" data-translate="security_verified">Contrat vérifié sur BSCScan</span>
           </div>
           <div class="security-item">
             <span class="security-icon">🔒</span>
-            <span class="security-text">Ownership renoncé (1 Janvier 2026)</span>
+            <span class="security-text" data-translate="security_ownership">Ownership renoncé (15 Janvier 2025)</span>
           </div>
           <div class="security-item">
             <span class="security-icon">💎</span>
-            <span class="security-text">Liquidité verrouillée</span>
+            <span class="security-text" data-translate="security_liquidity">Liquidité verrouillée</span>
           </div>
           <div class="security-item">
             <span class="security-icon">🚫</span>
-            <span class="security-text">Pas de fonction mint</span>
+            <span class="security-text" data-translate="security_mint">Pas de fonction mint</span>
           </div>
           <div class="security-item">
             <span class="security-icon">🔍</span>
-            <span class="security-text">Code source public</span>
+            <span class="security-text" data-translate="security_source">Code source public</span>
           </div>
           <div class="security-item">
             <span class="security-icon">⚡</span>
-            <span class="security-text">Anti-bot protection</span>
+            <span class="security-text" data-translate="security_antibot">Anti-bot protection</span>
           </div>
         </div>
       </div>
 
       <!-- Quick Actions -->
       <div class="quick-actions">
-        <h3>🚀 Actions Rapides</h3>
+        <h3 data-translate="actions_title">🚀 Actions Rapides</h3>
         <div class="action-buttons">
-          <button class="btn btn-primary" onclick="buyToken()">
+          <button class="btn btn-primary" onclick="buyToken()" data-translate="btn_buy_lfist">
             🛒 Acheter LFIST
           </button>
-          <button class="btn btn-secondary" onclick="addToWallet()">
+          <button class="btn btn-secondary" onclick="addToWallet()" data-translate="btn_add_wallet">
             💼 Ajouter à MetaMask
           </button>
-          <button class="btn btn-secondary" onclick="viewChart()">
+          <button class="btn btn-secondary" onclick="viewChart()" data-translate="btn_view_chart">
             📈 Voir le Chart
           </button>
-          <button class="btn btn-secondary" onclick="joinTelegram()">
+          <button class="btn btn-secondary" onclick="joinTelegram()" data-translate="btn_join_telegram">
             💬 Rejoindre Telegram
           </button>
         </div>
@@ -273,97 +308,131 @@
 
     </section>
 
-    <!-- Section AVERTISSEMENT HONEYPOT -->
-    <section id="honeypot-warning" class="section honeypot-warning-section">
-      <h2 class="section-title" data-translate="honeypot_warning_title">⚠️ AVERTISSEMENT IMPORTANT - FAUSSES ACCUSATIONS</h2>
-      <p class="section-subtitle" data-translate="honeypot_warning_subtitle">Certains sites comme Honeypot.is et DexScreener affichent des alertes FAUSSES sur notre token</p>
-      
-      <div class="warning-container">
-        <div class="warning-alert">
+    <!-- Section Alerte Sécurité -->
+    <section id="security-alert" class="section security-alert-section">
+      <div class="alert-container">
+        <div class="main-alert">
           <div class="alert-icon">🚨</div>
           <div class="alert-content">
-            <h3 data-translate="false_alert_title">ALERTE FAUSSE DÉTECTÉE</h3>
-            <p data-translate="false_alert_desc">Des outils automatisés signalent incorrectement LFIST comme "honeypot" ou "non sécurisé". Ces alertes sont FAUSSES et basées sur des analyses incorrectes.</p>
+            <h2 data-translate="alert_title">ALERTE : LFIST N'EST PAS UN HONEYPOT !</h2>
+            <p data-translate="alert_subtitle">Certains sites de vérification donnent de fausses alertes sur LFIST. Voici les PREUVES que notre token est 100% sûr et légitime.</p>
           </div>
         </div>
-
-        <div class="token-mechanics">
-          <h3 data-translate="token_mechanics_title">🔧 MÉCANIQUES RÉELLES DU TOKEN</h3>
-          <div class="mechanics-grid">
-            <div class="mechanic-item">
-              <div class="mechanic-icon">✅</div>
-              <div class="mechanic-content">
-                <h4 data-translate="mechanic_tradeable_title">100% Échangeable</h4>
-                <p data-translate="mechanic_tradeable_desc">Le token peut être acheté ET vendu librement sur PancakeSwap. Aucune restriction de vente.</p>
-              </div>
+        
+        <div class="false-accusations">
+          <h3 data-translate="false_accusations_title">🛡️ Réfutation des Fausses Accusations</h3>
+          <div class="accusation-item">
+            <div class="accusation-header">
+              <span class="false-label">❌ FAUX</span>
+              <h4 data-translate="false_claim_1">Certains sites prétendent que LFIST est un honeypot</h4>
             </div>
-            
-            <div class="mechanic-item">
-              <div class="mechanic-icon">💰</div>
-              <div class="mechanic-content">
-                <h4 data-translate="mechanic_taxes_title">Taxes Transparentes</h4>
-                <p data-translate="mechanic_taxes_desc">Buy: 5% (3% Marketing + 2% Dev) | Sell: 8% (4% Marketing + 3% Dev + 1% Liquidité)</p>
-              </div>
-            </div>
-            
-            <div class="mechanic-item">
-              <div class="mechanic-icon">🔒</div>
-              <div class="mechanic-content">
-                <h4 data-translate="mechanic_ownership_title">Ownership Renoncé</h4>
-                <p data-translate="mechanic_ownership_desc">Le propriétaire du contrat a renoncé à ses droits le 1 Janvier 2026. Aucune modification possible.</p>
-              </div>
-            </div>
-            
-            <div class="mechanic-item">
-              <div class="mechanic-icon">🔍</div>
-              <div class="mechanic-content">
-                <h4 data-translate="mechanic_verified_title">Contrat Vérifié</h4>
-                <p data-translate="mechanic_verified_desc">Code source public et vérifié sur BSCScan. Transparence totale du code.</p>
-              </div>
-            </div>
-            
-            <div class="mechanic-item">
-              <div class="mechanic-icon">💎</div>
-              <div class="mechanic-content">
-                <h4 data-translate="mechanic_liquidity_title">Liquidité Verrouillée</h4>
-                <p data-translate="mechanic_liquidity_desc">La liquidité est verrouillée et ne peut pas être retirée par l'équipe.</p>
-              </div>
-            </div>
-            
-            <div class="mechanic-item">
-              <div class="mechanic-icon">🚫</div>
-              <div class="mechanic-content">
-                <h4 data-translate="mechanic_no_mint_title">Pas de Fonction Mint</h4>
-                <p data-translate="mechanic_no_mint_desc">Impossible de créer de nouveaux tokens. Supply fixe à 1 milliard.</p>
-              </div>
+            <div class="proof-content">
+              <p data-translate="proof_1"><strong>RÉALITÉ :</strong> Ces sites utilisent des algorithmes défaillants qui génèrent de faux positifs. LFIST est totalement légitime et vérifiable.</p>
             </div>
           </div>
         </div>
-
+        
+        <div class="security-proofs">
+          <h3 data-translate="security_proofs_title">✅ PREUVES DE SÉCURITÉ LFIST</h3>
+          <div class="proofs-grid">
+            <div class="proof-item verified">
+              <div class="proof-icon">🔓</div>
+              <div class="proof-content">
+                <h4 data-translate="proof_ownership_title">Ownership Renoncé</h4>
+                <p data-translate="proof_ownership_desc">Le contrat LFIST a renoncé à l'ownership. Aucun contrôle centralisé possible.</p>
+                <div class="verification-link">
+                  <a href="https://bscscan.com/token/0xc0679bF1fda759B7CfC44691b422405Fae84253f" target="_blank" data-translate="verify_bscscan">✓ Vérifier sur BSCScan</a>
+                </div>
+              </div>
+            </div>
+            
+            <div class="proof-item verified">
+              <div class="proof-icon">🔒</div>
+              <div class="proof-content">
+                <h4 data-translate="proof_liquidity_title">Liquidité Verrouillée</h4>
+                <p data-translate="proof_liquidity_desc">100% de la liquidité est verrouillée définitivement. Impossible de rug pull.</p>
+                <div class="verification-link">
+                  <a href="https://www.pinksale.finance/pinklock/record/1285077" target="_blank" data-translate="verify_pinksale">✓ Vérifier sur PinkSale</a>
+                </div>
+              </div>
+            </div>
+            
+            <div class="proof-item verified">
+              <div class="proof-icon">📋</div>
+              <div class="proof-content">
+                <h4 data-translate="proof_contract_title">Contrat Vérifié</h4>
+                <p data-translate="proof_contract_desc">Code source public et vérifié sur BSCScan. Transparence totale.</p>
+                <div class="verification-link">
+                  <a href="https://bscscan.com/address/0xc0679bF1fda759B7CfC44691b422405Fae84253f#code" target="_blank" data-translate="verify_code">✓ Voir le Code Source</a>
+                </div>
+              </div>
+            </div>
+            
+            <div class="proof-item verified">
+              <div class="proof-icon">💱</div>
+              <div class="proof-content">
+                <h4 data-translate="proof_trading_title">Trading Libre</h4>
+                <p data-translate="proof_trading_desc">Achat ET vente libres sur PancakeSwap. Aucune restriction de trading.</p>
+                <div class="verification-link">
+                  <a href="https://pancakeswap.finance/swap?outputCurrency=0xc0679bF1fda759B7CfC44691b422405Fae84253f" target="_blank" data-translate="verify_pancake">✓ Tester sur PancakeSwap</a>
+                </div>
+              </div>
+            </div>
+            
+            <div class="proof-item verified">
+              <div class="proof-icon">📊</div>
+              <div class="proof-content">
+                <h4 data-translate="proof_taxes_title">Taxes Transparentes</h4>
+                <p data-translate="proof_taxes_desc">Taxes fixes et raisonnables : 5% achat / 5% vente. Pas de taxes cachées.</p>
+                <div class="tax-breakdown">
+                  <span data-translate="tax_buy">Achat : 5%</span> | <span data-translate="tax_sell">Vente : 5%</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="proof-item verified">
+              <div class="proof-icon">👥</div>
+              <div class="proof-content">
+                <h4 data-translate="proof_community_title">Communauté Active</h4>
+                <p data-translate="proof_community_desc">Équipe transparente, communauté engagée, développement continu.</p>
+                <div class="community-links">
+                  <a href="https://t.me/lfistcoin" target="_blank">Telegram</a> | 
+                  <a href="https://x.com/LFISTCOIN" target="_blank">Twitter</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
         <div class="why-false-alerts">
-          <h3 data-translate="why_false_title">❓ POURQUOI CES FAUSSES ALERTES ?</h3>
+          <h3 data-translate="why_false_title">🤔 Pourquoi ces Fausses Alertes ?</h3>
           <div class="false-reasons">
             <div class="reason-item">
-              <span class="reason-number">1</span>
-              <p data-translate="reason_1">Les outils automatisés détectent parfois les taxes comme des "restrictions" alors qu'elles sont normales et transparentes.</p>
+              <div class="reason-number">1</div>
+              <p data-translate="reason_1">Les outils automatiques analysent mal les contrats avec des mécaniques de taxes, même légitimes.</p>
             </div>
             <div class="reason-item">
-              <span class="reason-number">2</span>
-              <p data-translate="reason_2">Certains analyseurs ne comprennent pas les mécaniques de tokens avec taxes et génèrent de faux positifs.</p>
+              <div class="reason-number">2</div>
+              <p data-translate="reason_2">Certains sites ne mettent pas à jour leurs bases de données après vérification manuelle.</p>
             </div>
             <div class="reason-item">
-              <span class="reason-number">3</span>
-              <p data-translate="reason_3">Les bases de données de ces sites ne sont pas toujours à jour avec les derniers contrats vérifiés.</p>
+              <div class="reason-number">3</div>
+              <p data-translate="reason_3">Les algorithmes confondent parfois les mécaniques anti-bot avec des honeypots.</p>
+            </div>
+            <div class="reason-item">
+              <div class="reason-number">4</div>
+              <p data-translate="reason_4">Toujours vérifier manuellement sur BSCScan plutôt que de faire confiance aux outils automatiques.</p>
             </div>
           </div>
         </div>
-
-        <div class="call-to-action-warning">
-          <h3 data-translate="cta_warning_title">💡 VÉRIFIEZ PAR VOUS-MÊME</h3>
-          <p data-translate="cta_warning_desc">Ne faites pas confiance aux outils automatisés. Vérifiez directement :</p>
+        
+        <div class="call-to-action-security">
+          <h3 data-translate="security_cta_title">🔍 Vérifiez Par Vous-Même !</h3>
+          <p data-translate="security_cta_desc">Ne nous croyez pas sur parole. Vérifiez toutes ces informations directement sur la blockchain :</p>
           <div class="verification-buttons">
-            <a href="https://bscscan.com/token/0xc0679bF1fda759B7CfC44691b422405Fae84253f" target="_blank" class="btn btn-primary" data-translate="btn_verify_contract">Vérifier le Contrat</a>
-            <a href="https://pancakeswap.finance/swap?outputCurrency=0xc0679bF1fda759B7CfC44691b422405Fae84253f" target="_blank" class="btn btn-secondary" data-translate="btn_test_trade">Tester un Trade</a>
+            <a href="https://bscscan.com/token/0xc0679bF1fda759B7CfC44691b422405Fae84253f" target="_blank" class="verify-btn primary" data-translate="btn_verify_bsc">🔍 BSCScan</a>
+            <a href="https://www.pinksale.finance/pinklock/record/1285077" target="_blank" class="verify-btn secondary" data-translate="btn_verify_lock">🔒 Liquidité</a>
+            <a href="https://pancakeswap.finance/swap?outputCurrency=0xc0679bF1fda759B7CfC44691b422405Fae84253f" target="_blank" class="verify-btn tertiary" data-translate="btn_test_trade">💱 Test Trading</a>
           </div>
         </div>
       </div>
@@ -371,41 +440,41 @@
 
     <!-- Section ROADMAP -->
 <section id="roadmap" class="section roadmap-section">
-  <h2 class="section-title" data-translate="roadmap_title">📍 Roadmap LFIST</h2>
+  <h2 class="section-title" data-translate="roadmap_title">Roadmap LFIST</h2>
   <div class="timeline-container">
     <div class="timeline-step">
       <span class="emoji"></span>
       <div>
-        <h3>Phase 1 - Lancement</h3>
-        <p>Site live, token déployé, contrat vérifié. Premiers mèmes lancés.</p>
+        <h3 data-translate="roadmap_phase1_title">Phase 1 - Lancement</h3>
+        <p data-translate="roadmap_phase1_desc">Site live, token déployé, contrat vérifié. Premiers mèmes lancés.</p>
       </div>
     </div>
     <div class="timeline-step">
       <span class="emoji"></span>
       <div>
-        <h3>Phase 2 - Propagation</h3>
-        <p>Campagnes virales sur Twitter et Telegram. Buzz communautaire.</p>
+        <h3 data-translate="roadmap_phase2_title">Phase 2 - Propagation</h3>
+        <p data-translate="roadmap_phase2_desc">Campagnes virales sur Twitter et Telegram. Buzz communautaire.</p>
       </div>
     </div>
     <div class="timeline-step">
       <span class="emoji"></span>
       <div>
-        <h3>Phase 3 - Listing</h3>
-        <p>CoinMarketCap, partenariats memecoins et tools DeFi.</p>
+        <h3 data-translate="roadmap_phase3_title">Phase 3 - Listing</h3>
+        <p data-translate="roadmap_phase3_desc">CoinMarketCap, partenariats memecoins et tools DeFi.</p>
       </div>
     </div>
     <div class="timeline-step">
       <span class="emoji"></span>
       <div>
-        <h3>Phase 4 - Tech & Utilité</h3>
-        <p>FIST-DETECTOR actif, NFT à utilité, outils communautaires.</p>
+        <h3 data-translate="roadmap_phase4_title">Phase 4 - Tech & Utilité</h3>
+        <p data-translate="roadmap_phase4_desc">FIST-DETECTOR actif, NFT à utilité, outils communautaires.</p>
       </div>
     </div>
     <div class="timeline-step">
       <span class="emoji"></span>
       <div>
-        <h3>Phase 5 - Monde</h3>
-        <p>Ouverture globale, conquête du marché, du Web3 et de l'univers ...!</p>
+        <h3 data-translate="roadmap_phase5_title">Phase 5 - Monde</h3>
+        <p data-translate="roadmap_phase5_desc">Ouverture globale, conquête du marché, du Web3 et de l'univers ...!</p>
       </div>
     </div>
   </div>
@@ -413,66 +482,68 @@
 
 <!-- Section FAQ -->
 <section id="faq" class="section faq-section">
-  <h2 class="section-title" data-translate="faq_title">❓ FAQ</h2>
+  <h2 class="section-title" data-translate="faq_title">FAQ</h2>
   <div class="faq-grid">
     <div class="faq-item">
-      <h3>LFIST c’est sérieux ?</h3>
-      <p>Un memecoin à l’humour tranchant, mais un projet construit avec soin. Les deux.</p>
+      <h3 data-translate="faq_q1">LFIST c'est sérieux ?</h3>
+      <p data-translate="faq_a1">Un memecoin à l'humour tranchant, mais un projet construit avec soin. Les deux.</p>
     </div>
     <div class="faq-item">
-      <h3>Ça peut vraiment monter ?</h3>
-      <p>Tout dépend de la communauté. Si tu y crois, t’es déjà dans le bon camp.</p>
+      <h3 data-translate="faq_q2">Ça peut vraiment monter ?</h3>
+      <p data-translate="faq_a2">Tout dépend de la communauté. Si tu y crois, t'es déjà dans le bon camp.</p>
     </div>
     <div class="faq-item">
-      <h3>Comment acheter LFIST ?</h3>
-      <p>Copie le contrat, colle-le sur PancakeSwap, active le slippage, et FIST.</p>
+      <h3 data-translate="faq_q3">Comment acheter LFIST ?</h3>
+      <p data-translate="faq_a3">Copie le contrat, colle-le sur PancakeSwap, active le slippage, et FIST.</p>
     </div>
     <div class="faq-item">
-      <h3>Un projet à long terme ?</h3>
-      <p>Oui. NFT, détecteur de memecoins, site mis à jour, suivi régulier. On n’est pas là pour faire un one-pump.</p>
+      <h3 data-translate="faq_q4">Un projet à long terme ?</h3>
+      <p data-translate="faq_a4">Oui. NFT, détecteur de memecoins, site mis à jour, suivi régulier. On n'est pas là pour faire un one-pump.</p>
     </div>
     <div class="faq-item">
-      <h3>C’est safe ou c’est un piège ?</h3>
-      <p>Contrat vérifié, ownership renoncé dans quelques jours. C’est plus clean qu’un frigo de pharmacien.</p>
+      <h3 data-translate="faq_q5">C'est safe ou c'est un piège ?</h3>
+      <p data-translate="faq_a5">Contrat vérifié, ownership renoncé, liquidité verrouillée. Mais c'est crypto, DYOR.</p>
     </div>
     <div class="faq-item">
-      <h3>Y aura-t-il des utilités concrètes ?</h3>
-      <p>Oui. FIST-DETECTOR, NFTs exclusifs, votes communautaires, tracking de tokens... et du fun en continu.</p>
+      <h3 data-translate="faq_q6">Qui est Laurie ?</h3>
+      <p data-translate="faq_a6">La légende derrière LFIST. Une figure mystique du memecoin game.</p>
     </div>
   </div>
 </section>
 
 <!-- Section Communauté -->
 <section id="contact" class="section community-section">
-  <h2 class="section-title">💬 Rejoins la FISTFAMILY</h2>
-  <p class="community-text">Memecoins, chaos et bienveillance douteuse — ici, c’est chez toi maintenant.</p>
+  <h2 class="section-title" data-translate="contact_title">💬 Rejoins la FISTFAMILY</h2>
+  <p class="community-text" data-translate="contact_subtitle">Memecoins, chaos et bienveillance douteuse — ici, c'est chez toi maintenant.</p>
 
   <div class="community-buttons">
     <a href="https://x.com/LFISTCOIN" target="_blank" class="btn-social x">
       <!-- Icone X SVG -->
       <svg xmlns="http://www.w3.org/2000/svg" fill="white" height="20" width="20" viewBox="0 0 24 24"><path d="M14.47 10.37 22 2h-2.12l-6.39 7.13L8.5 2H2l8.04 11.5L2 22h2.12l6.82-7.61L15.5 22H22l-7.53-11.63Zm-2.01 2.23-.79-1.13L4.64 3.5h2.95l5.11 7.34.79 1.13 6.35 9.1h-2.95l-5.43-7.47Z"/></svg>
-      Rejoins-nous sur X
+      <span data-translate="btn_twitter">Rejoins-nous sur X</span>
     </a>
     <a href="https://t.me/lfistcoin" target="_blank" class="btn-social telegram">
       <!-- Icone Telegram SVG -->
       <svg xmlns="http://www.w3.org/2000/svg" fill="white" height="20" width="20" viewBox="0 0 24 24"><path d="M9.043 16.882l-.403 3.92c.577 0 .825-.246 1.129-.541l2.706-2.555 5.612 4.099c1.03.567 1.769.27 2.038-.956l3.694-17.375h-.001c.33-1.527-.538-2.124-1.54-1.754L1.328 9.442c-1.48.577-1.46 1.4-.252 1.78l5.912 1.846 13.68-8.63c.643-.432 1.229-.2.747.233l-11.372 10.21Z"/></svg>
-      Canal Telegram
+      <span data-translate="btn_telegram_channel">Canal Telegram</span>
     </a>
   </div>
 
-  <p class="email-contact">💌 Tu veux causer sérieusement (ou pas) ? Écris-nous :  
+  <p class="email-contact" data-translate="contact_email">💌 Tu veux causer sérieusement (ou pas) ? Écris-nous :  
     <a href="mailto:lfistcoin@gmail.com" class="email-link">lfistcoin@gmail.com</a>
   </p>
 </section>
 
-
+  </main>
 
 <!-- Footer -->
 <footer class="footer">
   <div class="footer-content">
-    <p>© 2025 LFIST Token. Powered by mèmes et conviction.</p>
+    <p data-translate="footer_copyright">© 2025 LFIST Token. Powered by mèmes et conviction.</p>
     <div class="visit-counter">
-      <span>👥 Visiteurs: <span id="visitCount">Loading...</span></span>
+      <span data-translate="visit_counter_text">Visites :</span> 
+      <span id="visitCount">0</span> 
+      <span class="meme-footer">💥</span>
     </div>
   </div>
 </footer>
@@ -484,12 +555,17 @@
 <script type="module" src="main.js"></script>
 <!-- Script de traduction -->
 <script src="translations.js"></script>
+<!-- Script du compteur de visites -->
+<script src="visit-counter.js"></script>
 <script>
 // Copier l'adresse du contrat
 function copyContract() {
     const address = document.getElementById('contractAddress').textContent;
     navigator.clipboard.writeText(address).then(() => {
-        alert('✅ Adresse copiée dans le presse-papiers !');
+        // Utiliser la traduction pour l'alerte
+        const currentLang = localStorage.getItem('lfist_language') || 'fr';
+        const message = translations[currentLang]['alert_copied'] || '✅ Adresse copiée dans le presse-papiers !';
+        alert(message);
     });
 }
 
@@ -514,12 +590,18 @@ async function addToWallet() {
                     }
                 }
             });
-            alert('✅ LFIST ajouté à MetaMask !');
+            const currentLang = localStorage.getItem('lfist_language') || 'fr';
+            const message = translations[currentLang]['alert_metamask_added'] || '✅ LFIST ajouté à MetaMask !';
+            alert(message);
         } catch (error) {
-            alert('❌ Erreur lors de l\'ajout à MetaMask');
+            const currentLang = localStorage.getItem('lfist_language') || 'fr';
+            const message = translations[currentLang]['alert_metamask_error'] || '❌ Erreur lors de l\'ajout à MetaMask';
+            alert(message);
         }
     } else {
-        alert('❌ MetaMask non détecté. Installez MetaMask pour continuer.');
+        const currentLang = localStorage.getItem('lfist_language') || 'fr';
+        const message = translations[currentLang]['alert_metamask_not_found'] || '❌ MetaMask non détecté. Installez MetaMask pour continuer.';
+        alert(message);
     }
 }
 
@@ -533,199 +615,7 @@ function joinTelegram() {
     window.open('https://t.me/lfistcoin', '_blank');
 }
 
-// Menu burger mobile amélioré
-document.addEventListener('DOMContentLoaded', function() {
-    const burger = document.getElementById('burger');
-    const navMenu = document.getElementById('nav-menu');
-    const body = document.body;
-    
-    if (burger && navMenu) {
-        burger.addEventListener('click', function(e) {
-            e.stopPropagation();
-            navMenu.classList.toggle('active');
-            burger.classList.toggle('active');
-            
-            // Animation du burger et gestion du scroll
-            if (navMenu.classList.contains('active')) {
-                burger.innerHTML = '✕';
-                body.style.overflow = 'hidden'; // Empêche le scroll en arrière-plan
-            } else {
-                burger.innerHTML = '☰';
-                body.style.overflow = 'auto';
-            }
-        });
-        
-        // Fermer le menu quand on clique sur un lien
-        const navLinks = navMenu.querySelectorAll('a');
-        navLinks.forEach(link => {
-            link.addEventListener('click', function() {
-                // Ne ferme pas le menu pour les liens externes (white paper)
-                if (!link.hasAttribute('target')) {
-                    closeMenu();
-                }
-            });
-        });
-        
-        // Fermer le menu quand on clique en dehors
-        document.addEventListener('click', function(e) {
-            if (!burger.contains(e.target) && !navMenu.contains(e.target)) {
-                closeMenu();
-            }
-        });
-        
-        // Fermer le menu avec la touche Escape
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && navMenu.classList.contains('active')) {
-                closeMenu();
-            }
-        });
-        
-        // Fonction pour fermer le menu
-        function closeMenu() {
-            navMenu.classList.remove('active');
-            burger.classList.remove('active');
-            burger.innerHTML = '☰';
-            body.style.overflow = 'auto';
-        }
-        
-        // Gérer le redimensionnement de la fenêtre
-        window.addEventListener('resize', function() {
-            if (window.innerWidth > 768 && navMenu.classList.contains('active')) {
-                closeMenu();
-            }
-        });
-    }
-    
-    // Smooth scroll amélioré pour mobile
-    const navLinksInternal = document.querySelectorAll('a[href^="#"]');
-    navLinksInternal.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            const targetId = this.getAttribute('href');
-            const targetSection = document.querySelector(targetId);
-            
-            if (targetSection) {
-                const headerHeight = document.querySelector('header').offsetHeight;
-                const targetPosition = targetSection.offsetTop - headerHeight - 20;
-                
-                window.scrollTo({
-                    top: targetPosition,
-                    behavior: 'smooth'
-                });
-            }
-        });
-    });
-    
-    // Initialiser le système de traduction
-    setTimeout(() => {
-        if (typeof window.initLanguage === 'function') {
-            window.initLanguage();
-        }
-    }, 100);
-    
-    // Initialiser le bouton de langue si pas déjà fait
-    const languageButton = document.getElementById('languageButton');
-    if (languageButton) {
-        languageButton.addEventListener('click', function() {
-            const currentLang = localStorage.getItem('lfist_language') || 'fr';
-            const nextLang = currentLang === 'fr' ? 'en' : 'fr';
-            
-            if (typeof window.changeLanguage === 'function') {
-                window.changeLanguage(nextLang);
-            }
-        });
-    }
-    
-    // Compteur de visites
-    initVisitCounter();
-});
-
-// Système de compteur de visites persistant
-function initVisitCounter() {
-    const visitCountElement = document.getElementById('visitCount');
-    if (!visitCountElement) return;
-    
-    // Clé unique pour le site
-    const SITE_KEY = 'lfist_visits';
-    const VISITOR_KEY = 'lfist_visitor_id';
-    
-    // Générer un ID unique pour le visiteur s'il n'existe pas
-    let visitorId = localStorage.getItem(VISITOR_KEY);
-    if (!visitorId) {
-        visitorId = 'visitor_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-        localStorage.setItem(VISITOR_KEY, visitorId);
-    }
-    
-    // Vérifier si c'est une nouvelle visite (pas dans les dernières 24h)
-    const lastVisit = localStorage.getItem('lfist_last_visit');
-    const now = Date.now();
-    const isNewVisit = !lastVisit || (now - parseInt(lastVisit)) > 24 * 60 * 60 * 1000; // 24h
-    
-    // Utiliser une API gratuite pour persister les données
-    updateVisitCount(isNewVisit, visitCountElement);
-    
-    if (isNewVisit) {
-        localStorage.setItem('lfist_last_visit', now.toString());
-    }
-}
-
-async function updateVisitCount(isNewVisit, element) {
-    try {
-        // Utiliser JSONBin.io comme stockage gratuit
-        const API_KEY = '$2a$10$8vJ9FqiEQJ4rJ5kJ5kJ5kOeJ5kJ5kJ5kJ5kJ5kJ5kJ5kJ5kJ5kJ5k';
-        const BIN_ID = '676b8e8ead19ca34f8d4c123'; // ID fictif, vous devrez créer votre propre bin
-        
-        // Récupérer le count actuel depuis le localStorage comme fallback
-        let currentCount = parseInt(localStorage.getItem('lfist_total_visits')) || 1247; // Nombre de base
-        
-        if (isNewVisit) {
-            currentCount++;
-            localStorage.setItem('lfist_total_visits', currentCount.toString());
-        }
-        
-        // Afficher le count avec animation
-        animateCounter(element, currentCount);
-        
-        // Essayer de synchroniser avec une API (optionnel)
-        try {
-            // Ici vous pourriez ajouter une vraie API si nécessaire
-            // Pour l'instant, on utilise juste le localStorage
-        } catch (apiError) {
-            console.log('API sync failed, using local storage');
-        }
-        
-    } catch (error) {
-        console.log('Visit counter error:', error);
-        // Fallback: utiliser juste un nombre local
-        const fallbackCount = parseInt(localStorage.getItem('lfist_total_visits')) || 1247;
-        element.textContent = fallbackCount.toLocaleString();
-    }
-}
-
-function animateCounter(element, targetCount) {
-    const startCount = parseInt(element.textContent.replace(/,/g, '')) || 0;
-    const duration = 2000; // 2 secondes
-    const startTime = Date.now();
-    
-    function updateCount() {
-        const elapsed = Date.now() - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        
-        // Easing function pour une animation plus fluide
-        const easeOutQuart = 1 - Math.pow(1 - progress, 4);
-        const currentCount = Math.floor(startCount + (targetCount - startCount) * easeOutQuart);
-        
-        element.textContent = currentCount.toLocaleString();
-        
-        if (progress < 1) {
-            requestAnimationFrame(updateCount);
-        } else {
-            element.textContent = targetCount.toLocaleString();
-        }
-    }
-    
-    updateCount();
-}
+// Le compteur de visites est maintenant géré par visit-counter.js
 </script>
 
 </body>
