@@ -1,0 +1,314 @@
+/* ===== OPTIMISATIONS GLOBALES POUR L'AFFICHAGE ===== */
+
+/* Optimisation générale des images */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
+/* Conteneurs d'images optimisés */
+.image-container, .fun-emoji, .card img {
+  overflow: hidden;
+  position: relative;
+}
+
+/* Amélioration de l'affichage des cartes */
+.card {
+  min-height: 350px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card img {
+  flex-shrink: 0;
+  width: 100%;
+  height: 180px;
+  object-fit: contain;
+  object-position: center;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  transition: transform 0.3s ease;
+}
+
+.card:hover img {
+  transform: scale(1.02);
+}
+
+/* Optimisation des grilles */
+.card-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  justify-items: center;
+  align-items: stretch;
+  width: 100%;
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+/* Amélioration de l'espacement vertical */
+.section {
+  margin-bottom: 4rem;
+}
+
+.section:last-child {
+  margin-bottom: 2rem;
+}
+
+/* Optimisation des titres */
+h1, h2, h3 {
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+h2 {
+  margin-bottom: 1.5rem;
+}
+
+/* Amélioration de la lisibilité des paragraphes */
+p {
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+/* Optimisation des boutons */
+.btn {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ===== RESPONSIVE OPTIMIZATIONS ===== */
+
+/* Tablettes */
+@media (max-width: 1024px) {
+  .card-container {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    padding: 0 1rem;
+  }
+  
+  .card {
+    min-height: 320px;
+  }
+  
+  .card img {
+    height: 160px;
+  }
+  
+  .section {
+    padding: 2rem 1rem;
+    margin-bottom: 3rem;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .card-container {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    max-width: 400px;
+  }
+  
+  .card {
+    min-height: 300px;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+  
+  .card img {
+    height: 150px;
+  }
+  
+  .section {
+    padding: 1.5rem 1rem;
+    margin-bottom: 2rem;
+  }
+  
+  h1 {
+    font-size: 1.8rem;
+    line-height: 1.2;
+  }
+  
+  h2 {
+    font-size: 1.6rem;
+    line-height: 1.2;
+  }
+  
+  h3 {
+    font-size: 1.2rem;
+    line-height: 1.2;
+  }
+  
+  p {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+  
+  .btn {
+    width: 100%;
+    max-width: 300px;
+    padding: 1rem;
+    font-size: 1rem;
+  }
+}
+
+/* Très petits écrans */
+@media (max-width: 480px) {
+  .card-container {
+    max-width: 100%;
+    padding: 0 0.5rem;
+  }
+  
+  .card {
+    min-height: 280px;
+    padding: 1rem;
+  }
+  
+  .card img {
+    height: 130px;
+  }
+  
+  .section {
+    padding: 1rem 0.5rem;
+  }
+  
+  h1 {
+    font-size: 1.5rem;
+  }
+  
+  h2 {
+    font-size: 1.4rem;
+  }
+  
+  h3 {
+    font-size: 1.1rem;
+  }
+  
+  p {
+    font-size: 0.9rem;
+  }
+}
+
+/* ===== OPTIMISATIONS POUR LES PERFORMANCES ===== */
+
+/* Lazy loading pour les images */
+img[loading="lazy"] {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+img[loading="lazy"].loaded {
+  opacity: 1;
+}
+
+/* Optimisation des animations sur mobile */
+@media (max-width: 768px) {
+  * {
+    animation-duration: 0.5s !important;
+  }
+  
+  .card:hover {
+    transform: none;
+  }
+  
+  .btn:hover {
+    transform: none;
+  }
+}
+
+/* Réduction des animations pour les utilisateurs qui préfèrent moins de mouvement */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .card:hover,
+  .btn:hover {
+    transform: none;
+  }
+}
+
+/* ===== OPTIMISATIONS POUR L'ACCESSIBILITÉ ===== */
+
+/* Amélioration du contraste */
+@media (prefers-contrast: high) {
+  .card {
+    border: 2px solid #fff;
+  }
+  
+  .btn {
+    border: 2px solid #fff;
+  }
+}
+
+/* Optimisation pour les écrans à haute densité */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  img {
+    image-rendering: -webkit-optimize-contrast;
+  }
+}
+
+/* ===== OPTIMISATIONS SPÉCIFIQUES POUR LFIST ===== */
+
+/* Hero section optimisée */
+.hero .fun-emoji img {
+  max-width: 90%;
+  height: auto;
+  max-height: 400px;
+  object-fit: contain;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .hero .fun-emoji img {
+    max-height: 250px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero .fun-emoji img {
+    max-height: 200px;
+  }
+}
+
+/* Optimisation des images d'équipe */
+.card img[alt*="Laurie"],
+.card img[alt*="Julien"],
+.card img[alt*="Sasha"] {
+  object-fit: cover;
+  object-position: center top;
+}
+
+/* Optimisation des images de mission */
+.card img[alt*="Humour"],
+.card img[alt*="DeFi"],
+.card img[alt*="Communauté"] {
+  object-fit: contain;
+  object-position: center;
+}
+
+/* Optimisation pour les images PNG avec transparence */
+.card img[src$=".png"] {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Optimisation pour les images JPEG */
+.card img[src$=".jpeg"],
+.card img[src$=".jpg"] {
+  background: rgba(0, 0, 0, 0.1);
+}

@@ -1,0 +1,880 @@
+/* CSS spécifique pour FIST-DETECTOR */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Press+Start+2P&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Orbitron', monospace;
+  background: linear-gradient(135deg, #0f0f23, #1a1a2e, #16213e);
+  color: #e8e8e8;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Header */
+header {
+  background: rgba(26, 26, 46, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 1rem 2rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  border-bottom: 2px solid #ff00cc;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 1.5rem;
+  color: #ff00cc;
+  text-shadow: 0 0 10px #ff00cc;
+}
+
+.nav-menu {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.nav-menu a {
+  color: #e8e8e8;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+}
+
+.nav-menu a:hover {
+  color: #00ffe7;
+  background: rgba(0, 255, 231, 0.1);
+  transform: translateY(-2px);
+}
+
+.language-btn {
+  background: linear-gradient(45deg, #ff00cc, #00ffe7);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  color: #000;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.language-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(255, 0, 204, 0.5);
+}
+
+/* Header Controls Container */
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.burger {
+  display: none; /* Caché sur desktop */
+  font-size: 1.8rem;
+  cursor: pointer;
+  color: #ff00cc;
+  padding: 0.5rem;
+  border-radius: 8px;
+  background: rgba(255, 0, 204, 0.1);
+  border: 2px solid rgba(255, 0, 204, 0.3);
+  transition: all 0.3s ease;
+}
+
+.burger:hover {
+  background: rgba(255, 0, 204, 0.2);
+  border-color: #ff00cc;
+  transform: scale(1.1);
+}
+
+.burger.active {
+  background: #ff00cc;
+  color: white;
+  transform: rotate(90deg);
+}
+
+/* Hero Section */
+.hero {
+  text-align: center;
+  padding: 8rem 2rem 4rem;
+  background: radial-gradient(circle at center, rgba(255, 0, 204, 0.1), transparent);
+}
+
+.hero h1 {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  color: #ff00cc;
+  text-shadow: 0 0 20px #ff00cc;
+}
+
+.highlight {
+  color: #00ffe7;
+  text-shadow: 0 0 20px #00ffe7;
+}
+
+.hero p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  color: #e8e8e8;
+}
+
+/* Animations */
+.floating-fifi {
+  animation: float 3s ease-in-out infinite;
+}
+
+.swaying-vinni {
+  animation: sway 4s ease-in-out infinite;
+}
+
+.bouncing-presentation {
+  animation: bounce 2s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes sway {
+  0%, 100% { transform: rotate(-5deg); }
+  50% { transform: rotate(5deg); }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-15px); }
+}
+
+.wiggling-alien {
+  animation: wiggle 2s ease-in-out infinite;
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(-3deg); }
+  50% { transform: rotate(3deg); }
+}
+
+/* Sections */
+.section {
+  padding: 4rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.section h2 {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #00ffe7;
+  text-shadow: 0 0 15px #00ffe7;
+  width: 100%;
+}
+
+.section p {
+  text-align: center;
+  max-width: 800px;
+  margin: 1rem auto;
+  color: #e8e8e8;
+  line-height: 1.6;
+}
+
+.neon-section {
+  background: rgba(255, 0, 204, 0.05);
+  border: 1px solid rgba(255, 0, 204, 0.2);
+  border-radius: 20px;
+  margin: 2rem auto;
+}
+
+/* Vote Countdown */
+.vote-countdown {
+  text-align: center;
+  margin: 2rem 0;
+  padding: 2rem;
+  background: rgba(0, 255, 231, 0.1);
+  border-radius: 15px;
+  border: 1px solid #00ffe7;
+}
+
+.vote-countdown h3 {
+  color: #ff00cc;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+
+#countdown {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 1.5rem;
+  color: #00ffe7;
+  text-shadow: 0 0 10px #00ffe7;
+}
+
+/* Victims Grid */
+.victims-grid, .card-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin: 2rem auto;
+  max-width: 1200px;
+  padding: 0 1rem;
+  justify-items: center;
+}
+
+.victim-card, .memecoin-card {
+  background: rgba(26, 26, 46, 0.8);
+  border: 2px solid #ff00cc;
+  border-radius: 15px;
+  padding: 2rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.victim-card:hover, .memecoin-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(255, 0, 204, 0.3);
+}
+
+.victim-card::before, .memecoin-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 0, 204, 0.1), transparent);
+  transition: left 0.5s;
+}
+
+.victim-card:hover::before, .memecoin-card:hover::before {
+  left: 100%;
+}
+
+.victim-card h3, .memecoin-card h3 {
+  color: #ff00cc;
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+}
+
+.victim-card p, .memecoin-card p {
+  color: #e8e8e8;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+/* Styles spécifiques pour les cartes memecoins */
+.memecoin-card img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin: 0 auto 1rem auto;
+  border: 2px solid #00ffe7;
+  object-fit: contain;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.2rem;
+  display: block;
+}
+
+.memecoin-card .vote-button {
+  background: linear-gradient(45deg, #ff00cc, #00ffe7);
+  border: none;
+  padding: 0.8rem 2rem;
+  border-radius: 25px;
+  color: #000;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+  text-transform: uppercase;
+  margin: 1rem 0;
+}
+
+.memecoin-card .vote-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(255, 0, 204, 0.5);
+}
+
+.memecoin-card .vote-button:disabled {
+  background: #666;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.memecoin-card .progress-container {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  height: 20px;
+  margin: 1rem 0;
+  overflow: hidden;
+}
+
+.memecoin-card .progress {
+  background: linear-gradient(45deg, #ff00cc, #00ffe7);
+  height: 100%;
+  border-radius: 10px;
+  transition: width 0.3s ease;
+}
+
+.memecoin-card .vote-count {
+  color: #00ffe7;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.memecoin-card .security-container {
+  margin: 1rem 0;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.memecoin-card .security-loading {
+  color: #00ffe7;
+  font-style: italic;
+}
+
+/* Message de vote */
+.meme-text {
+  text-align: center;
+  padding: 2rem;
+  background: rgba(255, 0, 204, 0.1);
+  border: 1px solid #ff00cc;
+  border-radius: 15px;
+  margin: 2rem auto;
+  max-width: 800px;
+  color: #e8e8e8;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+/* Section de recherche de sécurité */
+.security-search-section {
+  background: rgba(0, 255, 231, 0.05);
+  border-radius: 20px;
+  margin: 2rem auto;
+  border: 1px solid rgba(0, 255, 231, 0.2);
+}
+
+.search-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem 0;
+}
+
+.search-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.contract-input {
+  padding: 1rem;
+  border: 2px solid #00ffe7;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.3);
+  color: #e8e8e8;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.contract-input:focus {
+  outline: none;
+  border-color: #ff00cc;
+  box-shadow: 0 0 15px rgba(255, 0, 204, 0.3);
+}
+
+.chain-select {
+  padding: 1rem;
+  border: 2px solid #00ffe7;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.3);
+  color: #e8e8e8;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.analyze-btn {
+  background: linear-gradient(45deg, #00ffe7, #ff00cc);
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 25px;
+  color: #000;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+  text-transform: uppercase;
+}
+
+.analyze-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(0, 255, 231, 0.5);
+}
+
+.analysis-result {
+  margin-top: 2rem;
+  padding: 2rem;
+  border-radius: 15px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Community Section - Centrage simple */
+.community-section {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: rgba(0, 255, 231, 0.05);
+  border-radius: 20px;
+  margin: 2rem auto;
+  max-width: 1200px;
+}
+
+.community-section h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.community-section p {
+  text-align: center;
+  max-width: 600px;
+  margin: 1rem auto 2rem auto;
+}
+
+
+
+.community-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 2rem 0;
+}
+
+.btn-social {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 2rem;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.btn-social.x {
+  background: linear-gradient(45deg, #000, #333);
+  color: white;
+  border-color: #ff00cc;
+}
+
+.btn-social.telegram {
+  background: linear-gradient(45deg, #0088cc, #00aaff);
+  color: white;
+  border-color: #00ffe7;
+}
+
+.btn-social:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.email-contact {
+  margin-top: 2rem;
+  font-size: 1.1rem;
+  color: #e8e8e8;
+}
+
+.email-link {
+  color: #00ffe7;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.email-link:hover {
+  text-shadow: 0 0 5px #00ffe7;
+}
+
+.vote-btn {
+  background: linear-gradient(45deg, #ff00cc, #00ffe7);
+  border: none;
+  padding: 0.8rem 2rem;
+  border-radius: 25px;
+  color: #000;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+  text-transform: uppercase;
+}
+
+.vote-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(255, 0, 204, 0.5);
+}
+
+.vote-btn:disabled {
+  background: #666;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Vote Message */
+.vote-message {
+  text-align: center;
+  padding: 2rem;
+  background: rgba(255, 0, 204, 0.1);
+  border: 1px solid #ff00cc;
+  border-radius: 15px;
+  margin: 2rem 0;
+}
+
+.vote-message p {
+  color: #e8e8e8;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+
+
+.community-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 2rem 0;
+}
+
+.btn-social {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 2rem;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.btn-social.x {
+  background: linear-gradient(45deg, #000, #333);
+  color: white;
+  border-color: #ff00cc;
+}
+
+.btn-social.telegram {
+  background: linear-gradient(45deg, #0088cc, #00aaff);
+  color: white;
+  border-color: #00ffe7;
+}
+
+.btn-social:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.email-contact {
+  margin-top: 2rem;
+  font-size: 1.1rem;
+  color: #e8e8e8;
+}
+
+.email-link {
+  color: #00ffe7;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.email-link:hover {
+  text-shadow: 0 0 5px #00ffe7;
+}
+
+/* Footer */
+footer {
+  background: #1a1a2e;
+  text-align: center;
+  padding: 1.5rem 1rem;
+  margin-top: auto;
+  font-size: 0.9rem;
+  color: #e8e8e8;
+  border-top: 2px solid #ff00cc;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.visit-counter {
+  background: rgba(255, 0, 204, 0.1);
+  border: 1px solid #ff00cc;
+  border-radius: 20px;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  color: #00ffe7;
+  font-weight: bold;
+}
+
+.visit-counter span {
+  text-shadow: 0 0 5px #00ffe7;
+}
+
+.meme-footer {
+  color: #ff00cc;
+  margin-left: 0.5rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  header {
+    padding: 1rem;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .logo {
+    font-size: 1.3rem;
+    flex: 1;
+  }
+  
+  .burger {
+    display: block;
+    font-size: 2rem;
+    min-width: 50px;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .language-btn {
+    font-size: 0.7rem;
+    padding: 0.4rem 0.8rem;
+  }
+  
+  .nav-menu {
+    position: fixed;
+    top: 80px;
+    left: -100%;
+    width: 100%;
+    height: calc(100vh - 80px);
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 2rem 0;
+    transition: left 0.3s ease;
+    z-index: 999;
+    border-top: 2px solid #ff00cc;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    overflow-y: auto;
+  }
+  
+  .nav-menu.active {
+    left: 0;
+  }
+  
+  .nav-menu a {
+    width: 80%;
+    text-align: center;
+    padding: 1rem;
+    margin: 0.5rem 0;
+    border: 1px solid rgba(255, 0, 204, 0.3);
+    border-radius: 10px;
+  }
+  
+  .hero h1 {
+    font-size: 2rem;
+  }
+  
+  .hero p {
+    font-size: 1rem;
+  }
+  
+  .section {
+    padding: 2rem 1rem;
+  }
+  
+  .section h2 {
+    font-size: 1.5rem;
+  }
+  
+  .victims-grid, .card-container {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 0 1rem;
+    margin: 1.5rem auto;
+  }
+  
+  .victim-card, .memecoin-card {
+    max-width: 100%;
+    margin: 0 auto;
+  }
+  
+  .community-buttons {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .btn-social {
+    width: 100%;
+    max-width: 300px;
+    justify-content: center;
+  }
+  
+  .fun-emoji {
+    flex-direction: column !important;
+    gap: 2rem !important;
+    position: relative !important;
+  }
+  
+  .fun-emoji .image-container {
+    position: relative !important;
+    left: auto !important;
+    right: auto !important;
+    display: flex;
+    justify-content: center;
+    margin: 1rem 0;
+  }
+  
+  .fun-emoji img {
+    height: 120px !important;
+    max-height: 120px !important;
+    object-fit: contain;
+  }
+  
+  .footer-content {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+  
+  .visit-counter {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    padding: 6rem 1rem 2rem;
+  }
+  
+  .hero h1 {
+    font-size: 1.5rem;
+  }
+  
+  .victim-card, .memecoin-card {
+    padding: 1.5rem;
+    margin: 0 auto 1rem auto;
+    max-width: 100%;
+  }
+  
+  #countdown {
+    font-size: 1rem;
+  }
+  
+  .search-input-group {
+    gap: 0.8rem;
+  }
+  
+  .contract-input, .chain-select, .analyze-btn {
+    padding: 0.8rem;
+    font-size: 0.9rem;
+  }
+  
+  .vote-countdown {
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+  }
+  
+  .vote-countdown h3 {
+    font-size: 1rem;
+  }
+}
+
+/* Amélioration générale des images */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Optimisation des conteneurs d'images */
+.image-container {
+  overflow: hidden;
+  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Amélioration de l'espacement des sections */
+.section + .section {
+  margin-top: 3rem;
+}
+
+/* Optimisation des grilles pour un meilleur rendu */
+.victims-grid, .card-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  justify-items: center;
+  align-items: stretch;
+  width: 100%;
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+/* Amélioration des hauteurs uniformes */
+.victim-card, .memecoin-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between;
+}
+
+.memecoin-card p {
+  flex-grow: 1;
+}
