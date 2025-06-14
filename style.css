@@ -18,7 +18,7 @@ body {
 }
 
 /* CENTRAGE GLOBAL - Force le centrage de toutes les sections importantes */
-#presentation, #mission, #equipe, #tokenomics, #security-alert, #roadmap, #faq, #contact {
+#presentation, #mission, #equipe, #tokenomics, #listings, #security-alert, #roadmap, #faq, #contact {
   text-align: center !important;
   display: flex !important;
   flex-direction: column !important;
@@ -31,7 +31,7 @@ body {
 }
 
 /* Centrage spécifique pour chaque section */
-.section, .tokenomics-section, .security-alert-section, .roadmap-section, .faq-section, .community-section {
+.section, .tokenomics-section, .listings-section, .security-alert-section, .roadmap-section, .faq-section, .community-section {
   text-align: center !important;
   display: flex !important;
   flex-direction: column !important;
@@ -41,7 +41,7 @@ body {
 }
 
 /* Force le centrage des contenus dans ces sections */
-.tokenomics-section *, .security-alert-section *, .roadmap-section *, .faq-section *, .community-section * {
+.tokenomics-section *, .listings-section *, .security-alert-section *, .roadmap-section *, .faq-section *, .community-section * {
   text-align: center !important;
 }
 
