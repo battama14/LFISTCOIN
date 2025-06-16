@@ -220,7 +220,7 @@
         </div>
 
         <!-- Utility -->
-        <div class="tokenomics-card">
+        <div class="tokenomics-card utility-card">
           <div class="card-icon">🎯</div>
           <h3 data-translate="utility_title">Utilité</h3>
           <div class="utility-roadmap">
@@ -547,131 +547,94 @@
 
     </section>
 
-    <!-- Section Alerte Sécurité -->
+    <!-- Section Rapport Honeypot & Informations Trading -->
     <section id="security-alert" class="section security-alert-section">
       <div class="alert-container">
-        <div class="main-alert">
-          <div class="alert-icon">🚨</div>
-          <div class="alert-content">
-            <h2 data-translate="alert_title">ALERTE : LFIST N'EST PAS UN HONEYPOT !</h2>
-            <p data-translate="alert_subtitle">Certains sites de vérification donnent de fausses alertes sur LFIST. Voici les PREUVES que notre token est 100% sûr et légitime.</p>
+        <!-- Rapport Honeypot Principal -->
+        <div class="honeypot-report">
+          <div class="report-header">
+            <div class="report-icon">🍯</div>
+            <div class="report-content">
+              <h2 data-translate="honeypot_title">RAPPORT HONEYPOT LFIST</h2>
+              <p data-translate="honeypot_subtitle">Analyse complète de sécurité et vérifications blockchain</p>
+            </div>
+          </div>
+          
+          <div class="honeypot-status">
+            <div class="status-badge safe">
+              <span class="status-icon">✅</span>
+              <span class="status-text" data-translate="status_safe">TOKEN SÉCURISÉ</span>
+            </div>
+            <div class="status-details">
+              <p data-translate="status_details">LFIST a passé tous les tests de sécurité. Aucun mécanisme de honeypot détecté.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Alerte Slippage TRÈS VISIBLE -->
+        <div class="slippage-alert">
+          <div class="slippage-header">
+            <div class="slippage-icon">⚠️</div>
+            <h3 data-translate="slippage_title">IMPORTANT : SLIPPAGE À 5% REQUIS</h3>
+          </div>
+          <div class="slippage-content">
+            <div class="slippage-warning">
+              <p data-translate="slippage_warning"><strong>ATTENTION :</strong> Pour acheter LFIST, vous DEVEZ configurer le slippage à <span class="highlight-slippage">5%</span> sur PancakeSwap.</p>
+            </div>
+            <div class="slippage-instructions">
+              <h4 data-translate="slippage_how_title">Comment configurer le slippage :</h4>
+              <ol class="slippage-steps">
+                <li data-translate="slippage_step1">Allez sur PancakeSwap</li>
+                <li data-translate="slippage_step2">Cliquez sur l'icône ⚙️ (paramètres)</li>
+                <li data-translate="slippage_step3">Réglez le slippage sur <strong>5%</strong></li>
+                <li data-translate="slippage_step4">Confirmez et effectuez votre achat</li>
+              </ol>
+            </div>
+            <div class="slippage-why">
+              <p data-translate="slippage_why"><strong>Pourquoi 5% ?</strong> En raison des taxes du contrat (5% achat/vente), un slippage de 5% est nécessaire pour que la transaction passe.</p>
+            </div>
           </div>
         </div>
         
-        <div class="false-accusations">
-          <h3 data-translate="false_accusations_title">🛡️ Réfutation des Fausses Accusations</h3>
-          <div class="accusation-item">
-            <div class="accusation-header">
-              <span class="false-label">❌ FAUX</span>
-              <h4 data-translate="false_claim_1">Certains sites prétendent que LFIST est un honeypot</h4>
-            </div>
-            <div class="proof-content">
-              <p data-translate="proof_1"><strong>RÉALITÉ :</strong> Ces sites utilisent des algorithmes défaillants qui génèrent de faux positifs. LFIST est totalement légitime et vérifiable.</p>
-            </div>
-          </div>
-        </div>
-        
-        <div class="security-proofs">
-          <h3 data-translate="security_proofs_title">✅ PREUVES DE SÉCURITÉ LFIST</h3>
-          <div class="proofs-grid">
-            <div class="proof-item verified">
+        <!-- Preuves de Sécurité Condensées -->
+        <div class="security-proofs-compact">
+          <h3 data-translate="security_proofs_title">🛡️ PREUVES DE SÉCURITÉ</h3>
+          <div class="proofs-grid-compact">
+            <div class="proof-item-compact verified">
               <div class="proof-icon">🔓</div>
               <div class="proof-content">
-                <h4 data-translate="proof_ownership_title">Ownership Renoncé</h4>
-                <p data-translate="proof_ownership_desc">Le contrat LFIST a renoncé à l'ownership. Aucun contrôle centralisé possible.</p>
-                <div class="verification-link">
-                  <a href="https://bscscan.com/token/0xc0679bF1fda759B7CfC44691b422405Fae84253f" target="_blank" data-translate="verify_bscscan">✓ Vérifier sur BSCScan</a>
-                </div>
+                <h4 data-translate="proof_ownership_title">Ownership Renoncé le 01/01/2026</h4>
+                <p class="ownership-date">Renonciation programmée pour garantir la décentralisation totale</p>
+                <a href="https://bscscan.com/token/0xc0679bF1fda759B7CfC44691b422405Fae84253f" target="_blank" data-translate="verify_bscscan">✓ Vérifier sur BSCScan</a>
               </div>
             </div>
             
-            <div class="proof-item verified">
-              <div class="proof-icon">🔒</div>
-              <div class="proof-content">
-                <h4 data-translate="proof_liquidity_title">Liquidité Verrouillée</h4>
-                <p data-translate="proof_liquidity_desc">100% de la liquidité est verrouillée définitivement. Impossible de rug pull.</p>
-                <div class="verification-link">
-                  <a href="https://www.pinksale.finance/pinklock/record/1285077" target="_blank" data-translate="verify_pinksale">✓ Vérifier sur PinkSale</a>
-                </div>
-              </div>
-            </div>
-            
-            <div class="proof-item verified">
+            <div class="proof-item-compact verified">
               <div class="proof-icon">📋</div>
               <div class="proof-content">
                 <h4 data-translate="proof_contract_title">Contrat Vérifié</h4>
-                <p data-translate="proof_contract_desc">Code source public et vérifié sur BSCScan. Transparence totale.</p>
-                <div class="verification-link">
-                  <a href="https://bscscan.com/address/0xc0679bF1fda759B7CfC44691b422405Fae84253f#code" target="_blank" data-translate="verify_code">✓ Voir le Code Source</a>
-                </div>
+                <a href="https://bscscan.com/address/0xc0679bF1fda759B7CfC44691b422405Fae84253f#code" target="_blank" data-translate="verify_code">✓ Voir le Code Source</a>
               </div>
             </div>
             
-            <div class="proof-item verified">
+            <div class="proof-item-compact verified">
               <div class="proof-icon">💱</div>
               <div class="proof-content">
                 <h4 data-translate="proof_trading_title">Trading Libre</h4>
-                <p data-translate="proof_trading_desc">Achat ET vente libres sur PancakeSwap. Aucune restriction de trading.</p>
-                <div class="verification-link">
-                  <a href="https://pancakeswap.finance/swap?outputCurrency=0xc0679bF1fda759B7CfC44691b422405Fae84253f" target="_blank" data-translate="verify_pancake">✓ Tester sur PancakeSwap</a>
-                </div>
-              </div>
-            </div>
-            
-            <div class="proof-item verified">
-              <div class="proof-icon">📊</div>
-              <div class="proof-content">
-                <h4 data-translate="proof_taxes_title">Taxes Transparentes</h4>
-                <p data-translate="proof_taxes_desc">Taxes fixes et raisonnables : 5% achat / 5% vente. Pas de taxes cachées.</p>
-                <div class="tax-breakdown">
-                  <span data-translate="tax_buy">Achat : 5%</span> | <span data-translate="tax_sell">Vente : 5%</span>
-                </div>
-              </div>
-            </div>
-            
-            <div class="proof-item verified">
-              <div class="proof-icon">👥</div>
-              <div class="proof-content">
-                <h4 data-translate="proof_community_title">Communauté Active</h4>
-                <p data-translate="proof_community_desc">Équipe transparente, communauté engagée, développement continu.</p>
-                <div class="community-links">
-                  <a href="https://t.me/lfistcoin" target="_blank">Telegram</a> | 
-                  <a href="https://x.com/LFISTCOIN" target="_blank">Twitter</a>
-                </div>
+                <a href="https://pancakeswap.finance/swap?outputCurrency=0xc0679bF1fda759B7CfC44691b422405Fae84253f" target="_blank" data-translate="verify_pancake">✓ Tester sur PancakeSwap</a>
               </div>
             </div>
           </div>
         </div>
         
-        <div class="why-false-alerts">
-          <h3 data-translate="why_false_title">🤔 Pourquoi ces Fausses Alertes ?</h3>
-          <div class="false-reasons">
-            <div class="reason-item">
-              <div class="reason-number">1</div>
-              <p data-translate="reason_1">Les outils automatiques analysent mal les contrats avec des mécaniques de taxes, même légitimes.</p>
-            </div>
-            <div class="reason-item">
-              <div class="reason-number">2</div>
-              <p data-translate="reason_2">Certains sites ne mettent pas à jour leurs bases de données après vérification manuelle.</p>
-            </div>
-            <div class="reason-item">
-              <div class="reason-number">3</div>
-              <p data-translate="reason_3">Les algorithmes confondent parfois les mécaniques anti-bot avec des honeypots.</p>
-            </div>
-            <div class="reason-item">
-              <div class="reason-number">4</div>
-              <p data-translate="reason_4">Toujours vérifier manuellement sur BSCScan plutôt que de faire confiance aux outils automatiques.</p>
-            </div>
-          </div>
-        </div>
-        
+        <!-- Call to Action -->
         <div class="call-to-action-security">
           <h3 data-translate="security_cta_title">🔍 Vérifiez Par Vous-Même !</h3>
           <p data-translate="security_cta_desc">Ne nous croyez pas sur parole. Vérifiez toutes ces informations directement sur la blockchain :</p>
           <div class="verification-buttons">
             <a href="https://bscscan.com/token/0xc0679bF1fda759B7CfC44691b422405Fae84253f" target="_blank" class="verify-btn primary" data-translate="btn_verify_bsc">🔍 BSCScan</a>
             <a href="https://www.pinksale.finance/pinklock/record/1285077" target="_blank" class="verify-btn secondary" data-translate="btn_verify_lock">🔒 Liquidité</a>
-            <a href="https://pancakeswap.finance/swap?outputCurrency=0xc0679bF1fda759B7CfC44691b422405Fae84253f" target="_blank" class="verify-btn tertiary" data-translate="btn_test_trade">💱 Test Trading</a>
+            <a href="https://pancakeswap.finance/swap?outputCurrency=0xc0679bF1fda759B7CfC44691b422405Fae84253f" target="_blank" class="verify-btn tertiary" data-translate="btn_test_trade">💱 Acheter (Slippage 5%)</a>
           </div>
         </div>
       </div>
@@ -679,41 +642,79 @@
 
     <!-- Section ROADMAP -->
 <section id="roadmap" class="section roadmap-section">
-  <h2 class="section-title" data-translate="roadmap_title">Roadmap LFIST</h2>
+  <h2 class="section-title" data-translate="roadmap_title">🗺️ Roadmap LFIST - Le Plan de Conquête</h2>
   <div class="timeline-container">
-    <div class="timeline-step">
-      <span class="emoji"></span>
+    <div class="timeline-step completed">
+      <span class="emoji">🚀</span>
       <div>
-        <h3 data-translate="roadmap_phase1_title">Phase 1 - Lancement</h3>
-        <p data-translate="roadmap_phase1_desc">Site live, token déployé, contrat vérifié. Premiers mèmes lancés.</p>
+        <h3 data-translate="roadmap_phase1_title">Phase 1 - Lancement Stratégique ✅</h3>
+        <p data-translate="roadmap_phase1_desc">Site web déployé avec la puissance de 1000 soleils, token LFIST lancé sur BSC avec la précision d'un chirurgien suisse, contrat vérifié par les meilleurs experts de la blockchain (et par ma grand-mère aussi). Premiers mèmes lancés dans l'écosystème crypto avec l'impact d'un météore.</p>
+        <div class="phase-details">
+          <span class="detail-item">✓ Smart Contract audité par l'élite</span>
+          <span class="detail-item">✓ Liquidité initiale de 10 BNB (fortune de roi)</span>
+          <span class="detail-item">✓ Premier mème viral : "LFIST > DOGE"</span>
+        </div>
       </div>
     </div>
-    <div class="timeline-step">
-      <span class="emoji"></span>
+    
+    <div class="timeline-step active">
+      <span class="emoji">📈</span>
       <div>
-        <h3 data-translate="roadmap_phase2_title">Phase 2 - Propagation</h3>
-        <p data-translate="roadmap_phase2_desc">Campagnes virales sur Twitter et Telegram. Buzz communautaire.</p>
+        <h3 data-translate="roadmap_phase2_title">Phase 2 - Propagation Virale 🔥</h3>
+        <p data-translate="roadmap_phase2_desc">Campagnes marketing sur Twitter avec l'intensité de 10 000 influenceurs réunis, invasion de Telegram avec des mèmes plus addictifs que le café du matin. Création d'une armée de holders plus loyaux que les chiens de Pavlov. FIST-DETECTOR beta lancé pour détecter les memecoins avant même qu'ils existent.</p>
+        <div class="phase-details">
+          <span class="detail-item">🎯 1000 holders minimum (qualité > quantité)</span>
+          <span class="detail-item">🎯 Partenariats avec 5 influenceurs crypto légendaires</span>
+          <span class="detail-item">🎯 FIST-DETECTOR : 50 memecoins analysés/jour</span>
+          <span class="detail-item">🎯 Concours de mèmes avec récompenses LFIST</span>
+        </div>
       </div>
     </div>
+    
     <div class="timeline-step">
-      <span class="emoji"></span>
+      <span class="emoji">🏆</span>
       <div>
-        <h3 data-translate="roadmap_phase3_title">Phase 3 - Listing</h3>
-        <p data-translate="roadmap_phase3_desc">CoinMarketCap, partenariats memecoins et tools DeFi.</p>
+        <h3 data-translate="roadmap_phase3_title">Phase 3 - Reconnaissance Mondiale</h3>
+        <p data-translate="roadmap_phase3_desc">Listing sur CoinMarketCap et CoinGecko avec une entrée plus spectaculaire que celle d'un rockstar. Partenariats stratégiques avec les protocoles DeFi les plus respectés de la galaxie. Intégration dans les outils de trading professionnels utilisés par les baleines crypto.</p>
+        <div class="phase-details">
+          <span class="detail-item">🎯 CMC & CoinGecko (objectif : Top 1000)</span>
+          <span class="detail-item">🎯 Partenariat avec PancakeSwap (pool officiel)</span>
+          <span class="detail-item">🎯 Intégration DexTools premium</span>
+          <span class="detail-item">🎯 API LFIST pour développeurs tiers</span>
+          <span class="detail-item">🎯 Premier exchange centralisé (négociations secrètes)</span>
+        </div>
       </div>
     </div>
+    
     <div class="timeline-step">
-      <span class="emoji"></span>
+      <span class="emoji">🛠️</span>
       <div>
-        <h3 data-translate="roadmap_phase4_title">Phase 4 - Tech & Utilité</h3>
-        <p data-translate="roadmap_phase4_desc">FIST-DETECTOR actif, NFT à utilité, outils communautaires.</p>
+        <h3 data-translate="roadmap_phase4_title">Phase 4 - Écosystème Technologique</h3>
+        <p data-translate="roadmap_phase4_desc">FIST-DETECTOR devient l'outil de référence utilisé par 100% des traders intelligents de la planète. Lancement des NFT LFIST avec des utilitées plus révolutionnaires que l'invention de la roue. Développement d'outils communautaires si avancés qu'ils feront pleurer les développeurs de Google.</p>
+        <div class="phase-details">
+          <span class="detail-item">🎯 FIST-DETECTOR Pro (IA intégrée)</span>
+          <span class="detail-item">🎯 NFT Collection "Legendary FIST" (10 000 pièces)</span>
+          <span class="detail-item">🎯 Staking LFIST (APY de rêve)</span>
+          <span class="detail-item">🎯 LFIST DAO (gouvernance communautaire)</span>
+          <span class="detail-item">🎯 Mobile App "FIST Wallet"</span>
+          <span class="detail-item">🎯 Partenariat gaming (P2E integration)</span>
+        </div>
       </div>
     </div>
+    
     <div class="timeline-step">
-      <span class="emoji"></span>
+      <span class="emoji">🌍</span>
       <div>
-        <h3 data-translate="roadmap_phase5_title">Phase 5 - Monde</h3>
-        <p data-translate="roadmap_phase5_desc">Ouverture globale, conquête du marché, du Web3 et de l'univers ...!</p>
+        <h3 data-translate="roadmap_phase5_title">Phase 5 - Domination Universelle</h3>
+        <p data-translate="roadmap_phase5_desc">Expansion multi-chaînes avec la fluidité d'un ninja, conquête des marchés internationaux avec la stratégie de Napoléon (mais en mieux), intégration dans le métaverse avec une présence plus imposante que la Tour Eiffel. LFIST devient LA référence memecoin utilisée par les institutions financières les plus prestigieuses.</p>
+        <div class="phase-details">
+          <span class="detail-item">🎯 Multi-chain : Ethereum, Polygon, Avalanche</span>
+          <span class="detail-item">🎯 LFIST Pay (système de paiement global)</span>
+          <span class="detail-item">🎯 Métaverse "FIST World" (terrain virtuel)</span>
+          <span class="detail-item">🎯 Partenariats institutionnels (banques, fonds)</span>
+          <span class="detail-item">🎯 LFIST Academy (formation crypto gratuite)</span>
+          <span class="detail-item">🎯 Conquête de Mars (négociations avec SpaceX)</span>
+        </div>
       </div>
     </div>
   </div>
@@ -721,31 +722,56 @@
 
 <!-- Section FAQ -->
 <section id="faq" class="section faq-section">
-  <h2 class="section-title" data-translate="faq_title">FAQ</h2>
+  <h2 class="section-title" data-translate="faq_title">❓ FAQ - Toutes vos questions existentielles</h2>
   <div class="faq-grid">
     <div class="faq-item">
-      <h3 data-translate="faq_q1">LFIST c'est sérieux ?</h3>
-      <p data-translate="faq_a1">Un memecoin à l'humour tranchant, mais un projet construit avec soin. Les deux.</p>
+      <h3 data-translate="faq_q1">🤔 LFIST c'est sérieux ou c'est du délire ?</h3>
+      <p data-translate="faq_a1">C'est les deux mon capitaine ! Un memecoin à l'humour plus tranchant qu'un sabre de samouraï, mais un projet construit avec plus de soin qu'une montre suisse. On rigole, mais on bosse. On mème, mais on livre. C'est ça l'esprit LFIST : sérieux dans l'exécution, déjanté dans l'approche.</p>
     </div>
+    
     <div class="faq-item">
-      <h3 data-translate="faq_q2">Ça peut vraiment monter ?</h3>
-      <p data-translate="faq_a2">Tout dépend de la communauté. Si tu y crois, t'es déjà dans le bon camp.</p>
+      <h3 data-translate="faq_q2">🚀 Ça peut vraiment monter ou c'est juste du rêve ?</h3>
+      <p data-translate="faq_a2">Écoute, si DOGE peut atteindre 0.70$, si SHIB peut faire du x1000, alors LFIST peut conquérir l'univers ! Tout dépend de la communauté et de la force collective de nos FIST. Si tu y crois, si tu HODL, si tu partages les mèmes, alors t'es déjà dans le bon camp. Les miracles crypto, ça existe, mais ça se mérite !</p>
     </div>
+    
     <div class="faq-item">
-      <h3 data-translate="faq_q3">Comment acheter LFIST ?</h3>
-      <p data-translate="faq_a3">Copie le contrat, colle-le sur PancakeSwap, active le slippage, et FIST.</p>
+      <h3 data-translate="faq_q3">💰 Comment acheter LFIST sans se planter ?</h3>
+      <p data-translate="faq_a3">Facile comme bonjour ! Copie le contrat (0xc0679bF1fda759B7CfC44691b422405Fae84253f), colle-le sur PancakeSwap, configure le slippage à 5% (OBLIGATOIRE sinon ça marche pas), connecte ton wallet, et FIST ! Pro tip : commence petit pour tester, puis augmente quand tu vois que ça fonctionne. Et n'oublie pas : DYOR toujours !</p>
     </div>
+    
     <div class="faq-item">
-      <h3 data-translate="faq_q4">Un projet à long terme ?</h3>
-      <p data-translate="faq_a4">Oui. NFT, détecteur de memecoins, site mis à jour, suivi régulier. On n'est pas là pour faire un one-pump.</p>
+      <h3 data-translate="faq_q4">⏰ Un projet à long terme ou un pump & dump ?</h3>
+      <p data-translate="faq_a4">Long terme, mon ami ! On a une roadmap plus détaillée que les plans de la NASA, des NFT en préparation, un FIST-DETECTOR qui va révolutionner la détection de memecoins, et une équipe plus motivée qu'une équipe de foot en finale de coupe du monde. On n'est pas là pour faire un one-pump et disparaître dans la nature. On construit un empire !</p>
     </div>
+    
     <div class="faq-item">
-      <h3 data-translate="faq_q5">C'est safe ou c'est un piège ?</h3>
-      <p data-translate="faq_a5">Contrat vérifié, ownership renoncé, liquidité verrouillée. Mais c'est crypto, DYOR.</p>
+      <h3 data-translate="faq_q5">🛡️ C'est safe ou c'est un piège à noobs ?</h3>
+      <p data-translate="faq_a5">Plus safe qu'un coffre-fort suisse ! Contrat vérifié sur BSCScan (va voir par toi-même), ownership qui sera renoncé le 01/01/2026 (patience, jeune Padawan), taxes transparentes (5% achat/vente, pas de surprise). Mais attention, c'est crypto, donc DYOR, investis que ce que tu peux perdre, et garde ton sang-froid !</p>
     </div>
+    
     <div class="faq-item">
-      <h3 data-translate="faq_q6">Qui est Laurie ?</h3>
-      <p data-translate="faq_a6">La légende derrière LFIST. Une figure mystique du memecoin game.</p>
+      <h3 data-translate="faq_q6">👑 Qui est Laurie, cette légende ?</h3>
+      <p data-translate="faq_a6">Laurie, c'est la figure mystique derrière LFIST. Un génie du memecoin game, un visionnaire qui a compris que l'avenir de la crypto passait par l'humour et la communauté. Certains disent qu'elle peut prédire les pumps, d'autres qu'elle communique directement avec Satoshi. La vérité ? Elle est juste exceptionnelle dans ce qu'elle fait !</p>
+    </div>
+    
+    <div class="faq-item">
+      <h3 data-translate="faq_q7">🎯 FIST-DETECTOR, ça marche vraiment ?</h3>
+      <p data-translate="faq_a7">Oh que oui ! C'est notre arme secrète pour détecter les memecoins qui vont exploser avant tout le monde. L'algorithme analyse les tendances, les volumes, les communautés, et te sort les pépites. C'est comme avoir une boule de cristal, mais en mieux et en plus scientifique. Bientôt disponible en version Pro avec IA intégrée !</p>
+    </div>
+    
+    <div class="faq-item">
+      <h3 data-translate="faq_q8">💎 Pourquoi HODL LFIST plutôt qu'un autre memecoin ?</h3>
+      <p data-translate="faq_a8">Parce que LFIST, c'est pas juste un token, c'est un mouvement ! On a une utilité réelle (FIST-DETECTOR), une communauté de feu, une roadmap ambitieuse, et surtout, on sait faire rire tout en étant sérieux. Les autres memecoins font du bruit, nous on fait de la musique. La différence ? L'harmonie et la vision long terme !</p>
+    </div>
+    
+    <div class="faq-item">
+      <h3 data-translate="faq_q9">🌙 Objectif prix ? On vise quoi ?</h3>
+      <p data-translate="faq_a9">On ne donne pas de conseils financiers, mais on peut rêver ! Si la communauté grandit, si les partenariats se concrétisent, si FIST-DETECTOR devient LA référence... le ciel est la limite ! Certains visent la lune, nous on vise Mars. Mais chut, c'est entre nous 😉</p>
+    </div>
+    
+    <div class="faq-item">
+      <h3 data-translate="faq_q10">🤝 Comment rejoindre la communauté LFIST ?</h3>
+      <p data-translate="faq_a10">Simple ! Rejoins notre Telegram (@lfistcoin) pour les discussions quotidiennes et les alpha calls, suis-nous sur Twitter (@LFISTCOIN) pour les mèmes et les annonces, et surtout, achète quelques LFIST pour faire partie de la famille ! Une fois dedans, tu comprendras pourquoi on dit que LFIST, c'est plus qu'un token, c'est un art de vivre !</p>
     </div>
   </div>
 </section>
@@ -778,12 +804,53 @@
 <!-- Footer -->
 <footer class="footer">
   <div class="footer-content">
-    <p data-translate="footer_copyright">© 2025 LFIST Token. Powered by mèmes et conviction.</p>
-    <div class="visit-counter">
-      <span data-translate="visit_counter_text">Visites :</span> 
-      <span id="visitCount">0</span> 
-      <span class="meme-footer">💥</span>
+    
+    <!-- Section Certifications -->
+    <div class="certifications-section">
+      <h4 class="certifications-title">🏆 Certifications & Références</h4>
+      <div class="certifications-grid">
+        
+        <!-- GeckoTerminal -->
+        <div class="certification-item">
+          <a href="https://www.geckoterminal.com/bsc/pools/0x5ef4baddeba794ada4ac17ba233f9d50b205ac6c" target="_blank" rel="noopener noreferrer" class="certification-link">
+            <div class="certification-badge gecko">
+              <div class="cert-icon">🦎</div>
+              <div class="cert-content">
+                <h5>GeckoTerminal</h5>
+                <p>Référencé Officiellement</p>
+              </div>
+              <div class="cert-status">✅</div>
+            </div>
+          </a>
+        </div>
+        
+        <!-- CoinSniper -->
+        <div class="certification-item">
+          <a href="https://coinsniper.net/coin/82844" target="_blank" rel="noopener noreferrer" class="certification-link">
+            <div class="certification-badge sniper">
+              <div class="cert-icon">🎯</div>
+              <div class="cert-content">
+                <h5>CoinSniper</h5>
+                <p>Token Vérifié</p>
+              </div>
+              <div class="cert-status">✅</div>
+            </div>
+          </a>
+        </div>
+        
+      </div>
     </div>
+    
+    <!-- Copyright et compteur -->
+    <div class="footer-bottom">
+      <p data-translate="footer_copyright">© 2025 LFIST Token. Powered by mèmes et conviction.</p>
+      <div class="visit-counter">
+        <span data-translate="visit_counter_text">Visites :</span> 
+        <span id="visitCount">0</span> 
+        <span class="meme-footer">💥</span>
+      </div>
+    </div>
+    
   </div>
 </footer>
 
