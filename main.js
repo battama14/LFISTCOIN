@@ -744,6 +744,175 @@ async function loadSecurityInfo(memecoin) {
   }
 }
 
+/* --- Fonction pour récupérer des memecoins personnages via API --- */
+async function fetchCharacterMemecoins() {
+  console.log("🔍 Recherche de memecoins personnages...");
+  
+  // Mots-clés pour identifier les memecoins personnages
+  const characterKeywords = [
+    'doge', 'shib', 'pepe', 'floki', 'bonk', 'wojak', 'mog', 'cat', 'dog', 
+    'frog', 'inu', 'akita', 'corgi', 'pug', 'husky', 'brett', 'andy', 
+    'popcat', 'myro', 'wif', 'bome', 'slerf', 'wen', 'monkey', 'ape', 
+    'kong', 'banana', 'meme', 'chad', 'gigachad', 'nyan', 'grumpy', 
+    'cheems', 'babydoge', 'minidoge', 'kishu', 'hokkaido', 'samoyedcoin'
+  ];
+  
+  let characterMemecoins = [];
+  
+  try {
+    // 1. Rechercher dans les trending
+    console.log("🌐 Recherche dans les trending...");
+    const trendingRes = await fetch('https://api.coingecko.com/api/v3/search/trending');
+    const trendingData = await trendingRes.json();
+    
+    if (trendingData && trendingData.coins) {
+      const trendingCharacters = trendingData.coins.filter(coin => {
+        const name = coin.item.name.toLowerCase();
+        const symbol = coin.item.symbol.toLowerCase();
+        return characterKeywords.some(keyword => 
+          name.includes(keyword) || symbol.includes(keyword)
+        );
+      });
+      
+      if (trendingCharacters.length > 0) {
+        console.log(`✅ ${trendingCharacters.length} memecoins personnages trouvés dans trending`);
+        
+        // Récupérer les prix
+        const ids = trendingCharacters.map(c => c.item.id).join(',');
+        try {
+          const priceRes = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd`);
+          const prices = await priceRes.json();
+          
+          const trendingMemecoins = trendingCharacters.map(c => ({
+            id: c.item.id,
+            nom: c.item.name,
+            logo: c.item.small,
+            prix: prices[c.item.id]?.usd || "N/A",
+            description: `🔥 Trending #${c.item.market_cap_rank || '∞'} - ${getCharacterDescription(c.item.name)}`,
+            source: "trending"
+          }));
+          
+          characterMemecoins.push(...trendingMemecoins);
+        } catch (priceError) {
+          console.warn("⚠️ Erreur prix trending:", priceError.message);
+        }
+      }
+    }
+    
+    // 2. Si pas assez de résultats, rechercher par mots-clés
+    if (characterMemecoins.length < 3) {
+      console.log("🔍 Recherche complémentaire par mots-clés...");
+      
+      const searchQueries = ['doge', 'pepe', 'shiba', 'cat', 'meme'];
+      
+      for (const query of searchQueries) {
+        if (characterMemecoins.length >= 5) break;
+        
+        try {
+          const searchRes = await fetch(`https://api.coingecko.com/api/v3/search?query=${query}`);
+          const searchData = await searchRes.json();
+          
+          if (searchData && searchData.coins) {
+            const searchCharacters = searchData.coins.filter(coin => {
+              const name = coin.name.toLowerCase();
+              const symbol = coin.symbol.toLowerCase();
+              return characterKeywords.some(keyword => 
+                name.includes(keyword) || symbol.includes(keyword)
+              ) && !characterMemecoins.some(existing => existing.id === coin.id);
+            }).slice(0, 2);
+            
+            const searchMemecoins = searchCharacters.map(coin => ({
+              id: coin.id,
+              nom: coin.name,
+              logo: coin.large || coin.thumb || `https://via.placeholder.com/80x80/ff00cc/ffffff?text=${coin.name.charAt(0)}`,
+              prix: "N/A",
+              description: `🔍 ${getCharacterDescription(coin.name)} - Rank #${coin.market_cap_rank || '∞'}`,
+              source: "search"
+            }));
+            
+            characterMemecoins.push(...searchMemecoins);
+            console.log(`✅ +${searchMemecoins.length} memecoins trouvés pour "${query}"`);
+          }
+          
+          // Délai pour éviter le rate limiting
+          await new Promise(resolve => setTimeout(resolve, 200));
+        } catch (searchError) {
+          console.warn(`⚠️ Erreur recherche ${query}:`, searchError.message);
+        }
+      }
+    }
+    
+    // 3. Sélectionner les 3 meilleurs
+    if (characterMemecoins.length > 0) {
+      // Prioriser les trending, puis mélanger
+      const trending = characterMemecoins.filter(c => c.source === "trending");
+      const search = characterMemecoins.filter(c => c.source === "search");
+      
+      let selected = [];
+      selected.push(...trending.slice(0, 2)); // Max 2 trending
+      selected.push(...search.slice(0, 3 - selected.length)); // Compléter avec search
+      
+      // Mélanger et limiter à 3
+      selected = selected.sort(() => 0.5 - Math.random()).slice(0, 3);
+      
+      console.log("🎯 Memecoins personnages sélectionnés:", selected.map(c => c.nom));
+      return selected;
+    }
+    
+  } catch (error) {
+    console.error("❌ Erreur lors de la recherche API:", error);
+  }
+  
+  // Fallback : memecoins personnages de base si API échoue
+  console.log("🛡️ Utilisation du fallback - memecoins personnages de base");
+  return [
+    {
+      id: "dogecoin",
+      nom: "DOGECOIN",
+      logo: "https://assets.coingecko.com/coins/images/5/small/dogecoin.png",
+      prix: "0.08",
+      description: "🐕 Le memecoin original - Much wow, very moon !",
+      source: "fallback"
+    },
+    {
+      id: "pepe",
+      nom: "PEPE",
+      logo: "https://assets.coingecko.com/coins/images/29850/small/pepe-token.jpeg",
+      prix: "0.000001",
+      description: "🐸 Pepe the Frog - Le meme éternel qui revient en force !",
+      source: "fallback"
+    },
+    {
+      id: "shiba-inu",
+      nom: "SHIBA INU",
+      logo: "https://assets.coingecko.com/coins/images/11939/small/shiba.png",
+      prix: "0.000008",
+      description: "🐕‍🦺 Le Dogecoin Killer qui ne tue personne mais fait rire !",
+      source: "fallback"
+    }
+  ];
+}
+
+// Fonction pour générer des descriptions de personnages
+function getCharacterDescription(name) {
+  const lowerName = name.toLowerCase();
+  
+  if (lowerName.includes('doge')) return "🐕 Much wow, very moon !";
+  if (lowerName.includes('shib')) return "🐕‍🦺 Le tueur de DOGE selon ses fans !";
+  if (lowerName.includes('pepe')) return "🐸 Pepe the Frog - Le meme éternel !";
+  if (lowerName.includes('floki')) return "🐕‍🦺 Le Viking des memecoins !";
+  if (lowerName.includes('bonk')) return "🐕 Le Shiba qui fait du bruit !";
+  if (lowerName.includes('wojak')) return "😢 Le meme de la tristesse qui fait rire !";
+  if (lowerName.includes('cat') || lowerName.includes('mog')) return "😸 Le chat meme qui ronronne !";
+  if (lowerName.includes('pop')) return "😺 Le chat qui fait 'pop' !";
+  if (lowerName.includes('inu')) return "🐕 Un autre chien dans la course !";
+  if (lowerName.includes('monkey') || lowerName.includes('ape')) return "🐵 Le singe qui swingue !";
+  if (lowerName.includes('frog')) return "🐸 Une grenouille qui saute haut !";
+  if (lowerName.includes('meme')) return "😂 Un meme qui fait le buzz !";
+  
+  return "🎭 Un personnage mystérieux du monde crypto !";
+}
+
 /* --- Partie modifiée : gestion des memecoins sur une base hebdomadaire --- */
 async function fetchMemecoins() {
   console.log("🔍 Début du chargement des memecoins...");
@@ -766,100 +935,56 @@ async function fetchMemecoins() {
       return existingMemecoins;
     }
 
-    console.log("🔄 Mise à jour des Memecoins nécessaire !");
+    console.log("🔄 Recherche de nouveaux memecoins personnages via API...");
     
-    // Utiliser directement les données de test pour garantir le fonctionnement
-    const testMemecoins = [
-      {
-        id: "test1",
-        nom: "SafeMoon",
-        logo: "https://assets.coingecko.com/coins/images/14362/small/safemoon.png",
-        prix: "0.0001",
-        description: "Token de test avec analyse de sécurité",
-        contract_address: "0x8076c74c5e3f5852037f31ff0093eeb8c8add8d3"
-      },
-      {
-        id: "test2", 
-        nom: "PancakeSwap",
-        logo: "https://assets.coingecko.com/coins/images/12632/small/pancakeswap-cake-logo.png",
-        prix: "2.45",
-        description: "Token DeFi populaire",
-        contract_address: "0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82"
-      },
-      {
-        id: "test3",
-        nom: "Binance USD",
-        logo: "https://assets.coingecko.com/coins/images/9576/small/BUSD.png", 
-        prix: "1.00",
-        description: "Stablecoin de test",
-        contract_address: "0xe9e7cea3dedca5984780bafc599bd69add087d56"
-      }
-    ];
+    // Récupérer UNIQUEMENT des memecoins personnages via l'API
+    let fetchedMemecoins = await fetchCharacterMemecoins();
 
-    // Essayer les APIs en arrière-plan, mais utiliser les données de test par défaut
-    let fetchedMemecoins = [...testMemecoins];
-    
-    try {
-      console.log("🌐 Tentative de récupération via CoinGecko...");
-      const res = await fetch('https://api.coingecko.com/api/v3/search/trending');
-      const data = await res.json();
-      
-      if (data && data.coins && data.coins.length > 0) {
-        const trending = data.coins.slice(0, 3);
-        const ids = trending.map(c => c.item.id).join(',');
-        const priceRes = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd`);
-        const prices = await priceRes.json();
-
-        fetchedMemecoins = trending.map(c => ({
-          id: c.item.id,
-          nom: c.item.name,
-          logo: c.item.small,
-          prix: prices[c.item.id]?.usd ?? "N/A",
-          description: `#${c.item.market_cap_rank ?? '∞'} sur CoinGecko`
-        }));
-        
-        console.log("✅ Memecoins récupérés via CoinGecko:", fetchedMemecoins);
-      }
-    } catch (apiError) {
-      console.warn("⚠️ API CoinGecko échouée, utilisation des données de test:", apiError.message);
+    // Vérifier que nous avons bien des memecoins
+    if (!fetchedMemecoins || fetchedMemecoins.length === 0) {
+      console.warn("⚠️ Aucun memecoin personnage trouvé, utilisation du fallback");
+      fetchedMemecoins = await fetchCharacterMemecoins(); // Le fallback est intégré dans la fonction
     }
 
-    console.log("💾 Sauvegarde des memecoins dans Firebase...");
+    console.log("💾 Sauvegarde des memecoins personnages dans Firebase...");
     await set(memecoinsRef, fetchedMemecoins);
     
-    console.log("✅ Memecoins chargés avec succès:", fetchedMemecoins);
+    console.log("✅ Memecoins personnages chargés avec succès:", fetchedMemecoins);
     return fetchedMemecoins;
     
   } catch (error) {
     console.error("❌ Erreur lors du chargement des memecoins:", error);
     
-    // En cas d'erreur, retourner des données de test
-    const fallbackMemecoins = [
+    // En cas d'erreur critique, retourner des memecoins personnages de base
+    const emergencyFallback = [
       {
-        id: "fallback1",
-        nom: "DOGE",
+        id: "emergency1",
+        nom: "DOGECOIN",
         logo: "https://assets.coingecko.com/coins/images/5/small/dogecoin.png",
         prix: "0.08",
-        description: "Le memecoin original"
+        description: "🐕 Le memecoin original - Much wow, very moon !",
+        source: "emergency"
       },
       {
-        id: "fallback2",
-        nom: "SHIB",
-        logo: "https://assets.coingecko.com/coins/images/11939/small/shiba.png",
-        prix: "0.000008",
-        description: "Shiba Inu Token"
-      },
-      {
-        id: "fallback3",
+        id: "emergency2",
         nom: "PEPE",
         logo: "https://assets.coingecko.com/coins/images/29850/small/pepe-token.jpeg",
         prix: "0.000001",
-        description: "Pepe the Frog"
+        description: "🐸 Pepe the Frog - Le meme éternel !",
+        source: "emergency"
+      },
+      {
+        id: "emergency3",
+        nom: "SHIBA INU",
+        logo: "https://assets.coingecko.com/coins/images/11939/small/shiba.png",
+        prix: "0.000008",
+        description: "🐕‍🦺 Le Dogecoin Killer qui fait rire !",
+        source: "emergency"
       }
     ];
     
-    console.log("🔄 Utilisation des données de fallback:", fallbackMemecoins);
-    return fallbackMemecoins;
+    console.log("🚨 Utilisation du fallback d'urgence:", emergencyFallback);
+    return emergencyFallback;
   }
 }
 
