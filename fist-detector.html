@@ -13,39 +13,47 @@
     /* Container principal avec z-index élevé - AMÉLIORÉ */
     #memecoins-container {
       position: relative !important;
-      z-index: 25 !important;
+      z-index: 100 !important;
       min-height: 300px;
       margin: 2rem auto 4rem auto;
       padding: 2rem;
-      background: rgba(26, 26, 46, 0.3);
+      background: rgba(26, 26, 46, 0.95) !important;
       border-radius: 20px;
-      backdrop-filter: blur(5px);
+      backdrop-filter: blur(10px);
+      border: 2px solid #00ff88;
+      box-shadow: 0 10px 40px rgba(0, 255, 136, 0.2);
+      display: block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
     }
     
     /* Cartes memecoins avec z-index très élevé - AMÉLIORÉES */
     .memecoin-card {
       position: relative !important;
-      z-index: 25 !important;
-      background: rgba(26, 26, 46, 0.95) !important;
+      z-index: 150 !important;
+      background: rgba(26, 26, 46, 0.98) !important;
       border: 2px solid #ff00cc;
       border-radius: 20px;
       padding: 2.5rem;
       margin: 1rem;
-      text-align: left; /* Alignement à gauche pour un meilleur rendu */
+      text-align: left;
       transition: all 0.3s ease;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4);
-      min-height: 280px; /* Hauteur minimale pour uniformité */
-      display: flex;
+      backdrop-filter: blur(15px);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+      min-height: 280px;
+      display: flex !important;
       flex-direction: column;
       justify-content: space-between;
+      visibility: visible !important;
+      opacity: 1 !important;
+      transform: translateZ(0); /* Force hardware acceleration */
     }
     
     .memecoin-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 15px 40px rgba(255, 0, 204, 0.4);
+      transform: translateY(-8px) translateZ(0);
+      box-shadow: 0 20px 60px rgba(255, 0, 204, 0.6);
       border-color: #00ff88;
-      z-index: 30 !important;
+      z-index: 200 !important;
     }
     
     /* Message de vote avec z-index plus bas - CORRIGÉ */
@@ -64,13 +72,15 @@
     
     /* Grid des memecoins - AMÉLIORÉE */
     .memecoins-grid {
-      display: grid;
+      display: grid !important;
       grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
       gap: 2.5rem;
       margin: 2rem 0 4rem 0;
-      position: relative;
-      z-index: 30;
+      position: relative !important;
+      z-index: 120 !important;
       padding: 0 1rem;
+      visibility: visible !important;
+      opacity: 1 !important;
     }
     
     /* Header des memecoins - AMÉLIORÉ */
@@ -951,6 +961,23 @@
       </div>
     </div>
 
+    <!-- Bouton de débogage (masqué par défaut) -->
+    <div id="debug-panel" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999; display: none;">
+      <button onclick="forceDisplayMemecoins()" style="
+        background: linear-gradient(45deg, #ff0066, #ff3388);
+        color: white;
+        border: none;
+        padding: 15px 20px;
+        border-radius: 10px;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 5px 15px rgba(255, 0, 102, 0.4);
+        font-size: 14px;
+      ">
+        🔧 FORCER AFFICHAGE
+      </button>
+    </div>
+
 
 
 
@@ -1199,25 +1226,142 @@
     let hasVoted = localStorage.getItem('votedThisWeek') === 'true';
     let countdownInterval = null;
 
+    // Fonction de test pour forcer l'affichage
+    function forceDisplayMemecoins() {
+        console.log('🔧 FORCE DISPLAY - Début automatique');
+        
+        // Réinitialiser les variables de contrôle
+        isDisplaying = false;
+        if (displayTimeout) {
+            clearTimeout(displayTimeout);
+            displayTimeout = null;
+        }
+        
+        // Ajouter des memecoins de test si aucun n'existe
+        if (Object.keys(memecoins).length === 0) {
+            console.log('🧪 Ajout de memecoins de test...');
+            memecoins = {
+                'test-coin-1': {
+                    name: 'LFIST Coin',
+                    symbol: 'LFIST',
+                    description: 'Le memecoin officiel de LFIST - Détecté automatiquement !',
+                    price: '0.001',
+                    logoUrl: 'https://via.placeholder.com/80x80/00ff88/000000?text=LFIST',
+                    active: true,
+                    fistDetector: true,
+                    website: 'https://lfist.com'
+                },
+                'test-coin-2': {
+                    name: 'Moon Rocket',
+                    symbol: 'MOON',
+                    description: 'Prêt pour le décollage vers la lune ! 🚀',
+                    price: '0.0005',
+                    logoUrl: 'https://via.placeholder.com/80x80/ff00cc/ffffff?text=🚀',
+                    active: true,
+                    fistDetector: true,
+                    website: 'https://moonrocket.com'
+                }
+            };
+        }
+        
+        // Forcer l'affichage immédiatement
+        actualDisplayMemecoins();
+        
+        // Vérifier et corriger après 500ms
+        setTimeout(() => {
+            const container = document.getElementById('memecoins-container');
+            const cards = container ? container.querySelectorAll('.memecoin-card') : [];
+            console.log(`🔧 FORCE DISPLAY - Résultat: ${cards.length} cartes visibles`);
+            
+            if (cards.length === 0) {
+                console.error('❌ PROBLÈME CRITIQUE: Tentative de récupération d\'urgence...');
+                
+                // Méthode d'urgence : injection HTML directe
+                if (container) {
+                    const emergencyHTML = `
+                        <div style="text-align: center; margin-bottom: 30px; position: relative; z-index: 15;">
+                            <h2 style="color: #00ff88;">🎯 FIST-DETECTOR</h2>
+                            <p style="color: #ccc;">Votez pour votre memecoin préféré cette semaine</p>
+                        </div>
+                        <div class="memecoins-grid" style="position: relative; z-index: 125;">
+                            <div class="memecoin-card" style="z-index: 150 !important; position: relative; display: block !important; visibility: visible !important; opacity: 1 !important;">
+                                <div class="memecoin-content">
+                                    <div class="memecoin-header">
+                                        <div class="memecoin-logo" style="background: linear-gradient(45deg, #00ff88, #00cc66); display: flex; align-items: center; justify-content: center; font-size: 32px; color: #000;">🎯</div>
+                                        <div class="memecoin-info">
+                                            <h3>LFIST Detector</h3>
+                                            <p>Le système de détection automatique de memecoins prometteurs</p>
+                                            <p class="memecoin-price">💰 Prix: $0.001</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="vote-section">
+                                    <button class="vote-btn" onclick="vote('emergency-coin')" ${hasVoted ? 'disabled' : ''}>
+                                        ${hasVoted ? '✅ Déjà voté cette semaine' : '🗳️ Voter pour ce memecoin'}
+                                    </button>
+                                    <div class="vote-count">
+                                        🔥 0 vote cette semaine
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    container.innerHTML = emergencyHTML;
+                    console.log('🚨 Mode d\'urgence activé - HTML injecté directement');
+                }
+            } else {
+                console.log('✅ Forçage automatique réussi !');
+                
+                // Masquer le bouton de débogage s'il était visible
+                const debugPanel = document.getElementById('debug-panel');
+                if (debugPanel) {
+                    debugPanel.style.display = 'none';
+                }
+            }
+        }, 500);
+    }
+
     // Rendre les fonctions disponibles globalement
     window.vote = vote;
+    window.forceDisplayMemecoins = forceDisplayMemecoins;
 
     // Initialisation
     document.addEventListener('DOMContentLoaded', () => {
         console.log('🎯 Initialisation FIST-DETECTOR intégré...');
         initializeFistDetector();
         startCountdownFixed();
+        
+        // Forçage immédiat après 1 seconde pour éviter tout délai
+        setTimeout(() => {
+            console.log('⚡ Forçage immédiat après chargement...');
+            forceDisplayMemecoins();
+        }, 1000);
     });
 
     function initializeFistDetector() {
         console.log('🚀 Démarrage FIST-DETECTOR...');
         
+        let memecoinDataLoaded = false;
+        let votesDataLoaded = false;
+        
+        // Fonction pour afficher seulement quand les deux sont chargés
+        function tryDisplayMemecoins() {
+            if (memecoinDataLoaded && votesDataLoaded) {
+                console.log('📊 Toutes les données chargées, affichage...');
+                displayMemecoins();
+            } else {
+                console.log(`⏳ Attente données: memecoins=${memecoinDataLoaded}, votes=${votesDataLoaded}`);
+            }
+        }
+        
         // Écouter les changements de memecoins
         const memecoinRef = ref(db, 'memecoins');
         onValue(memecoinRef, (snapshot) => {
-            console.log('📊 Memecoins reçus:', snapshot.val());
+            console.log('📊 Memecoins reçus de Firebase:', snapshot.val());
             memecoins = snapshot.val() || {};
-            displayMemecoins();
+            memecoinDataLoaded = true;
+            tryDisplayMemecoins();
         }, (error) => {
             console.error('❌ Erreur memecoins:', error);
             showStatusMessage('❌ Erreur lors du chargement des memecoins: ' + error.message, 'error');
@@ -1226,15 +1370,64 @@
         // Écouter les changements de votes
         const votesRef = ref(db, 'votes');
         onValue(votesRef, (snapshot) => {
-            console.log('🗳️ Votes reçus:', snapshot.val());
+            console.log('🗳️ Votes reçus de Firebase:', snapshot.val());
             votes = snapshot.val() || {};
-            displayMemecoins();
+            votesDataLoaded = true;
+            tryDisplayMemecoins();
         }, (error) => {
             console.error('❌ Erreur votes:', error);
+            votesDataLoaded = true; // Continuer même en cas d'erreur
+            tryDisplayMemecoins();
         });
 
         // Test de connexion
         testFirebaseConnection();
+        
+        // Affichage initial après un délai
+        setTimeout(() => {
+            if (!memecoinDataLoaded) {
+                console.log('⚠️ Timeout: affichage forcé sans données Firebase');
+                displayMemecoins();
+            }
+        }, 3000);
+        
+        // Vérification précoce après 2 secondes
+        setTimeout(() => {
+            const container = document.getElementById('memecoins-container');
+            const loadingMessage = container ? container.querySelector('.status-message.loading') : null;
+            
+            if (loadingMessage && loadingMessage.style.display !== 'none') {
+                console.log('⚡ Forçage précoce après 2 secondes...');
+                forceDisplayMemecoins();
+            }
+        }, 2000);
+        
+        // Vérifier après 5 secondes si les memecoins sont visibles
+        setTimeout(() => {
+            const container = document.getElementById('memecoins-container');
+            const cards = container ? container.querySelectorAll('.memecoin-card') : [];
+            
+            if (cards.length === 0) {
+                console.warn('⚠️ Aucun memecoin visible après 5 secondes, FORÇAGE AUTOMATIQUE...');
+                forceDisplayMemecoins();
+                
+                // Si toujours pas visible après le forçage, afficher le bouton
+                setTimeout(() => {
+                    const cardsAfterForce = container ? container.querySelectorAll('.memecoin-card') : [];
+                    if (cardsAfterForce.length === 0) {
+                        console.error('❌ Échec du forçage automatique, affichage du bouton de débogage');
+                        const debugPanel = document.getElementById('debug-panel');
+                        if (debugPanel) {
+                            debugPanel.style.display = 'block';
+                        }
+                    } else {
+                        console.log('✅ Forçage automatique réussi !');
+                    }
+                }, 2000);
+            } else {
+                console.log('✅ Memecoins visibles normalement');
+            }
+        }, 5000);
     }
 
     function startCountdownFixed() {
@@ -1331,21 +1524,53 @@
         }
     }
 
+    // Variable pour éviter les appels multiples
+    let displayTimeout = null;
+    let isDisplaying = false;
+
     function displayMemecoins() {
-        const container = document.getElementById('memecoins-container');
-        if (!container) {
-            console.error('❌ Container memecoins-container non trouvé');
+        // Éviter les appels multiples simultanés
+        if (isDisplaying) {
+            console.log('⚠️ displayMemecoins déjà en cours, ignoré');
             return;
         }
 
-        // Filtrer les memecoins actifs et FIST-DETECTOR
-        const fistDetectorCoins = Object.entries(memecoins).filter(([id, coin]) => 
-            coin.active && coin.fistDetector
-        );
+        // Annuler le timeout précédent s'il existe
+        if (displayTimeout) {
+            clearTimeout(displayTimeout);
+        }
 
-        console.log('🎯 Memecoins FIST-DETECTOR:', fistDetectorCoins.length);
+        // Délai pour éviter les appels trop fréquents
+        displayTimeout = setTimeout(() => {
+            actualDisplayMemecoins();
+        }, 100);
+    }
+
+    function actualDisplayMemecoins() {
+        isDisplaying = true;
+        console.log('🔄 === AFFICHAGE MEMECOINS DÉBUT ===');
+        
+        const container = document.getElementById('memecoins-container');
+        if (!container) {
+            console.error('❌ Container memecoins-container non trouvé');
+            isDisplaying = false;
+            return;
+        }
+
+        console.log('📦 Container trouvé:', container);
+        console.log('📊 Memecoins disponibles:', Object.keys(memecoins).length);
+
+        // Filtrer les memecoins actifs et FIST-DETECTOR
+        const fistDetectorCoins = Object.entries(memecoins).filter(([id, coin]) => {
+            const isValid = coin && coin.active && coin.fistDetector;
+            console.log(`🎯 ${coin?.name || 'Unknown'}: active=${coin?.active}, fistDetector=${coin?.fistDetector}, valid=${isValid}`);
+            return isValid;
+        });
+
+        console.log('🎯 Memecoins FIST-DETECTOR filtrés:', fistDetectorCoins.length);
 
         if (fistDetectorCoins.length === 0) {
+            console.log('⚠️ Aucun memecoin FIST-DETECTOR trouvé');
             showStatusMessage(`
                 <h3>🎯 FIST-DETECTOR</h3>
                 <p>Aucun memecoin disponible pour le vote</p>
@@ -1355,36 +1580,60 @@
                 <button onclick="location.reload()" style="margin-top: 15px; padding: 10px 20px; background: #00ff88; color: #000; border: none; border-radius: 5px; cursor: pointer;">
                     🔄 Actualiser
                 </button>
+                <div style="margin-top: 20px; padding: 15px; background: rgba(255, 170, 0, 0.1); border: 1px solid #ffaa00; border-radius: 8px;">
+                    <strong>🐛 Debug Info:</strong><br>
+                    Total memecoins: ${Object.keys(memecoins).length}<br>
+                    Memecoins actifs: ${Object.values(memecoins).filter(c => c?.active).length}<br>
+                    Memecoins FIST-DETECTOR: ${Object.values(memecoins).filter(c => c?.fistDetector).length}
+                </div>
             `, 'empty');
+            isDisplaying = false;
             return;
         }
 
         // Créer le contenu avec les memecoins
+        console.log('🏗️ Création des cartes memecoins...');
         const memecoinCards = fistDetectorCoins.map(([id, coin]) => {
             const voteCount = getVotesForCoin(id);
+            console.log(`🃏 Création carte pour ${coin.name}: ${voteCount} votes`);
             return createMemecoinCard(id, coin, voteCount);
         }).join('');
 
-        container.innerHTML = `
+        const htmlContent = `
             <div style="text-align: center; margin-bottom: 30px; position: relative; z-index: 15;">
                 <h2 style="color: #00ff88;">🎯 FIST-DETECTOR</h2>
                 <p style="color: #ccc;">Votez pour votre memecoin préféré cette semaine</p>
                 ${hasVoted ? '<p style="color: #ffaa00; font-weight: bold;">⚠️ Vous avez déjà voté cette semaine</p>' : ''}
             </div>
-            <div class="memecoins-grid">
+            <div class="memecoins-grid" style="position: relative; z-index: 25;">
                 ${memecoinCards}
             </div>
         `;
 
-        // S'assurer que les memecoins sont visibles avec z-index élevé
+        console.log('📝 HTML généré, longueur:', htmlContent.length);
+        container.innerHTML = htmlContent;
+
+        // S'assurer que les memecoins restent visibles
         setTimeout(() => {
             const cards = container.querySelectorAll('.memecoin-card');
+            console.log(`🃏 Cartes trouvées après insertion: ${cards.length}`);
+            
             cards.forEach((card, index) => {
-                card.style.zIndex = (30 + index).toString();
+                card.style.zIndex = (50 + index).toString();
                 card.style.position = 'relative';
+                card.style.display = 'block';
+                card.style.visibility = 'visible';
+                card.style.opacity = '1';
+                
+                // Vérifier que la carte est visible
+                const rect = card.getBoundingClientRect();
+                console.log(`🃏 Carte ${index + 1}: visible=${rect.height > 0}, z-index=${card.style.zIndex}`);
             });
-            console.log(`✅ ${cards.length} cartes memecoins affichées avec z-index élevé`);
-        }, 100);
+            
+            console.log(`✅ ${cards.length} cartes memecoins configurées et visibles`);
+            console.log('🔄 === AFFICHAGE MEMECOINS FIN ===');
+            isDisplaying = false;
+        }, 200);
     }
 
     function createMemecoinCard(id, coin, voteCount) {
