@@ -207,7 +207,7 @@ header {
   margin: 2rem auto;
 }
 
-/* Vote Countdown */
+/* Vote Countdown - CORRIGÉ POUR ÉVITER LE CLIGNOTEMENT */
 .vote-countdown {
   text-align: center;
   margin: 2rem 0;
@@ -215,19 +215,59 @@ header {
   background: rgba(0, 255, 231, 0.1);
   border-radius: 15px;
   border: 1px solid #00ffe7;
+  min-height: 120px; /* Hauteur fixe pour éviter le saut */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: none; /* Supprimer les transitions qui causent le clignotement */
 }
 
 .vote-countdown h3 {
   color: #ff00cc;
   margin-bottom: 1rem;
   font-size: 1.2rem;
+  transition: none;
 }
 
 #countdown {
   font-family: 'Press Start 2P', cursive;
-  font-size: 1.5rem;
+  font-size: 1.2rem; /* Taille réduite pour éviter les sauts */
   color: #00ffe7;
   text-shadow: 0 0 10px #00ffe7;
+  transition: none; /* Supprimer les transitions */
+  min-height: 60px; /* Hauteur minimale fixe */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Style pour le countdown en mode compact */
+.countdown-display {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.countdown-item {
+  text-align: center;
+  min-width: 60px;
+}
+
+.countdown-number {
+  font-size: 1.8em;
+  font-weight: bold;
+  color: #00ff88;
+  line-height: 1;
+  display: block;
+}
+
+.countdown-label {
+  font-size: 0.7em;
+  color: #666;
+  margin-top: 5px;
+  display: block;
 }
 
 /* Victims Grid */

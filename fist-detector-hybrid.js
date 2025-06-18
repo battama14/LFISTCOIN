@@ -544,51 +544,73 @@ class FistDetectorHybrid {
         const countdownEl = document.getElementById('countdown');
         if (!countdownEl) return;
         
-        const updateCountdown = () => {
-            const now = new Date();
-            const nextMonday = new Date();
-            
-            // Calculer le prochain lundi à 00:00
-            const daysUntilMonday = (8 - now.getDay()) % 7 || 7;
-            nextMonday.setDate(now.getDate() + daysUntilMonday);
-            nextMonday.setHours(0, 0, 0, 0);
-            
-            const timeLeft = nextMonday - now;
-            
-            if (timeLeft <= 0) {
-                countdownEl.textContent = '🔄 Nouveau vote disponible !';
-                this.checkWeeklyReset();
-                return;
-            }
-            
-            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-            
-            countdownEl.innerHTML = `
-                <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
-                    <div style="text-align: center;">
-                        <div style="font-size: 2em; font-weight: bold; color: #00ff88;">${days}</div>
-                        <div style="font-size: 0.8em; color: #666;">JOURS</div>
-                    </div>
-                    <div style="text-align: center;">
-                        <div style="font-size: 2em; font-weight: bold; color: #00ff88;">${hours}</div>
-                        <div style="font-size: 0.8em; color: #666;">HEURES</div>
-                    </div>
-                    <div style="text-align: center;">
-                        <div style="font-size: 2em; font-weight: bold; color: #00ff88;">${minutes}</div>
-                        <div style="font-size: 0.8em; color: #666;">MINUTES</div>
-                    </div>
-                    <div style="text-align: center;">
-                        <div style="font-size: 2em; font-weight: bold; color: #00ff88;">${seconds}</div>
-                        <div style="font-size: 0.8em; color: #666;">SECONDES</div>
-                    </div>
+        // Initialiser immédiatement avec la structure fixe pour éviter le clignotement
+        countdownEl.innerHTML = `
+            <div class="countdown-display">
+                <div class="countdown-item">
+                    <span class="countdown-number">--</span>
+                    <span class="countdown-label">JOURS</span>
                 </div>
-            `;
+                <div class="countdown-item">
+                    <span class="countdown-number">--</span>
+                    <span class="countdown-label">HEURES</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-number">--</span>
+                    <span class="countdown-label">MINUTES</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-number">--</span>
+                    <span class="countdown-label">SECONDES</span>
+                </div>
+            </div>
+        `;
+        
+        const updateCountdown = () => {
+            try {
+                const now = new Date();
+                const nextMonday = new Date();
+                
+                // Calculer le prochain lundi à 00:00
+                const daysUntilMonday = (8 - now.getDay()) % 7 || 7;
+                nextMonday.setDate(now.getDate() + daysUntilMonday);
+                nextMonday.setHours(0, 0, 0, 0);
+                
+                const timeLeft = nextMonday - now;
+                
+                if (timeLeft <= 0) {
+                    countdownEl.innerHTML = `
+                        <div style="color: #00ff88; font-size: 1.2em;">
+                            🔄 Nouveau vote disponible !
+                        </div>
+                    `;
+                    this.checkWeeklyReset();
+                    return;
+                }
+                
+                const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                
+                // Mettre à jour seulement les nombres, pas toute la structure HTML
+                const numberElements = countdownEl.querySelectorAll('.countdown-number');
+                if (numberElements.length === 4) {
+                    numberElements[0].textContent = days.toString().padStart(2, '0');
+                    numberElements[1].textContent = hours.toString().padStart(2, '0');
+                    numberElements[2].textContent = minutes.toString().padStart(2, '0');
+                    numberElements[3].textContent = seconds.toString().padStart(2, '0');
+                }
+                
+            } catch (error) {
+                console.error('❌ Erreur countdown:', error);
+            }
         };
         
+        // Première mise à jour immédiate
         updateCountdown();
+        
+        // Démarrer le timer
         setInterval(updateCountdown, 1000);
     }
     
