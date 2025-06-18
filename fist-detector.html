@@ -7,6 +7,868 @@
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Press+Start+2P&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="fist-detector.css" />
   <script src="translations.js"></script>
+  <style>
+    /* Corrections spécifiques pour éviter le masquage des memecoins */
+    
+    /* Container principal avec z-index élevé - AMÉLIORÉ */
+    #memecoins-container {
+      position: relative !important;
+      z-index: 25 !important;
+      min-height: 300px;
+      margin: 2rem auto 4rem auto;
+      padding: 2rem;
+      background: rgba(26, 26, 46, 0.3);
+      border-radius: 20px;
+      backdrop-filter: blur(5px);
+    }
+    
+    /* Cartes memecoins avec z-index très élevé - AMÉLIORÉES */
+    .memecoin-card {
+      position: relative !important;
+      z-index: 25 !important;
+      background: rgba(26, 26, 46, 0.95) !important;
+      border: 2px solid #ff00cc;
+      border-radius: 20px;
+      padding: 2.5rem;
+      margin: 1rem;
+      text-align: left; /* Alignement à gauche pour un meilleur rendu */
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4);
+      min-height: 280px; /* Hauteur minimale pour uniformité */
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    
+    .memecoin-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 40px rgba(255, 0, 204, 0.4);
+      border-color: #00ff88;
+      z-index: 30 !important;
+    }
+    
+    /* Message de vote avec z-index plus bas - CORRIGÉ */
+    .meme-text {
+      position: relative !important;
+      z-index: 5 !important;
+      margin-top: 4rem !important; /* Plus d'espace en haut */
+      margin-bottom: 2rem !important;
+      clear: both;
+      background: rgba(26, 26, 46, 0.8) !important;
+      padding: 2rem !important;
+      border-radius: 15px !important;
+      border: 1px solid #444 !important;
+      backdrop-filter: blur(10px) !important;
+    }
+    
+    /* Grid des memecoins - AMÉLIORÉE */
+    .memecoins-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 2.5rem;
+      margin: 2rem 0 4rem 0;
+      position: relative;
+      z-index: 30;
+      padding: 0 1rem;
+    }
+    
+    /* Header des memecoins - AMÉLIORÉ */
+    .memecoin-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      margin-bottom: 20px;
+      padding: 10px 0;
+    }
+    
+    .memecoin-logo {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #00ff88;
+      box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+      flex-shrink: 0; /* Empêche le rétrécissement */
+      transition: all 0.3s ease;
+    }
+    
+    .memecoin-logo:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 25px rgba(0, 255, 136, 0.5);
+    }
+    
+    .memecoin-info {
+      flex: 1;
+      min-width: 0; /* Permet le text-overflow */
+    }
+    
+    .memecoin-info h3 {
+      color: #00ff88;
+      margin-bottom: 8px;
+      font-size: 1.3em;
+      font-weight: bold;
+    }
+    
+    .memecoin-info p {
+      color: #ccc;
+      font-size: 0.95em;
+      line-height: 1.4;
+      margin-bottom: 5px;
+    }
+    
+    .memecoin-price {
+      color: #00ff88 !important;
+      font-weight: bold;
+      font-size: 1.1em;
+    }
+    
+    /* Section de vote - AMÉLIORÉE */
+    .vote-section {
+      margin-top: 20px;
+      text-align: center;
+      padding: 15px 0;
+      border-top: 1px solid rgba(255, 0, 204, 0.3);
+    }
+    
+    .vote-btn {
+      background: linear-gradient(45deg, #00ff88, #00cc66);
+      color: #000;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 1.1em;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 255, 136, 0.3);
+      width: 100%;
+      max-width: 200px;
+    }
+    
+    .vote-btn:hover {
+      background: linear-gradient(45deg, #00cc66, #009944);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0, 255, 136, 0.5);
+    }
+    
+    .vote-btn:disabled {
+      background: linear-gradient(45deg, #666, #555);
+      color: #999;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    
+    .vote-count {
+      color: #00ff88;
+      font-weight: bold;
+      margin-top: 12px;
+      font-size: 1.1em;
+      text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+    }
+    
+    /* Lien site web */
+    .memecoin-website {
+      margin: 15px 0;
+      text-align: center;
+    }
+    
+    .memecoin-website a {
+      color: #00ff88;
+      text-decoration: none;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    
+    .memecoin-website a:hover {
+      color: #00ffe7;
+      text-shadow: 0 0 10px rgba(0, 255, 231, 0.5);
+    }
+    
+    /* Message d'état */
+    .status-message {
+      text-align: center;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 10px;
+      position: relative;
+      z-index: 15;
+    }
+    
+    .status-message.loading {
+      background: rgba(0, 255, 136, 0.1);
+      color: #00ff88;
+      border: 1px solid #00ff88;
+    }
+    
+    .status-message.error {
+      background: rgba(255, 68, 68, 0.1);
+      color: #ff4444;
+      border: 1px solid #ff4444;
+    }
+    
+    .status-message.empty {
+      background: rgba(255, 170, 0, 0.1);
+      color: #ffaa00;
+      border: 1px solid #ffaa00;
+    }
+    
+    /* Responsive - AMÉLIORÉ */
+    @media (max-width: 768px) {
+      .memecoins-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        padding: 0 0.5rem;
+      }
+      
+      .memecoin-card {
+        margin: 0.5rem;
+        padding: 2rem;
+        min-height: 250px;
+      }
+      
+      .memecoin-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+      }
+      
+      .memecoin-logo {
+        width: 70px;
+        height: 70px;
+        align-self: center;
+      }
+      
+      .memecoin-info {
+        text-align: center;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .memecoin-card {
+        padding: 1.5rem;
+        margin: 0.25rem;
+      }
+      
+      .memecoin-logo {
+        width: 60px;
+        height: 60px;
+      }
+      
+      .vote-btn {
+        padding: 10px 20px;
+        font-size: 1em;
+      }
+    }
+    
+    /* === STYLES POUR LA SECTION TWITTER TRACKING - CENTRÉ === */
+    .twitter-tracking-section {
+      background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+      border-radius: 15px;
+      padding: 40px;
+      margin: 40px auto;
+      border: 2px solid #333;
+      max-width: 1400px;
+      text-align: center;
+    }
+    
+    .twitter-tracking-section h2 {
+      text-align: center;
+      color: #00ff88;
+      font-size: 2.2em;
+      margin-bottom: 15px;
+      text-shadow: 0 0 15px rgba(0, 255, 136, 0.4);
+      font-weight: bold;
+    }
+    
+    .twitter-tracking-section p {
+      text-align: center;
+      color: #ccc;
+      margin-bottom: 40px;
+      font-size: 1.2em;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+      margin-bottom: 40px;
+    }
+    
+    .tracking-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      text-align: left; /* Réinitialiser l'alignement pour le contenu */
+    }
+    
+    .tracking-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      margin-bottom: 30px;
+    }
+    
+    .twitter-feed-section,
+    .vote-stats-section {
+      background: #2a2a2a;
+      border-radius: 12px;
+      padding: 25px;
+      border: 2px solid #444;
+      transition: all 0.3s ease;
+    }
+    
+    .twitter-feed-section:hover,
+    .vote-stats-section:hover {
+      border-color: #00ff88;
+      box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
+    }
+    
+    .twitter-feed-section h3,
+    .vote-stats-section h3 {
+      color: #00ffe7;
+      margin-bottom: 20px;
+      font-size: 1.3em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .twitter-feed {
+      max-height: 400px;
+      overflow-y: auto;
+      margin-bottom: 20px;
+      border: 1px solid #444;
+      border-radius: 8px;
+      padding: 15px;
+      background: #1a1a1a;
+    }
+    
+    .tweet-item {
+      background: #333;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-left: 3px solid #00ff88;
+      transition: all 0.3s ease;
+    }
+    
+    .tweet-item:hover {
+      background: #3a3a3a;
+      transform: translateX(5px);
+    }
+    
+    .tweet-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    
+    .tweet-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #00ff88;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+    
+    .tweet-user {
+      color: #00ffe7;
+      font-weight: bold;
+    }
+    
+    .tweet-handle {
+      color: #888;
+      font-size: 0.9em;
+    }
+    
+    .tweet-time {
+      color: #666;
+      font-size: 0.8em;
+      margin-left: auto;
+    }
+    
+    .tweet-content {
+      color: #ccc;
+      line-height: 1.4;
+      margin-bottom: 10px;
+    }
+    
+    .tweet-stats {
+      display: flex;
+      gap: 15px;
+      font-size: 0.8em;
+      color: #888;
+    }
+    
+    .loading-tweets,
+    .loading-leaderboard,
+    .loading-activity {
+      text-align: center;
+      padding: 40px;
+      color: #666;
+    }
+    
+    .tweet-loading-spinner {
+      width: 30px;
+      height: 30px;
+      border: 3px solid #333;
+      border-top: 3px solid #00ff88;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 15px;
+    }
+    
+    .twitter-actions {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+    }
+    
+    .refresh-btn,
+    .follow-btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .refresh-btn {
+      background: #444;
+      color: #fff;
+    }
+    
+    .refresh-btn:hover {
+      background: #555;
+      transform: translateY(-2px);
+    }
+    
+    .follow-btn {
+      background: #1DA1F2;
+      color: white;
+    }
+    
+    .follow-btn:hover {
+      background: #1991DB;
+      transform: translateY(-2px);
+    }
+    
+    .vote-stats-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+    
+    .stat-card {
+      background: #1a1a1a;
+      border-radius: 8px;
+      padding: 20px;
+      text-align: center;
+      border: 1px solid #444;
+      transition: all 0.3s ease;
+    }
+    
+    .stat-card:hover {
+      border-color: #00ff88;
+      transform: translateY(-3px);
+    }
+    
+    .stat-number {
+      font-size: 2em;
+      font-weight: bold;
+      color: #00ffe7;
+      margin-bottom: 5px;
+    }
+    
+    .stat-label {
+      color: #999;
+      font-size: 0.9em;
+    }
+    
+    .vote-leaderboard h4 {
+      color: #00ff88;
+      margin-bottom: 15px;
+      font-size: 1.1em;
+    }
+    
+    .leaderboard-list {
+      background: #1a1a1a;
+      border-radius: 8px;
+      padding: 15px;
+      border: 1px solid #444;
+    }
+    
+    .leaderboard-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 10px;
+      margin-bottom: 10px;
+      background: #333;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+    }
+    
+    .leaderboard-item:hover {
+      background: #3a3a3a;
+    }
+    
+    .leaderboard-rank {
+      font-size: 1.2em;
+      font-weight: bold;
+      min-width: 30px;
+    }
+    
+    .leaderboard-coin {
+      flex: 1;
+      color: #00ffe7;
+      font-weight: bold;
+    }
+    
+    .leaderboard-votes {
+      color: #00ff88;
+      font-weight: bold;
+    }
+    
+    .recent-activity {
+      background: #2a2a2a;
+      border-radius: 12px;
+      padding: 25px;
+      border: 2px solid #444;
+    }
+    
+    .recent-activity h3 {
+      color: #00ffe7;
+      margin-bottom: 20px;
+      font-size: 1.3em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .activity-feed {
+      max-height: 300px;
+      overflow-y: auto;
+    }
+    
+    .activity-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 12px;
+      margin-bottom: 10px;
+      background: #1a1a1a;
+      border-radius: 8px;
+      border-left: 3px solid #00ff88;
+      transition: all 0.3s ease;
+    }
+    
+    .activity-item:hover {
+      background: #333;
+      transform: translateX(5px);
+    }
+    
+    .activity-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #00ff88;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      color: #000;
+    }
+    
+    .activity-content {
+      flex: 1;
+    }
+    
+    .activity-text {
+      color: #ccc;
+      margin-bottom: 3px;
+    }
+    
+    .activity-time {
+      color: #666;
+      font-size: 0.8em;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    /* Responsive pour la section Twitter */
+    @media (max-width: 768px) {
+      .tracking-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+      
+      .vote-stats-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .twitter-actions {
+        flex-direction: column;
+      }
+      
+      .twitter-tracking-section h2 {
+        font-size: 1.5em;
+      }
+    }
+    
+    /* === STYLES POUR LE POPUP DE CONFIRMATION DE VOTE - VERSION AMÉLIORÉE === */
+    .popup-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+      backdrop-filter: blur(5px);
+    }
+    
+    .popup-overlay.show {
+      display: flex;
+    }
+    
+    .popup-content {
+      background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+      border-radius: 20px;
+      max-width: 500px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      border: 3px solid #00ff88;
+      box-shadow: 0 20px 60px rgba(0, 255, 136, 0.4);
+      animation: slideIn 0.3s ease-out;
+    }
+    
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-50px) scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+    
+    .popup-header {
+      background: linear-gradient(45deg, #00ff88, #00cc66);
+      color: #000;
+      padding: 25px 30px;
+      border-radius: 17px 17px 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .popup-header h2 {
+      margin: 0;
+      font-size: 1.8em;
+      font-weight: bold;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+    
+    .close-btn {
+      background: rgba(0, 0, 0, 0.2);
+      border: none;
+      color: #000;
+      font-size: 2em;
+      font-weight: bold;
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+    
+    .close-btn:hover {
+      background: rgba(0, 0, 0, 0.4);
+      transform: rotate(90deg);
+    }
+    
+    .popup-body {
+      padding: 30px;
+    }
+    
+    .voted-coin {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 30px;
+      padding: 20px;
+      background: #2a2a2a;
+      border-radius: 15px;
+      border: 2px solid #444;
+    }
+    
+    .voted-coin-logo {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: 3px solid #00ff88;
+      object-fit: cover;
+    }
+    
+    .voted-coin-info h3 {
+      color: #00ffe7;
+      margin: 0 0 10px 0;
+      font-size: 1.4em;
+    }
+    
+    .voted-coin-info p {
+      color: #ccc;
+      margin: 0;
+      font-size: 1em;
+    }
+    
+    .share-section {
+      text-align: center;
+      margin-bottom: 25px;
+      padding: 20px;
+      background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+      border-radius: 12px;
+      border-left: 4px solid #00ff88;
+    }
+    
+    .share-section h4 {
+      color: #00ff88;
+      margin: 0 0 10px 0;
+      font-size: 1.3em;
+    }
+    
+    .share-section p {
+      color: #ccc;
+      margin: 0;
+      font-size: 1em;
+      line-height: 1.5;
+    }
+    
+    .social-buttons {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+    
+    .social-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 15px 20px;
+      border: none;
+      border-radius: 12px;
+      font-weight: bold;
+      font-size: 1em;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+    
+    .social-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    }
+    
+    .social-btn.twitter {
+      background: linear-gradient(45deg, #1DA1F2, #0d8bd9);
+      color: white;
+    }
+    
+    .social-btn.telegram {
+      background: linear-gradient(45deg, #0088cc, #006699);
+      color: white;
+    }
+    
+    .social-btn.reddit {
+      background: linear-gradient(45deg, #FF4500, #cc3700);
+      color: white;
+    }
+    
+    .social-btn.facebook {
+      background: linear-gradient(45deg, #1877F2, #0d65d9);
+      color: white;
+    }
+    
+    .popup-actions {
+      text-align: center;
+      padding-top: 20px;
+      border-top: 1px solid #444;
+    }
+    
+    .confirm-btn {
+      background: linear-gradient(45deg, #00ff88, #00cc66);
+      color: #000;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 12px;
+      font-weight: bold;
+      font-size: 1.1em;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(0, 255, 136, 0.3);
+    }
+    
+    .confirm-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 255, 136, 0.5);
+    }
+    
+    /* Responsive pour le popup */
+    @media (max-width: 768px) {
+      .popup-content {
+        width: 95%;
+        margin: 10px;
+      }
+      
+      .popup-header {
+        padding: 20px;
+      }
+      
+      .popup-header h2 {
+        font-size: 1.5em;
+      }
+      
+      .popup-body {
+        padding: 20px;
+      }
+      
+      .voted-coin {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+      }
+      
+      .social-buttons {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+    }
+  </style>
 
 </head>
 <body>
@@ -26,7 +888,7 @@
   <nav class="quick-nav">
     <div class="quick-nav-container">
       <a href="#victims" class="quick-nav-item" data-translate="nav_victims">🎯 Victimes</a>
-      <a href="#security-search" class="quick-nav-item" data-translate="nav_security_search">🔍 Analyse</a>
+      <a href="#twitter-tracking" class="quick-nav-item" data-translate="nav_twitter_tracking">🐦 Suivi</a>
       <a href="#newsletter" class="quick-nav-item" data-translate="nav_newsletter">📧 Newsletter</a>
       <a href="#contact" class="quick-nav-item" data-translate="nav_contact">📞 Contact</a>
     </div>
@@ -56,49 +918,154 @@
     <!-- Countdown Timer -->
     <div class="vote-countdown">
       <h3 data-translate="countdown_title">⏰ Temps avant le prochain vote :</h3>
-      <div id="countdown" data-translate="countdown_loading">Chargement...</div>
+      <div id="countdown">
+        <div class="countdown-display">
+          <div class="countdown-item">
+            <span class="countdown-number">--</span>
+            <span class="countdown-label">JOURS</span>
+          </div>
+          <div class="countdown-item">
+            <span class="countdown-number">--</span>
+            <span class="countdown-label">HEURES</span>
+          </div>
+          <div class="countdown-item">
+            <span class="countdown-number">--</span>
+            <span class="countdown-label">MINUTES</span>
+          </div>
+          <div class="countdown-item">
+            <span class="countdown-number">--</span>
+            <span class="countdown-label">SECONDES</span>
+          </div>
+        </div>
+      </div>
       <p style="font-size: 0.9rem; color: #888; margin-top: 0.5rem;">
         🔄 Nouveau vote chaque lundi à 00h00 • Le gagnant sera annoncé automatiquement
       </p>
     </div>
 
     <!-- 🔽 Ce conteneur sera rempli dynamiquement par le JS -->
-    <div id="memecoins-container" class="card-container"></div>
-
-
-
-
-
-    <p class="meme-text" data-translate="vote_message">Tu ne peux voter qu'une seule fois par semaine mais en attendant rejoins sur sur nos reseaux et inscrit toi a la newsletter.Sinon Reviens lundi !</p>
-  </section>
-
-  <!-- Section de recherche de sécurité -->
-  <section id="security-search" class="section security-search-section">
-    <h2 data-translate="security_search_title">🔍 Analyse de Sécurité Personnalisée</h2>
-    <p data-translate="security_search_subtitle">Vérifie la sécurité de n'importe quel token en saisissant son adresse de contrat :</p>
-    
-    <div class="search-container">
-      <div class="search-input-group">
-        <input 
-          type="text" 
-          id="contractAddressInput" 
-          data-translate-placeholder="contract_placeholder"
-          placeholder="0x... (Adresse du contrat)"
-          class="contract-input"
-        />
-        <select id="chainSelect" class="chain-select">
-          <option value="1" data-translate="blockchain_ethereum">Ethereum</option>
-          <option value="56" data-translate="blockchain_bsc">BSC</option>
-          <option value="137" data-translate="blockchain_polygon">Polygon</option>
-          <option value="43114" data-translate="blockchain_avalanche">Avalanche</option>
-          <option value="250" data-translate="blockchain_fantom">Fantom</option>
-        </select>
-        <button onclick="analyzeContract()" class="analyze-btn" data-translate="btn_analyze">🔍 Analyser</button>
+    <div id="memecoins-container" style="position: relative; z-index: 20;">
+      <div class="status-message loading">
+        <h3>⏳ Chargement des memecoins...</h3>
+        <p>Connexion à Firebase en cours...</p>
       </div>
     </div>
-    
-    <div id="analysisResult" class="analysis-result"></div>
+
+
+
+
+
+    <!-- Message de vote - PLACÉ APRÈS LES MEMECOINS -->
+    <p class="meme-text" data-translate="vote_message" style="margin-top: 4rem;">Tu ne peux voter qu'une seule fois par semaine mais en attendant rejoins sur nos réseaux et inscris-toi à la newsletter. Sinon reviens lundi !</p>
   </section>
+
+  <!-- Section de suivi Twitter et votes -->
+  <section id="twitter-tracking" class="section twitter-tracking-section">
+    <h2 data-translate="twitter_tracking_title">🐦 Suivi @LFISTCOIN & Votes</h2>
+    <p data-translate="twitter_tracking_subtitle">Suivez en temps réel les mentions @LFISTCOIN et l'évolution des votes :</p>
+    
+    <div class="tracking-container">
+      <div class="tracking-grid">
+        <!-- Section Twitter Feed -->
+        <div class="twitter-feed-section">
+          <h3>🔥 Dernières mentions @LFISTCOIN</h3>
+          <div id="twitterFeed" class="twitter-feed">
+            <div class="loading-tweets">
+              <div class="tweet-loading-spinner"></div>
+              <p>Chargement des tweets...</p>
+            </div>
+          </div>
+          <div class="twitter-actions">
+            <button onclick="refreshTwitterFeed()" class="refresh-btn">🔄 Actualiser</button>
+            <a href="https://twitter.com/LFISTCOIN" target="_blank" class="follow-btn">
+              🐦 Suivre @LFISTCOIN
+            </a>
+          </div>
+        </div>
+        
+        <!-- Section Statistiques des votes -->
+        <div class="vote-stats-section">
+          <h3>📊 Statistiques des Votes</h3>
+          <div id="voteStats" class="vote-stats-container">
+            <div class="stat-card">
+              <div class="stat-number" id="totalVotesCount">0</div>
+              <div class="stat-label">Total des votes</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number" id="weeklyVotesCount">0</div>
+              <div class="stat-label">Cette semaine</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number" id="activeMemecoinCount">0</div>
+              <div class="stat-label">Memecoins actifs</div>
+            </div>
+          </div>
+          
+          <div class="vote-leaderboard">
+            <h4>🏆 Classement actuel</h4>
+            <div id="voteLeaderboard" class="leaderboard-list">
+              <div class="loading-leaderboard">Chargement du classement...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Section Activité récente -->
+      <div class="recent-activity">
+        <h3>⚡ Activité récente</h3>
+        <div id="recentActivity" class="activity-feed">
+          <div class="loading-activity">Chargement de l'activité...</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Popup de confirmation de vote avec partage social - VERSION AMÉLIORÉE -->
+  <div id="voteConfirmationPopup" class="popup-overlay">
+    <div class="popup-content">
+      <div class="popup-header">
+        <h2>🎉 Vote Confirmé !</h2>
+        <button class="close-btn" onclick="closeVotePopup()">&times;</button>
+      </div>
+      
+      <div class="popup-body">
+        <div class="voted-coin">
+          <img id="votedCoinLogo" src="" alt="Logo" class="voted-coin-logo">
+          <div class="voted-coin-info">
+            <h3 id="votedCoinName">Nom du Memecoin</h3>
+            <p>Merci d'avoir voté ! Votre choix a été enregistré.</p>
+          </div>
+        </div>
+        
+        <div class="share-section">
+          <h4>📢 Partagez votre vote !</h4>
+          <p>Invitez vos amis à découvrir et voter sur <strong>Lfistcoin.netlify.app</strong></p>
+        </div>
+        
+        <div class="social-buttons">
+          <button class="social-btn twitter" onclick="shareVoteOnTwitter()">
+            🐦 Twitter
+          </button>
+          <button class="social-btn telegram" onclick="shareVoteOnTelegram()">
+            💬 Telegram
+          </button>
+          <button class="social-btn reddit" onclick="shareVoteOnReddit()">
+            🔴 Reddit
+          </button>
+          <button class="social-btn facebook" onclick="shareVoteOnFacebook()">
+            📘 Facebook
+          </button>
+        </div>
+        
+        <div class="popup-actions">
+          <button class="confirm-btn" onclick="closeVotePopup()">
+            ✅ Parfait, merci !
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <section id="newsletter" style="text-align: center; margin-top: 40px;">
   <h2 data-translate="newsletter_title">📬 Inscris-toi à notre newsletter</h2>
   <p data-translate="newsletter_subtitle">Reste informé des nouveaux memecoins détectés chaque semaine !</p>
@@ -199,7 +1166,666 @@
   // Le compteur de visites est maintenant géré par visit-counter.js
   </script>
 
-  <!-- JavaScript pour les fonctionnalités principales -->
+  <!-- JavaScript pour les fonctionnalités principales - CORRIGÉ -->
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+    import { 
+        getDatabase, 
+        ref, 
+        push, 
+        set, 
+        get, 
+        onValue 
+    } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
+
+    // Configuration Firebase
+    const firebaseConfig = {
+        apiKey: "AIzaSyDo6bGH2ofNNhL6SBB9rJ3ZaBMzldp0qp8",
+        authDomain: "lfistdur.firebaseapp.com",
+        databaseURL: "https://lfistdur-default-rtdb.firebaseio.com",
+        projectId: "lfistdur",
+        storageBucket: "lfistdur.appspot.com",
+        messagingSenderId: "3612454131",
+        appId: "1:3612454131:web:dc3eeab8ded57a40671b86"
+    };
+
+    // Initialisation Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    // Variables globales
+    let memecoins = {};
+    let votes = {};
+    let hasVoted = localStorage.getItem('votedThisWeek') === 'true';
+    let countdownInterval = null;
+
+    // Rendre les fonctions disponibles globalement
+    window.vote = vote;
+
+    // Initialisation
+    document.addEventListener('DOMContentLoaded', () => {
+        console.log('🎯 Initialisation FIST-DETECTOR intégré...');
+        initializeFistDetector();
+        startCountdownFixed();
+    });
+
+    function initializeFistDetector() {
+        console.log('🚀 Démarrage FIST-DETECTOR...');
+        
+        // Écouter les changements de memecoins
+        const memecoinRef = ref(db, 'memecoins');
+        onValue(memecoinRef, (snapshot) => {
+            console.log('📊 Memecoins reçus:', snapshot.val());
+            memecoins = snapshot.val() || {};
+            displayMemecoins();
+        }, (error) => {
+            console.error('❌ Erreur memecoins:', error);
+            showStatusMessage('❌ Erreur lors du chargement des memecoins: ' + error.message, 'error');
+        });
+
+        // Écouter les changements de votes
+        const votesRef = ref(db, 'votes');
+        onValue(votesRef, (snapshot) => {
+            console.log('🗳️ Votes reçus:', snapshot.val());
+            votes = snapshot.val() || {};
+            displayMemecoins();
+        }, (error) => {
+            console.error('❌ Erreur votes:', error);
+        });
+
+        // Test de connexion
+        testFirebaseConnection();
+    }
+
+    function startCountdownFixed() {
+        const countdownEl = document.getElementById('countdown');
+        if (!countdownEl) {
+            console.error('❌ Element countdown non trouvé');
+            return;
+        }
+
+        // Vérifier que la structure HTML est déjà en place
+        const numberElements = countdownEl.querySelectorAll('.countdown-number');
+        if (numberElements.length !== 4) {
+            console.log('⚠️ Structure HTML countdown incorrecte, reconstruction...');
+            countdownEl.innerHTML = `
+                <div class="countdown-display">
+                    <div class="countdown-item">
+                        <span class="countdown-number">--</span>
+                        <span class="countdown-label">JOURS</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="countdown-number">--</span>
+                        <span class="countdown-label">HEURES</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="countdown-number">--</span>
+                        <span class="countdown-label">MINUTES</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="countdown-number">--</span>
+                        <span class="countdown-label">SECONDES</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        const updateCountdown = () => {
+            try {
+                const now = new Date();
+                const nextMonday = new Date();
+                
+                const daysUntilMonday = (8 - now.getDay()) % 7 || 7;
+                nextMonday.setDate(now.getDate() + daysUntilMonday);
+                nextMonday.setHours(0, 0, 0, 0);
+                
+                const timeLeft = nextMonday - now;
+                
+                if (timeLeft <= 0) {
+                    countdownEl.innerHTML = `
+                        <div style="color: #00ff88; font-size: 1.2em;">
+                            🔄 Nouveau vote disponible !
+                        </div>
+                    `;
+                    checkWeeklyReset();
+                    return;
+                }
+                
+                const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                
+                // Mettre à jour seulement les nombres, pas toute la structure HTML
+                const numberElements = countdownEl.querySelectorAll('.countdown-number');
+                if (numberElements.length === 4) {
+                    numberElements[0].textContent = days.toString().padStart(2, '0');
+                    numberElements[1].textContent = hours.toString().padStart(2, '0');
+                    numberElements[2].textContent = minutes.toString().padStart(2, '0');
+                    numberElements[3].textContent = seconds.toString().padStart(2, '0');
+                }
+                
+            } catch (error) {
+                console.error('❌ Erreur countdown:', error);
+            }
+        };
+        
+        updateCountdown();
+        
+        if (countdownInterval) {
+            clearInterval(countdownInterval);
+        }
+        
+        countdownInterval = setInterval(updateCountdown, 1000);
+        console.log('⏰ Timer corrigé démarré');
+    }
+
+    async function testFirebaseConnection() {
+        try {
+            const testRef = ref(db, 'test');
+            await get(testRef);
+            console.log('✅ Connexion Firebase OK');
+        } catch (error) {
+            console.error('❌ Erreur connexion:', error);
+            showStatusMessage('❌ Erreur de connexion à Firebase: ' + error.message, 'error');
+        }
+    }
+
+    function displayMemecoins() {
+        const container = document.getElementById('memecoins-container');
+        if (!container) {
+            console.error('❌ Container memecoins-container non trouvé');
+            return;
+        }
+
+        // Filtrer les memecoins actifs et FIST-DETECTOR
+        const fistDetectorCoins = Object.entries(memecoins).filter(([id, coin]) => 
+            coin.active && coin.fistDetector
+        );
+
+        console.log('🎯 Memecoins FIST-DETECTOR:', fistDetectorCoins.length);
+
+        if (fistDetectorCoins.length === 0) {
+            showStatusMessage(`
+                <h3>🎯 FIST-DETECTOR</h3>
+                <p>Aucun memecoin disponible pour le vote</p>
+                <p style="font-size: 14px; margin-top: 10px;">
+                    Les memecoins apparaîtront ici une fois ajoutés par l'administrateur
+                </p>
+                <button onclick="location.reload()" style="margin-top: 15px; padding: 10px 20px; background: #00ff88; color: #000; border: none; border-radius: 5px; cursor: pointer;">
+                    🔄 Actualiser
+                </button>
+            `, 'empty');
+            return;
+        }
+
+        // Créer le contenu avec les memecoins
+        const memecoinCards = fistDetectorCoins.map(([id, coin]) => {
+            const voteCount = getVotesForCoin(id);
+            return createMemecoinCard(id, coin, voteCount);
+        }).join('');
+
+        container.innerHTML = `
+            <div style="text-align: center; margin-bottom: 30px; position: relative; z-index: 15;">
+                <h2 style="color: #00ff88;">🎯 FIST-DETECTOR</h2>
+                <p style="color: #ccc;">Votez pour votre memecoin préféré cette semaine</p>
+                ${hasVoted ? '<p style="color: #ffaa00; font-weight: bold;">⚠️ Vous avez déjà voté cette semaine</p>' : ''}
+            </div>
+            <div class="memecoins-grid">
+                ${memecoinCards}
+            </div>
+        `;
+
+        // S'assurer que les memecoins sont visibles avec z-index élevé
+        setTimeout(() => {
+            const cards = container.querySelectorAll('.memecoin-card');
+            cards.forEach((card, index) => {
+                card.style.zIndex = (30 + index).toString();
+                card.style.position = 'relative';
+            });
+            console.log(`✅ ${cards.length} cartes memecoins affichées avec z-index élevé`);
+        }, 100);
+    }
+
+    function createMemecoinCard(id, coin, voteCount) {
+        const logoImg = coin.logoUrl ? 
+            `<img src="${coin.logoUrl}" class="memecoin-logo" alt="${coin.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+             <div class="memecoin-logo" style="background: linear-gradient(45deg, #333, #555); display: none; align-items: center; justify-content: center; font-size: 32px; color: #00ff88;">🪙</div>` :
+            `<div class="memecoin-logo" style="background: linear-gradient(45deg, #333, #555); display: flex; align-items: center; justify-content: center; font-size: 32px; color: #00ff88;">🪙</div>`;
+
+        return `
+            <div class="memecoin-card" style="z-index: 25 !important; position: relative;">
+                <div class="memecoin-content">
+                    <div class="memecoin-header">
+                        ${logoImg}
+                        <div class="memecoin-info">
+                            <h3>${coin.name} (${coin.symbol})</h3>
+                            <p>${coin.description || 'Memecoin prometteur détecté par notre système'}</p>
+                            ${coin.price ? `<p class="memecoin-price">💰 Prix: $${coin.price}</p>` : ''}
+                        </div>
+                    </div>
+                    
+                    ${coin.website ? `
+                        <div class="memecoin-website">
+                            <a href="${coin.website}" target="_blank">
+                                🌐 Visiter le site officiel
+                            </a>
+                        </div>
+                    ` : ''}
+                </div>
+                
+                <div class="vote-section">
+                    <button class="vote-btn" onclick="vote('${id}')" ${hasVoted ? 'disabled' : ''}>
+                        ${hasVoted ? '✅ Déjà voté cette semaine' : '🗳️ Voter pour ce memecoin'}
+                    </button>
+                    <div class="vote-count">
+                        🔥 ${voteCount} vote${voteCount > 1 ? 's' : ''} cette semaine
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    function getVotesForCoin(coinId) {
+        if (!votes) return 0;
+        return Object.values(votes).filter(vote => vote.coinId === coinId).length;
+    }
+
+    async function vote(coinId) {
+        if (hasVoted) {
+            alert('Vous avez déjà voté cette semaine !');
+            return;
+        }
+
+        try {
+            console.log('🗳️ Vote pour:', coinId);
+
+            const votesRef = ref(db, 'votes');
+            const newVoteRef = push(votesRef);
+            await set(newVoteRef, {
+                coinId: coinId,
+                timestamp: Date.now(),
+                userAgent: navigator.userAgent.substring(0, 50)
+            });
+
+            hasVoted = true;
+            localStorage.setItem('votedThisWeek', 'true');
+
+            console.log('✅ Vote enregistré');
+            
+            displayMemecoins();
+            
+            // Afficher le popup de confirmation avec partage social
+            showVoteConfirmationPopup(coinId);
+
+        } catch (error) {
+            console.error('❌ Erreur vote:', error);
+            alert('Erreur lors du vote: ' + error.message);
+        }
+    }
+
+    function checkWeeklyReset() {
+        const lastReset = localStorage.getItem('lastWeeklyReset');
+        const now = Date.now();
+        const oneWeek = 7 * 24 * 60 * 60 * 1000;
+        
+        if (!lastReset || (now - parseInt(lastReset)) > oneWeek) {
+            localStorage.removeItem('votedThisWeek');
+            localStorage.setItem('lastWeeklyReset', now.toString());
+            hasVoted = false;
+            console.log('🔄 Reset hebdomadaire effectué');
+        }
+    }
+
+    function showStatusMessage(message, type) {
+        const container = document.getElementById('memecoins-container');
+        if (container) {
+            container.innerHTML = `
+                <div class="status-message ${type}">
+                    ${message}
+                </div>
+            `;
+        }
+    }
+
+    // Vérifier le reset au chargement
+    checkWeeklyReset();
+
+    // === FONCTIONS POUR LA SECTION TWITTER TRACKING ===
+    
+    // Initialiser la section Twitter tracking
+    function initializeTwitterTracking() {
+        console.log('🐦 Initialisation du suivi Twitter...');
+        loadTwitterFeed();
+        loadVoteStats();
+        loadRecentActivity();
+        
+        // Actualiser toutes les 5 minutes
+        setInterval(() => {
+            loadVoteStats();
+            loadRecentActivity();
+        }, 5 * 60 * 1000);
+        
+        // Actualiser le feed Twitter toutes les 10 minutes
+        setInterval(loadTwitterFeed, 10 * 60 * 1000);
+    }
+    
+    function loadTwitterFeed() {
+        const twitterFeed = document.getElementById('twitterFeed');
+        if (!twitterFeed) return;
+        
+        // Simuler des tweets (en réalité, vous devriez utiliser l'API Twitter)
+        const mockTweets = [
+            {
+                user: 'CryptoEnthusiast',
+                handle: '@cryptofan2024',
+                avatar: '🚀',
+                content: 'Viens de découvrir @LFISTCOIN ! Leur système de vote pour les memecoins est génial ! 🔥 #LFIST #Memecoin',
+                time: '2h',
+                likes: 15,
+                retweets: 8
+            },
+            {
+                user: 'MemeLord',
+                handle: '@meme_master',
+                avatar: '😎',
+                content: 'Le vote de la semaine sur @LFISTCOIN est lancé ! Qui va gagner cette fois ? 🏆 #VoteLFIST',
+                time: '4h',
+                likes: 23,
+                retweets: 12
+            },
+            {
+                user: 'DeFi_Trader',
+                handle: '@defi_pro',
+                avatar: '💎',
+                content: '@LFISTCOIN a un concept unique ! Voter pour les memecoins de la semaine, j\'adore ! 💪',
+                time: '6h',
+                likes: 31,
+                retweets: 18
+            },
+            {
+                user: 'CryptoNews',
+                handle: '@crypto_daily',
+                avatar: '📰',
+                content: 'Nouveau projet intéressant : @LFISTCOIN permet de voter pour les memecoins les plus prometteurs ! 🗳️',
+                time: '8h',
+                likes: 45,
+                retweets: 27
+            }
+        ];
+        
+        const tweetsHtml = mockTweets.map(tweet => `
+            <div class="tweet-item">
+                <div class="tweet-header">
+                    <div class="tweet-avatar">${tweet.avatar}</div>
+                    <div class="tweet-user">${tweet.user}</div>
+                    <div class="tweet-handle">${tweet.handle}</div>
+                    <div class="tweet-time">${tweet.time}</div>
+                </div>
+                <div class="tweet-content">${tweet.content}</div>
+                <div class="tweet-stats">
+                    <span>❤️ ${tweet.likes}</span>
+                    <span>🔄 ${tweet.retweets}</span>
+                </div>
+            </div>
+        `).join('');
+        
+        twitterFeed.innerHTML = tweetsHtml;
+    }
+    
+    function loadVoteStats() {
+        // Calculer les statistiques des votes
+        const totalVotes = Object.keys(votes).length;
+        const weekAgo = Date.now() - (7 * 24 * 60 * 60 * 1000);
+        const weeklyVotes = Object.values(votes).filter(vote => 
+            vote.timestamp && vote.timestamp > weekAgo
+        ).length;
+        const activeMemecoins = Object.values(memecoins).filter(coin => coin.active).length;
+        
+        // Mettre à jour les compteurs
+        const totalVotesEl = document.getElementById('totalVotesCount');
+        const weeklyVotesEl = document.getElementById('weeklyVotesCount');
+        const activeMemecoinEl = document.getElementById('activeMemecoinCount');
+        
+        if (totalVotesEl) totalVotesEl.textContent = totalVotes;
+        if (weeklyVotesEl) weeklyVotesEl.textContent = weeklyVotes;
+        if (activeMemecoinEl) activeMemecoinEl.textContent = activeMemecoins;
+        
+        // Mettre à jour le classement
+        loadVoteLeaderboard();
+    }
+    
+    function loadVoteLeaderboard() {
+        const leaderboard = document.getElementById('voteLeaderboard');
+        if (!leaderboard) return;
+        
+        const activeMemecoins = Object.entries(memecoins).filter(([id, coin]) => coin.active);
+        
+        if (activeMemecoins.length === 0) {
+            leaderboard.innerHTML = '<div class="loading-leaderboard">Aucun memecoin actif</div>';
+            return;
+        }
+        
+        // Calculer les votes pour chaque memecoin
+        const coinVotes = activeMemecoins.map(([id, coin]) => ({
+            id,
+            name: coin.name,
+            symbol: coin.symbol,
+            votes: getVotesForCoin(id)
+        })).sort((a, b) => b.votes - a.votes);
+        
+        const leaderboardHtml = coinVotes.map((coin, index) => {
+            const medals = ['🥇', '🥈', '🥉'];
+            const medal = medals[index] || '🔸';
+            
+            return `
+                <div class="leaderboard-item">
+                    <div class="leaderboard-rank">${medal}</div>
+                    <div class="leaderboard-coin">${coin.name} (${coin.symbol})</div>
+                    <div class="leaderboard-votes">${coin.votes} votes</div>
+                </div>
+            `;
+        }).join('');
+        
+        leaderboard.innerHTML = leaderboardHtml;
+    }
+    
+    function loadRecentActivity() {
+        const activityFeed = document.getElementById('recentActivity');
+        if (!activityFeed) return;
+        
+        // Générer des activités récentes basées sur les votes
+        const recentVotes = Object.values(votes)
+            .filter(vote => vote.timestamp)
+            .sort((a, b) => b.timestamp - a.timestamp)
+            .slice(0, 10);
+        
+        const activities = recentVotes.map(vote => {
+            const coin = Object.values(memecoins).find(c => 
+                Object.keys(memecoins).find(key => memecoins[key] === c) === vote.coinId
+            );
+            const timeAgo = getTimeAgo(vote.timestamp);
+            
+            return {
+                icon: '🗳️',
+                text: `Vote pour ${coin?.name || 'un memecoin'}`,
+                time: timeAgo
+            };
+        });
+        
+        // Ajouter quelques activités simulées
+        activities.unshift(
+            {
+                icon: '🔥',
+                text: 'Nouveau memecoin ajouté au vote',
+                time: '1h'
+            },
+            {
+                icon: '📊',
+                text: 'Statistiques mises à jour',
+                time: '2h'
+            }
+        );
+        
+        const activitiesHtml = activities.slice(0, 8).map(activity => `
+            <div class="activity-item">
+                <div class="activity-icon">${activity.icon}</div>
+                <div class="activity-content">
+                    <div class="activity-text">${activity.text}</div>
+                    <div class="activity-time">Il y a ${activity.time}</div>
+                </div>
+            </div>
+        `).join('');
+        
+        activityFeed.innerHTML = activitiesHtml || '<div class="loading-activity">Aucune activité récente</div>';
+    }
+    
+    function getTimeAgo(timestamp) {
+        const now = Date.now();
+        const diff = now - timestamp;
+        const minutes = Math.floor(diff / (1000 * 60));
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        
+        if (days > 0) return `${days}j`;
+        if (hours > 0) return `${hours}h`;
+        if (minutes > 0) return `${minutes}min`;
+        return 'maintenant';
+    }
+    
+    function refreshTwitterFeed() {
+        const twitterFeed = document.getElementById('twitterFeed');
+        if (twitterFeed) {
+            twitterFeed.innerHTML = `
+                <div class="loading-tweets">
+                    <div class="tweet-loading-spinner"></div>
+                    <p>Actualisation des tweets...</p>
+                </div>
+            `;
+            
+            setTimeout(() => {
+                loadTwitterFeed();
+            }, 1000);
+        }
+    }
+    
+    // === FONCTIONS POUR LE POPUP DE CONFIRMATION DE VOTE ===
+    
+    let currentVotedCoin = null;
+    
+    function showVoteConfirmationPopup(coinId) {
+        const coin = memecoins[coinId];
+        if (!coin) return;
+        
+        currentVotedCoin = coin;
+        
+        // Mettre à jour les informations du coin dans le popup
+        const coinLogo = document.getElementById('votedCoinLogo');
+        const coinName = document.getElementById('votedCoinName');
+        
+        if (coinLogo) {
+            coinLogo.src = coin.logoUrl || 'https://via.placeholder.com/60x60/00ff88/000000?text=' + coin.symbol;
+            coinLogo.alt = coin.name + ' logo';
+        }
+        
+        if (coinName) {
+            coinName.textContent = `${coin.name} (${coin.symbol})`;
+        }
+        
+        // Afficher le popup avec animation
+        const popup = document.getElementById('voteConfirmationPopup');
+        if (popup) {
+            popup.classList.add('show');
+            document.body.style.overflow = 'hidden'; // Empêcher le scroll
+        }
+        
+        console.log('✅ Popup de vote affiché pour:', coin.name);
+    }
+    
+    function closeVotePopup() {
+        const popup = document.getElementById('voteConfirmationPopup');
+        if (popup) {
+            popup.classList.remove('show');
+            document.body.style.overflow = 'auto'; // Réactiver le scroll
+        }
+        currentVotedCoin = null;
+        console.log('❌ Popup de vote fermé');
+    }
+    
+    function shareVoteOnTwitter() {
+        if (!currentVotedCoin) return;
+        
+        const text = `🗳️ Je viens de voter pour ${currentVotedCoin.name} (${currentVotedCoin.symbol}) sur LFIST ! 🚀\n\nRejoignez-moi pour voter pour votre memecoin préféré cette semaine !\n\n👉 Lfistcoin.netlify.app\n\n#LFIST #Memecoin #Vote #${currentVotedCoin.symbol}`;
+        const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
+        window.open(url, '_blank', 'width=600,height=400');
+        
+        console.log('🐦 Partage Twitter:', currentVotedCoin.name);
+    }
+    
+    function shareVoteOnTelegram() {
+        if (!currentVotedCoin) return;
+        
+        const text = `🗳️ Je viens de voter pour ${currentVotedCoin.name} (${currentVotedCoin.symbol}) sur LFIST ! 🚀\n\nRejoignez-moi pour voter pour votre memecoin préféré cette semaine !\n\n👉 Lfistcoin.netlify.app`;
+        const url = `https://t.me/share/url?url=https://Lfistcoin.netlify.app&text=${encodeURIComponent(text)}`;
+        window.open(url, '_blank', 'width=600,height=400');
+        
+        console.log('💬 Partage Telegram:', currentVotedCoin.name);
+    }
+    
+    function shareVoteOnReddit() {
+        if (!currentVotedCoin) return;
+        
+        const title = `🗳️ Je viens de voter pour ${currentVotedCoin.name} sur LFIST !`;
+        const text = `Salut la communauté !\n\nJe viens de voter pour ${currentVotedCoin.name} (${currentVotedCoin.symbol}) sur LFIST !\n\nC'est un site génial où on peut voter chaque semaine pour notre memecoin préféré. Venez découvrir et voter vous aussi !\n\nLe concept est simple : chaque semaine, 3 memecoins sont sélectionnés et la communauté vote pour celui qui va "prendre cher" ! 😄\n\nRejoignez-nous sur Lfistcoin.netlify.app !`;
+        const url = `https://reddit.com/submit?url=https://Lfistcoin.netlify.app&title=${encodeURIComponent(title)}&text=${encodeURIComponent(text)}`;
+        window.open(url, '_blank', 'width=800,height=600');
+        
+        console.log('🔴 Partage Reddit:', currentVotedCoin.name);
+    }
+    
+    function shareVoteOnFacebook() {
+        if (!currentVotedCoin) return;
+        
+        const text = `🗳️ Je viens de voter pour ${currentVotedCoin.name} (${currentVotedCoin.symbol}) sur LFIST ! 🚀\n\nRejoignez-moi pour découvrir et voter pour votre memecoin préféré cette semaine !\n\nUn concept unique : voter pour les memecoins les plus prometteurs !`;
+        const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent('https://Lfistcoin.netlify.app')}&quote=${encodeURIComponent(text)}`;
+        window.open(url, '_blank', 'width=600,height=400');
+        
+        console.log('📘 Partage Facebook:', currentVotedCoin.name);
+    }
+    
+    // Fermer le popup en cliquant en dehors
+    document.addEventListener('click', function(e) {
+        const popup = document.getElementById('voteConfirmationPopup');
+        const popupContent = document.querySelector('.popup-content');
+        
+        if (popup && popup.classList.contains('show') && !popupContent.contains(e.target)) {
+            closeVotePopup();
+        }
+    });
+    
+    // Fermer le popup avec la touche Escape
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && document.getElementById('voteConfirmationPopup').classList.contains('show')) {
+            closeVotePopup();
+        }
+    });
+
+    // Rendre les fonctions disponibles globalement
+    window.refreshTwitterFeed = refreshTwitterFeed;
+    window.showVoteConfirmationPopup = showVoteConfirmationPopup;
+    window.closeVotePopup = closeVotePopup;
+    window.shareVoteOnTwitter = shareVoteOnTwitter;
+    window.shareVoteOnTelegram = shareVoteOnTelegram;
+    window.shareVoteOnReddit = shareVoteOnReddit;
+    window.shareVoteOnFacebook = shareVoteOnFacebook;
+    
+    // Initialiser le suivi Twitter après un délai
+    setTimeout(initializeTwitterTracking, 2000);
+
+    console.log('🎯 FIST-DETECTOR intégré initialisé');
+  </script>
+  
+  <!-- Fallback vers main.js si nécessaire -->
   <script type="module" src="main.js"></script>
 
 </body>

@@ -270,7 +270,7 @@ header {
   display: block;
 }
 
-/* Victims Grid */
+/* Victims Grid - CORRIGÉ POUR ÉVITER LE MASQUAGE */
 .victims-grid, .card-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -279,6 +279,9 @@ header {
   max-width: 1200px;
   padding: 0 1rem;
   justify-items: center;
+  position: relative;
+  z-index: 10; /* S'assurer que les memecoins sont au-dessus */
+  min-height: 200px; /* Hauteur minimale pour éviter l'effondrement */
 }
 
 .victim-card, .memecoin-card {
@@ -289,6 +292,7 @@ header {
   text-align: center;
   transition: all 0.3s ease;
   position: relative;
+  z-index: 15; /* Z-index élevé pour les cartes */
   overflow: hidden;
   backdrop-filter: blur(10px);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
@@ -399,7 +403,7 @@ header {
   font-style: italic;
 }
 
-/* Message de vote */
+/* Message de vote - CORRIGÉ POUR NE PAS MASQUER LES MEMECOINS */
 .meme-text {
   text-align: center;
   padding: 2rem;
@@ -411,6 +415,9 @@ header {
   color: #e8e8e8;
   font-size: 1.1rem;
   line-height: 1.6;
+  position: relative;
+  z-index: 5; /* Z-index plus bas que les memecoins */
+  clear: both; /* S'assurer qu'il ne flotte pas au-dessus */
 }
 
 /* Section de recherche de sécurité */
