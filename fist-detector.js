@@ -1,17 +1,22 @@
-// === script.js ===
+// === fist-detector.js ===
 
-// Config Firebase (à remplacer par tes infos réelles)
+// Config Firebase - Configuration corrigée
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
+  apiKey: "AIzaSyDo6bGH2ofNNhL6SBB9rJ3ZaBMzldp0qp8",
   authDomain: "lfistdur.firebaseapp.com",
+  databaseURL: "https://lfistdur-default-rtdb.firebaseio.com",
   projectId: "lfistdur",
   storageBucket: "lfistdur.appspot.com",
-  messagingSenderId: "SENDER_ID",
-  appId: "APP_ID"
+  messagingSenderId: "3612454131",
+  appId: "1:3612454131:web:dc3eeab8ded57a40671b86"
 };
 
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+// Utilisation de la nouvelle API Firebase v9+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, set, get, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
 
 const voteContainer = document.getElementById("detector-container");
 
@@ -84,28 +89,41 @@ async function vote(id, index) {
     return alert(message);
   }
 
-  const ref = db.collection("votes").doc(id);
-  await db.runTransaction(async t => {
-    const doc = await t.get(ref);
-    const newCount = doc.exists ? doc.data().count + 1 : 1;
-    t.set(ref, { count: newCount });
-  });
-
-  localStorage.setItem("votedThisWeek", true);
-  loadVoteCount(id, index);
+  try {
+    const voteRef = ref(db, `votes/${id}`);
+    const snapshot = await get(voteRef);
+    const currentCount = snapshot.exists() ? snapshot.val().count || 0 : 0;
+    
+    await set(voteRef, { count: currentCount + 1 });
+    localStorage.setItem("votedThisWeek", true);
+    loadVoteCount(id, index);
+  } catch (error) {
+    console.error("Erreur lors du vote:", error);
+    alert("Erreur lors du vote. Veuillez réessayer.");
+  }
 }
 
 function loadVoteCount(id, index) {
   const fill = document.getElementById(`fill-${index}`);
   const count = document.getElementById(`count-${index}`);
 
-  db.collection("votes").doc(id).onSnapshot(doc => {
-    const totalVotes = doc.exists ? doc.data().count : 0;
+  if (!fill || !count) return;
+
+  const voteRef = ref(db, `votes/${id}`);
+  onValue(voteRef, (snapshot) => {
+    const totalVotes = snapshot.exists() ? snapshot.val().count || 0 : 0;
     count.innerText = `${totalVotes} vote${totalVotes > 1 ? 's' : ''}`;
 
-    db.collection("votes").get().then(snapshot => {
+    // Calculer le pourcentage par rapport à tous les votes
+    const allVotesRef = ref(db, 'votes');
+    get(allVotesRef).then((allSnapshot) => {
       let allVotes = 0;
-      snapshot.forEach(d => allVotes += d.data().count || 0);
+      if (allSnapshot.exists()) {
+        const votesData = allSnapshot.val();
+        Object.values(votesData).forEach(vote => {
+          allVotes += vote.count || 0;
+        });
+      }
       const percent = allVotes ? (totalVotes / allVotes * 100).toFixed(1) : 0;
       fill.style.width = `${percent}%`;
     });
@@ -116,11 +134,14 @@ function loadVoteCount(id, index) {
 async function weeklyReset() {
   const today = new Date();
   if (today.getDay() === 1 && today.getHours() < 3) {
-    const snapshot = await db.collection("votes").get();
-    const batch = db.batch();
-    snapshot.forEach(doc => batch.delete(doc.ref));
-    await batch.commit();
-    localStorage.removeItem("votedThisWeek");
+    try {
+      const votesRef = ref(db, 'votes');
+      await set(votesRef, null); // Supprime tous les votes
+      localStorage.removeItem("votedThisWeek");
+      console.log("Reset hebdomadaire effectué");
+    } catch (error) {
+      console.error("Erreur lors du reset hebdomadaire:", error);
+    }
   }
 }
 

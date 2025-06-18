@@ -1,0 +1,39 @@
+{
+  "rules": {
+    "memecoins": {
+      ".read": true,
+      ".write": false,
+      "$memecoinId": {
+        ".read": true,
+        ".write": false
+      }
+    },
+    "votes": {
+      ".read": true,
+      ".write": true,
+      "$voteId": {
+        ".read": true,
+        ".write": true,
+        ".validate": "newData.hasChildren(['coinId', 'timestamp', 'userAgent']) && newData.child('timestamp').isNumber()"
+      }
+    },
+    "visitCount": {
+      ".read": true,
+      ".write": true,
+      ".validate": "newData.isNumber()"
+    },
+    "lastUpdate": {
+      ".read": true,
+      ".write": true
+    },
+    "newsletter": {
+      ".read": false,
+      ".write": true,
+      "$emailId": {
+        ".read": false,
+        ".write": true,
+        ".validate": "newData.hasChild('email') && newData.child('email').isString()"
+      }
+    }
+  }
+}
