@@ -12,6 +12,13 @@ const translations = {
     nav_contact: "Nous Rejoindre",
     nav_home: "Accueil",
     nav_fist_detector: "Fist-Detector",
+    nav_listings: "Référencements",
+    nav_victims: "Victimes",
+    nav_twitter_tracking: "Suivi Twitter",
+    nav_newsletter: "Newsletter",
+    nav_victims: "Victimes",
+    nav_twitter_tracking: "Suivi Twitter",
+    nav_newsletter: "Newsletter",
 
     // Index.html - Hero Section
     hero_title: "Bienvenue dans l'univers <span class=\"highlight\">LFIST</span>",
@@ -45,7 +52,7 @@ const translations = {
     team_laurie_name: "Laurie",
     team_laurie_desc: "Fondatrice mystique. Stratège memecoin intergalactique.",
     team_kamkam_name: "KamKam", 
-    team_kamkam_desc: "Développeur de conneries.Fait tout et fait rien.",
+    team_kamkam_desc: "Développeur de conneries. Fait tout et fait rien.",
     team_vinni_name: "Vinni",
     team_vinni_desc: "Community Manager. Roi du meme et du vol de banane.",
 
@@ -92,7 +99,7 @@ const translations = {
     // Security Section
     security_title: "🔒 Sécurité & Transparence",
     security_verified: "Contrat vérifié sur BSCScan",
-    security_ownership: "Ownership renoncé (15 Janvier 2025)",
+    security_ownership: "Ownership renoncé (01 Janvier 2026)",
     security_liquidity: "Liquidité verrouillée",
     security_mint: "Pas de fonction mint",
     security_source: "Code source public",
@@ -157,8 +164,163 @@ const translations = {
     victims_title: "Les 3 victimes détectées cette semaine",
     countdown_title: "⏰ Temps restant pour voter :",
     countdown_loading: "Chargement...",
-    vote_message: "Tu ne peux voter qu'une seule fois par semaine mais en attendant rejoins sur sur nos reseaux et inscrit toi a la newsletter.Sinon Reviens lundi !",
+    vote_message: "Tu ne peux voter qu'une seule fois par semaine mais en attendant rejoins sur nos réseaux et inscris-toi à la newsletter. Sinon reviens lundi !",
     vote_already_done: "Tu as déjà voté cette semaine ! Reviens lundi pour voter à nouveau.",
+    twitter_tracking_title: "🐦 Suivi @LFISTCOIN & Votes",
+    twitter_tracking_subtitle: "Suivez en temps réel les mentions @LFISTCOIN et l'évolution des votes :",
+    
+    // Listings Section
+    listings_title: "🚀 Référencements LFIST",
+    listings_subtitle: "LFIST gagne en visibilité sur les principales plateformes crypto",
+    current_listings_title: "✅ Actuellement Référencé",
+    upcoming_listings_title: "🎯 Référencements à Venir",
+    
+    // Status
+    status_live: "🟢 LIVE",
+    status_pending: "🟡 EN COURS",
+    status_planned: "🔵 PLANIFIÉ",
+    
+    // Platform descriptions
+    geckoterminal_desc: "Plateforme de trading et d'analyse en temps réel pour les tokens DeFi",
+    pancakeswap_desc: "DEX principal pour l'achat et la vente de LFIST",
+    bscscan_desc: "Explorateur blockchain officiel pour vérifier toutes les transactions",
+    cmc_desc: "La plus grande plateforme de données crypto au monde",
+    coingecko_desc: "Plateforme de référence pour le tracking et l'analyse crypto",
+    dextools_desc: "Outils d'analyse avancés pour les traders DeFi",
+    coinpaprika_desc: "Données crypto fiables et API pour développeurs",
+    
+    // Stats and buttons
+    stat_pool: "Pool:",
+    stat_network: "Réseau:",
+    btn_view_geckoterminal: "📊 Voir sur GeckoTerminal",
+    btn_trade_pancake: "🥞 Trader sur PancakeSwap",
+    btn_view_bscscan: "🔍 Voir sur BSCScan",
+    btn_follow_twitter: "🐦 Suivre sur Twitter",
+    
+    // Progress
+    progress_75: "75% - Dossier soumis",
+    progress_60: "60% - Préparation dossier",
+    progress_30: "30% - Étude en cours",
+    progress_20: "20% - Évaluation initiale",
+    
+    // Benefits
+    benefit_visibility: "📈 Visibilité massive",
+    benefit_credibility: "✨ Crédibilité accrue",
+    benefit_tracking: "📊 Tracking avancé",
+    benefit_analytics: "📈 Analytics détaillées",
+    benefit_tools: "🛠️ Outils pro",
+    benefit_alerts: "🚨 Alertes trading",
+    benefit_api: "🔌 API access",
+    benefit_data: "📊 Données fiables",
+    
+    // Impact section
+    impact_title: "🎯 Impact des Référencements",
+    impact_visibility_title: "Visibilité Accrue",
+    impact_visibility_desc: "Exposition à des millions d'utilisateurs crypto quotidiens",
+    impact_credibility_title: "Crédibilité Renforcée",
+    impact_credibility_desc: "Validation par les plateformes de référence du secteur",
+    impact_liquidity_title: "Liquidité Améliorée",
+    impact_liquidity_desc: "Plus de traders = plus de volume = meilleure liquidité",
+    impact_global_title: "Portée Mondiale",
+    impact_global_desc: "Accès facilité pour les investisseurs internationaux",
+    
+    // CTA
+    listings_cta_title: "🚀 Suivez Notre Progression",
+    listings_cta_desc: "Restez informés de tous nos nouveaux référencements en rejoignant notre communauté",
+    
+    // Honeypot section
+    honeypot_title: "RAPPORT HONEYPOT LFIST",
+    honeypot_subtitle: "Analyse complète de sécurité et vérifications blockchain",
+    status_safe: "TOKEN SÉCURISÉ",
+    status_details: "LFIST a passé tous les tests de sécurité. Aucun mécanisme de honeypot détecté.",
+    
+    // Slippage section
+    slippage_title: "IMPORTANT : SLIPPAGE À 5% REQUIS",
+    slippage_warning: "<strong>ATTENTION :</strong> Pour acheter LFIST, vous DEVEZ configurer le slippage à <span class=\"highlight-slippage\">5%</span> sur PancakeSwap.",
+    slippage_how_title: "Comment configurer le slippage :",
+    slippage_step1: "Allez sur PancakeSwap",
+    slippage_step2: "Cliquez sur l'icône ⚙️ (paramètres)",
+    slippage_step3: "Réglez le slippage sur <strong>5%</strong>",
+    slippage_step4: "Confirmez et effectuez votre achat",
+    slippage_why: "<strong>Pourquoi 5% ?</strong> En raison des taxes du contrat (5% achat/vente), un slippage de 5% est nécessaire pour que la transaction passe.",
+    
+    // FAQ extended
+    faq_q7: "🎯 FIST-DETECTOR, ça marche vraiment ?",
+    faq_a7: "Oh que oui ! C'est notre arme secrète pour détecter les memecoins qui vont exploser avant tout le monde. L'algorithme analyse les tendances, les volumes, les communautés, et te sort les pépites. C'est comme avoir une boule de cristal, mais en mieux et en plus scientifique. Bientôt disponible en version Pro avec IA intégrée !",
+    faq_q8: "💎 Pourquoi HODL LFIST plutôt qu'un autre memecoin ?",
+    faq_a8: "Parce que LFIST, c'est pas juste un token, c'est un mouvement ! On a une utilité réelle (FIST-DETECTOR), une communauté de feu, une roadmap ambitieuse, et surtout, on sait faire rire tout en étant sérieux. Les autres memecoins font du bruit, nous on fait de la musique. La différence ? L'harmonie et la vision long terme !",
+    faq_q9: "🌙 Objectif prix ? On vise quoi ?",
+    faq_a9: "On ne donne pas de conseils financiers, mais on peut rêver ! Si la communauté grandit, si les partenariats se concrétisent, si FIST-DETECTOR devient LA référence... le ciel est la limite ! Certains visent la lune, nous on vise Mars. Mais chut, c'est entre nous 😉",
+    faq_q10: "🤝 Comment rejoindre la communauté LFIST ?",
+    faq_a10: "Simple ! Rejoins notre Telegram (@lfistcoin) pour les discussions quotidiennes et les alpha calls, suis-nous sur Twitter (@LFISTCOIN) pour les mèmes et les annonces, et surtout, achète quelques LFIST pour faire partie de la famille ! Une fois dedans, tu comprendras pourquoi on dit que LFIST, c'est plus qu'un token, c'est un art de vivre !",
+    
+    // Newsletter Section
+    newsletter_title: "📬 Inscris-toi à notre newsletter",
+    newsletter_subtitle: "Reste informé des nouveaux memecoins détectés chaque semaine !",
+    newsletter_placeholder: "Ton adresse email",
+    btn_subscribe: "S'inscrire",
+    
+    // Twitter Tracking Section (textes supplémentaires)
+    twitter_mentions_title: "🔥 Dernières mentions @LFISTCOIN",
+    twitter_loading: "Chargement des tweets...",
+    btn_refresh: "🔄 Actualiser",
+    btn_follow_twitter: "🐦 Suivre @LFISTCOIN",
+    
+    // Vote Statistics
+    vote_stats_title: "📊 Statistiques des Votes",
+    stat_total_votes: "Total des votes",
+    stat_weekly_votes: "Cette semaine",
+    stat_active_memecoins: "Memecoins actifs",
+    leaderboard_title: "🏆 Classement actuel",
+    loading_leaderboard: "Chargement du classement...",
+    
+    // Recent Activity
+    recent_activity_title: "⚡ Activité récente",
+    loading_activity: "Chargement de l'activité...",
+    
+    // Vote Confirmation Popup
+    vote_confirmed_title: "🎉 Vote Confirmé !",
+    vote_thanks_message: "Merci d'avoir voté ! Votre choix a été enregistré.",
+    share_vote_title: "📢 Partagez votre vote !",
+    share_vote_desc: "Invitez vos amis à découvrir et voter sur Lfistcoin.netlify.app",
+    btn_share_twitter: "🐦 Twitter",
+    btn_share_telegram: "💬 Telegram",
+    btn_share_reddit: "🔴 Reddit",
+    btn_share_facebook: "📘 Facebook",
+    btn_vote_confirm: "✅ Parfait, merci !",
+    
+    // Community Section (fist-detector specific)
+    community_title_fist: "💬 Rejoins la FISTFAMILY",
+    community_subtitle_fist: "Memecoins, chaos et bienveillance douteuse — ici, c'est chez toi maintenant.",
+    btn_join_x: "Rejoins-nous sur X",
+    btn_telegram_channel: "Canal Telegram",
+    contact_email_text: "💌 Tu veux causer sérieusement (ou pas) ? Écris-nous :",
+    
+    // Debug and Force Display
+    btn_force_display: "🔧 FORCER AFFICHAGE",
+    
+    // Weekly Winner Section
+    weekly_winner_title: "🏆 GAGNANT DE LA SEMAINE",
+    weekly_winner_loading: "⏳ Chargement du gagnant...",
+    
+    // Countdown Section
+    countdown_reset_title: "⏰ Prochaine remise à zéro des votes",
+    countdown_days: "Jours",
+    countdown_hours: "Heures",
+    countdown_minutes: "Minutes",
+    countdown_seconds: "Secondes",
+    countdown_reset_info: "🔄 Les votes sont remis à zéro chaque lundi à 00h00 (heure de Paris)",
+    
+    // Loading Messages
+    loading_memecoins: "⏳ Chargement des memecoins...",
+    loading_firebase: "Connexion à Firebase en cours...",
+    
+    // Vote Buttons and Messages
+    btn_vote_for: "🗳️ Voter pour ce memecoin",
+    btn_already_voted: "✅ Déjà voté cette semaine",
+    vote_count_single: "vote cette semaine",
+    vote_count_plural: "votes cette semaine",
+    vote_count_prefix: "🔥",
     
     // Honeypot Warning Section
     honeypot_warning_title: "⚠️ AVERTISSEMENT IMPORTANT - FAUSSES ACCUSATIONS",
@@ -171,7 +333,7 @@ const translations = {
     mechanic_taxes_title: "Taxes Transparentes",
     mechanic_taxes_desc: "Buy: 5% (3% Marketing + 2% Dev) | Sell: 8% (4% Marketing + 3% Dev + 1% Liquidité)",
     mechanic_ownership_title: "Ownership Renoncé",
-    mechanic_ownership_desc: "Le propriétaire du contrat a renoncé à ses droits le 15 Janvier 2025. Aucune modification possible.",
+    mechanic_ownership_desc: "Le propriétaire du contrat a renoncé à ses droits le 01 Janvier 2026. Aucune modification possible.",
     mechanic_verified_title: "Contrat Vérifié",
     mechanic_verified_desc: "Code source public et vérifié sur BSCScan. Transparence totale du code.",
     mechanic_liquidity_title: "Liquidité Verrouillée",
@@ -281,6 +443,10 @@ const translations = {
     nav_contact: "Join Us",
     nav_home: "Home",
     nav_fist_detector: "Fist-Detector",
+    nav_listings: "Listings",
+    nav_victims: "Victims",
+    nav_twitter_tracking: "Twitter Tracking",
+    nav_newsletter: "Newsletter",
 
     // Index.html - Hero Section
     hero_title: "Welcome to the <span class=\"highlight\">LFIST</span> universe",
@@ -361,7 +527,7 @@ const translations = {
     // Security Section
     security_title: "🔒 Security & Transparency",
     security_verified: "Contract verified on BSCScan",
-    security_ownership: "Ownership renounced (January 15, 2025)",
+    security_ownership: "Ownership renounced (January 01, 2026)",
     security_liquidity: "Liquidity locked",
     security_mint: "No mint function",
     security_source: "Public source code",
@@ -428,6 +594,161 @@ const translations = {
     countdown_loading: "Loading...",
     vote_message: "You can only vote once per week but in the meantime join us on our networks and subscribe to the newsletter. Otherwise come back Monday!",
     vote_already_done: "You have already voted this week! Come back Monday to vote again.",
+    twitter_tracking_title: "🐦 @LFISTCOIN Tracking & Votes",
+    twitter_tracking_subtitle: "Follow in real time @LFISTCOIN mentions and vote evolution:",
+    
+    // Listings Section
+    listings_title: "🚀 LFIST Listings",
+    listings_subtitle: "LFIST gains visibility on major crypto platforms",
+    current_listings_title: "✅ Currently Listed",
+    upcoming_listings_title: "🎯 Upcoming Listings",
+    
+    // Status
+    status_live: "🟢 LIVE",
+    status_pending: "🟡 PENDING",
+    status_planned: "🔵 PLANNED",
+    
+    // Platform descriptions
+    geckoterminal_desc: "Real-time trading and analysis platform for DeFi tokens",
+    pancakeswap_desc: "Main DEX for buying and selling LFIST",
+    bscscan_desc: "Official blockchain explorer to verify all transactions",
+    cmc_desc: "The world's largest crypto data platform",
+    coingecko_desc: "Reference platform for crypto tracking and analysis",
+    dextools_desc: "Advanced analysis tools for DeFi traders",
+    coinpaprika_desc: "Reliable crypto data and API for developers",
+    
+    // Stats and buttons
+    stat_pool: "Pool:",
+    stat_network: "Network:",
+    btn_view_geckoterminal: "📊 View on GeckoTerminal",
+    btn_trade_pancake: "🥞 Trade on PancakeSwap",
+    btn_view_bscscan: "🔍 View on BSCScan",
+    btn_follow_twitter: "🐦 Follow on Twitter",
+    
+    // Progress
+    progress_75: "75% - Application submitted",
+    progress_60: "60% - Preparing application",
+    progress_30: "30% - Under review",
+    progress_20: "20% - Initial evaluation",
+    
+    // Benefits
+    benefit_visibility: "📈 Massive visibility",
+    benefit_credibility: "✨ Increased credibility",
+    benefit_tracking: "📊 Advanced tracking",
+    benefit_analytics: "📈 Detailed analytics",
+    benefit_tools: "🛠️ Pro tools",
+    benefit_alerts: "🚨 Trading alerts",
+    benefit_api: "🔌 API access",
+    benefit_data: "📊 Reliable data",
+    
+    // Impact section
+    impact_title: "🎯 Listings Impact",
+    impact_visibility_title: "Increased Visibility",
+    impact_visibility_desc: "Exposure to millions of daily crypto users",
+    impact_credibility_title: "Enhanced Credibility",
+    impact_credibility_desc: "Validation by industry reference platforms",
+    impact_liquidity_title: "Improved Liquidity",
+    impact_liquidity_desc: "More traders = more volume = better liquidity",
+    impact_global_title: "Global Reach",
+    impact_global_desc: "Easier access for international investors",
+    
+    // CTA
+    listings_cta_title: "🚀 Follow Our Progress",
+    listings_cta_desc: "Stay informed about all our new listings by joining our community",
+    
+    // Honeypot section
+    honeypot_title: "LFIST HONEYPOT REPORT",
+    honeypot_subtitle: "Complete security analysis and blockchain verifications",
+    status_safe: "SECURE TOKEN",
+    status_details: "LFIST has passed all security tests. No honeypot mechanism detected.",
+    
+    // Slippage section
+    slippage_title: "IMPORTANT: 5% SLIPPAGE REQUIRED",
+    slippage_warning: "<strong>WARNING:</strong> To buy LFIST, you MUST configure slippage to <span class=\"highlight-slippage\">5%</span> on PancakeSwap.",
+    slippage_how_title: "How to configure slippage:",
+    slippage_step1: "Go to PancakeSwap",
+    slippage_step2: "Click on the ⚙️ icon (settings)",
+    slippage_step3: "Set slippage to <strong>5%</strong>",
+    slippage_step4: "Confirm and make your purchase",
+    slippage_why: "<strong>Why 5%?</strong> Due to contract taxes (5% buy/sell), 5% slippage is necessary for the transaction to go through.",
+    
+    // FAQ extended
+    faq_q7: "🎯 Does FIST-DETECTOR really work?",
+    faq_a7: "Oh yes! It's our secret weapon to detect memecoins that will explode before everyone else. The algorithm analyzes trends, volumes, communities, and gives you the gems. It's like having a crystal ball, but better and more scientific. Soon available in Pro version with integrated AI!",
+    faq_q8: "💎 Why HODL LFIST rather than another memecoin?",
+    faq_a8: "Because LFIST is not just a token, it's a movement! We have real utility (FIST-DETECTOR), a fire community, an ambitious roadmap, and above all, we know how to make people laugh while being serious. Other memecoins make noise, we make music. The difference? Harmony and long-term vision!",
+    faq_q9: "🌙 Price target? What are we aiming for?",
+    faq_a9: "We don't give financial advice, but we can dream! If the community grows, if partnerships materialize, if FIST-DETECTOR becomes THE reference... the sky is the limit! Some aim for the moon, we aim for Mars. But shh, it's between us 😉",
+    faq_q10: "🤝 How to join the LFIST community?",
+    faq_a10: "Simple! Join our Telegram (@lfistcoin) for daily discussions and alpha calls, follow us on Twitter (@LFISTCOIN) for memes and announcements, and above all, buy some LFIST to be part of the family! Once inside, you'll understand why we say LFIST is more than a token, it's a way of life!",
+    
+    // Newsletter Section
+    newsletter_title: "📬 Subscribe to our newsletter",
+    newsletter_subtitle: "Stay informed about new memecoins detected every week!",
+    newsletter_placeholder: "Your email address",
+    btn_subscribe: "Subscribe",
+    
+    // Twitter Tracking Section (additional texts)
+    twitter_mentions_title: "🔥 Latest @LFISTCOIN mentions",
+    twitter_loading: "Loading tweets...",
+    btn_refresh: "🔄 Refresh",
+    btn_follow_twitter: "🐦 Follow @LFISTCOIN",
+    
+    // Vote Statistics
+    vote_stats_title: "📊 Vote Statistics",
+    stat_total_votes: "Total votes",
+    stat_weekly_votes: "This week",
+    stat_active_memecoins: "Active memecoins",
+    leaderboard_title: "🏆 Current ranking",
+    loading_leaderboard: "Loading leaderboard...",
+    
+    // Recent Activity
+    recent_activity_title: "⚡ Recent activity",
+    loading_activity: "Loading activity...",
+    
+    // Vote Confirmation Popup
+    vote_confirmed_title: "🎉 Vote Confirmed!",
+    vote_thanks_message: "Thank you for voting! Your choice has been recorded.",
+    share_vote_title: "📢 Share your vote!",
+    share_vote_desc: "Invite your friends to discover and vote on Lfistcoin.netlify.app",
+    btn_share_twitter: "🐦 Twitter",
+    btn_share_telegram: "💬 Telegram",
+    btn_share_reddit: "🔴 Reddit",
+    btn_share_facebook: "📘 Facebook",
+    btn_vote_confirm: "✅ Perfect, thank you!",
+    
+    // Community Section (fist-detector specific)
+    community_title_fist: "💬 Join the FISTFAMILY",
+    community_subtitle_fist: "Memecoins, chaos and questionable kindness — this is your home now.",
+    btn_join_x: "Join us on X",
+    btn_telegram_channel: "Telegram Channel",
+    contact_email_text: "💌 Want to talk seriously (or not)? Write to us:",
+    
+    // Debug and Force Display
+    btn_force_display: "🔧 FORCE DISPLAY",
+    
+    // Weekly Winner Section
+    weekly_winner_title: "🏆 WINNER OF THE WEEK",
+    weekly_winner_loading: "⏳ Loading winner...",
+    
+    // Countdown Section
+    countdown_reset_title: "⏰ Next vote reset",
+    countdown_days: "Days",
+    countdown_hours: "Hours",
+    countdown_minutes: "Minutes",
+    countdown_seconds: "Seconds",
+    countdown_reset_info: "🔄 Votes are reset every Monday at 00:00 (Paris time)",
+    
+    // Loading Messages
+    loading_memecoins: "⏳ Loading memecoins...",
+    loading_firebase: "Connecting to Firebase...",
+    
+    // Vote Buttons and Messages
+    btn_vote_for: "🗳️ Vote for this memecoin",
+    btn_already_voted: "✅ Already voted this week",
+    vote_count_single: "vote this week",
+    vote_count_plural: "votes this week",
+    vote_count_prefix: "🔥",
     
     // Honeypot Warning Section
     honeypot_warning_title: "⚠️ IMPORTANT WARNING - FALSE ACCUSATIONS",
@@ -440,7 +761,7 @@ const translations = {
     mechanic_taxes_title: "Transparent Taxes",
     mechanic_taxes_desc: "Buy: 5% (3% Marketing + 2% Dev) | Sell: 8% (4% Marketing + 3% Dev + 1% Liquidity)",
     mechanic_ownership_title: "Ownership Renounced",
-    mechanic_ownership_desc: "Contract owner renounced rights on January 15, 2025. No modifications possible.",
+    mechanic_ownership_desc: "Contract owner renounced rights on January 01, 2026. No modifications possible.",
     mechanic_verified_title: "Verified Contract",
     mechanic_verified_desc: "Public source code verified on BSCScan. Complete code transparency.",
     mechanic_liquidity_title: "Liquidity Locked",

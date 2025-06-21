@@ -1356,36 +1356,36 @@
 
     <!-- Gagnant de la semaine -->
     <div id="weeklyWinnerSection" style="text-align: center; margin: 2rem auto; max-width: 800px; background: rgba(255, 215, 0, 0.1); border: 2px solid #ffd700; border-radius: 20px; padding: 2rem; display: none;">
-      <h2 style="color: #ffd700; margin-bottom: 1rem; font-size: 2rem;">🏆 GAGNANT DE LA SEMAINE</h2>
+      <h2 style="color: #ffd700; margin-bottom: 1rem; font-size: 2rem;" data-translate="weekly_winner_title">🏆 GAGNANT DE LA SEMAINE</h2>
       <div id="weeklyWinnerContent">
         <div style="text-align: center; color: #888; padding: 20px;">
-          ⏳ Chargement du gagnant...
+          <span data-translate="weekly_winner_loading">⏳ Chargement du gagnant...</span>
         </div>
       </div>
     </div>
 
     <!-- Compteur avant remise à zéro des votes -->
     <div class="countdown-container" style="text-align: center; margin: 2rem auto; max-width: 600px;">
-      <h3 style="color: #00ff88; margin-bottom: 1rem;">⏰ Prochaine remise à zéro des votes</h3>
+      <h3 style="color: #00ff88; margin-bottom: 1rem;" data-translate="countdown_reset_title">⏰ Prochaine remise à zéro des votes</h3>
       <div class="countdown" id="voteCountdown" style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
         <div class="countdown-item" style="background: rgba(26, 26, 46, 0.9); border: 2px solid #00ff88; border-radius: 15px; padding: 1rem; min-width: 80px;">
           <div class="countdown-number" id="days" style="font-size: 2rem; font-weight: bold; color: #00ff88;">0</div>
-          <div class="countdown-label" style="font-size: 0.9rem; color: #ccc;">Jours</div>
+          <div class="countdown-label" style="font-size: 0.9rem; color: #ccc;" data-translate="countdown_days">Jours</div>
         </div>
         <div class="countdown-item" style="background: rgba(26, 26, 46, 0.9); border: 2px solid #00ff88; border-radius: 15px; padding: 1rem; min-width: 80px;">
           <div class="countdown-number" id="hours" style="font-size: 2rem; font-weight: bold; color: #00ff88;">0</div>
-          <div class="countdown-label" style="font-size: 0.9rem; color: #ccc;">Heures</div>
+          <div class="countdown-label" style="font-size: 0.9rem; color: #ccc;" data-translate="countdown_hours">Heures</div>
         </div>
         <div class="countdown-item" style="background: rgba(26, 26, 46, 0.9); border: 2px solid #00ff88; border-radius: 15px; padding: 1rem; min-width: 80px;">
           <div class="countdown-number" id="minutes" style="font-size: 2rem; font-weight: bold; color: #00ff88;">0</div>
-          <div class="countdown-label" style="font-size: 0.9rem; color: #ccc;">Minutes</div>
+          <div class="countdown-label" style="font-size: 0.9rem; color: #ccc;" data-translate="countdown_minutes">Minutes</div>
         </div>
         <div class="countdown-item" style="background: rgba(26, 26, 46, 0.9); border: 2px solid #00ff88; border-radius: 15px; padding: 1rem; min-width: 80px;">
           <div class="countdown-number" id="seconds" style="font-size: 2rem; font-weight: bold; color: #00ff88;">0</div>
-          <div class="countdown-label" style="font-size: 0.9rem; color: #ccc;">Secondes</div>
+          <div class="countdown-label" style="font-size: 0.9rem; color: #ccc;" data-translate="countdown_seconds">Secondes</div>
         </div>
       </div>
-      <p style="color: #888; font-size: 0.9rem; margin-top: 1rem;">
+      <p style="color: #888; font-size: 0.9rem; margin-top: 1rem;" data-translate="countdown_reset_info">
         🔄 Les votes sont remis à zéro chaque lundi à 00h00 (heure de Paris)
       </p>
     </div>
@@ -1393,8 +1393,8 @@
     <!-- 🔽 Ce conteneur sera rempli dynamiquement par le JS -->
     <div id="detector-container" style="position: relative; z-index: 20;">
       <div class="status-message loading">
-        <h3>⏳ Chargement des memecoins...</h3>
-        <p>Connexion à Firebase en cours...</p>
+        <h3 data-translate="loading_memecoins">⏳ Chargement des memecoins...</h3>
+        <p data-translate="loading_firebase">Connexion à Firebase en cours...</p>
       </div>
     </div>
 
@@ -1411,7 +1411,7 @@
         box-shadow: 0 5px 15px rgba(255, 0, 102, 0.4);
         font-size: 14px;
       ">
-        🔧 FORCER AFFICHAGE
+        <span data-translate="btn_force_display">🔧 FORCER AFFICHAGE</span>
       </button>
     </div>
 
@@ -1432,16 +1432,16 @@
       <div class="tracking-grid">
         <!-- Section Twitter Feed -->
         <div class="twitter-feed-section">
-          <h3>🔥 Dernières mentions @LFISTCOIN</h3>
+          <h3 data-translate="twitter_mentions_title">🔥 Dernières mentions @LFISTCOIN</h3>
           <div id="twitterFeed" class="twitter-feed">
             <div class="loading-tweets">
               <div class="tweet-loading-spinner"></div>
-              <p>Chargement des tweets...</p>
+              <p data-translate="twitter_loading">Chargement des tweets...</p>
             </div>
           </div>
           <div class="twitter-actions">
-            <button onclick="refreshTwitterFeed()" class="refresh-btn">🔄 Actualiser</button>
-            <a href="https://twitter.com/LFISTCOIN" target="_blank" class="follow-btn">
+            <button onclick="refreshTwitterFeed()" class="refresh-btn" data-translate="btn_refresh">🔄 Actualiser</button>
+            <a href="https://twitter.com/LFISTCOIN" target="_blank" class="follow-btn" data-translate="btn_follow_twitter">
               🐦 Suivre @LFISTCOIN
             </a>
           </div>
@@ -1449,26 +1449,26 @@
         
         <!-- Section Statistiques des votes -->
         <div class="vote-stats-section">
-          <h3>📊 Statistiques des Votes</h3>
+          <h3 data-translate="vote_stats_title">📊 Statistiques des Votes</h3>
           <div id="voteStats" class="vote-stats-container">
             <div class="stat-card">
               <div class="stat-number" id="totalVotesCount">0</div>
-              <div class="stat-label">Total des votes</div>
+              <div class="stat-label" data-translate="stat_total_votes">Total des votes</div>
             </div>
             <div class="stat-card">
               <div class="stat-number" id="weeklyVotesCount">0</div>
-              <div class="stat-label">Cette semaine</div>
+              <div class="stat-label" data-translate="stat_weekly_votes">Cette semaine</div>
             </div>
             <div class="stat-card">
               <div class="stat-number" id="activeMemecoinCount">0</div>
-              <div class="stat-label">Memecoins actifs</div>
+              <div class="stat-label" data-translate="stat_active_memecoins">Memecoins actifs</div>
             </div>
           </div>
           
           <div class="vote-leaderboard">
-            <h4>🏆 Classement actuel</h4>
+            <h4 data-translate="leaderboard_title">🏆 Classement actuel</h4>
             <div id="voteLeaderboard" class="leaderboard-list">
-              <div class="loading-leaderboard">Chargement du classement...</div>
+              <div class="loading-leaderboard" data-translate="loading_leaderboard">Chargement du classement...</div>
             </div>
           </div>
         </div>
@@ -1476,9 +1476,9 @@
       
       <!-- Section Activité récente -->
       <div class="recent-activity">
-        <h3>⚡ Activité récente</h3>
+        <h3 data-translate="recent_activity_title">⚡ Activité récente</h3>
         <div id="recentActivity" class="activity-feed">
-          <div class="loading-activity">Chargement de l'activité...</div>
+          <div class="loading-activity" data-translate="loading_activity">Chargement de l'activité...</div>
         </div>
       </div>
     </div>
@@ -1488,7 +1488,7 @@
   <div id="voteConfirmationPopup" class="popup-overlay">
     <div class="popup-content">
       <div class="popup-header">
-        <h2>🎉 Vote Confirmé !</h2>
+        <h2 data-translate="vote_confirmed_title">🎉 Vote Confirmé !</h2>
         <button class="close-btn" onclick="closeVotePopup()">&times;</button>
       </div>
       
@@ -1497,26 +1497,26 @@
           <img id="votedCoinLogo" src="" alt="Logo" class="voted-coin-logo">
           <div class="voted-coin-info">
             <h3 id="votedCoinName">Nom du Memecoin</h3>
-            <p>Merci d'avoir voté ! Votre choix a été enregistré.</p>
+            <p data-translate="vote_thanks_message">Merci d'avoir voté ! Votre choix a été enregistré.</p>
           </div>
         </div>
         
         <div class="share-section">
-          <h4>📢 Partagez votre vote !</h4>
-          <p>Invitez vos amis à découvrir et voter sur <strong>Lfistcoin.netlify.app</strong></p>
+          <h4 data-translate="share_vote_title">📢 Partagez votre vote !</h4>
+          <p data-translate="share_vote_desc">Invitez vos amis à découvrir et voter sur <strong>Lfistcoin.netlify.app</strong></p>
         </div>
         
         <div class="social-buttons">
-          <button class="social-btn twitter" onclick="shareVoteOnTwitter()">
+          <button class="social-btn twitter" onclick="shareVoteOnTwitter()" data-translate="btn_share_twitter">
             🐦 Twitter
           </button>
-          <button class="social-btn telegram" onclick="shareVoteOnTelegram()">
+          <button class="social-btn telegram" onclick="shareVoteOnTelegram()" data-translate="btn_share_telegram">
             💬 Telegram
           </button>
-          <button class="social-btn reddit" onclick="shareVoteOnReddit()">
+          <button class="social-btn reddit" onclick="shareVoteOnReddit()" data-translate="btn_share_reddit">
             🔴 Reddit
           </button>
-          <button class="social-btn facebook" onclick="shareVoteOnFacebook()">
+          <button class="social-btn facebook" onclick="shareVoteOnFacebook()" data-translate="btn_share_facebook">
             📘 Facebook
           </button>
         </div>
@@ -1546,7 +1546,7 @@
           <img src="alien.png" alt="LFIST fun" style="height: 400px;" class="wiggling-alien">
         </div>
       </div>
-  <h2 class="section-title" style="text-align: center;">💬 Rejoins la FISTFAMILY</h2>
+  <h2 class="section-title" style="text-align: center;" data-translate="community_title_fist">💬 Rejoins la FISTFAMILY</h2>
   <p class="community-text" style="text-align: center;">Memecoins, chaos et bienveillance douteuse — ici, c’est chez toi maintenant.</p>
 
   <div class="community-buttons" style="text-align: center; justify-content: center;">
@@ -1634,6 +1634,12 @@
   <script>
     // Code JavaScript intégré supprimé pour éviter les conflits avec fist-detector-final.js
     console.log('🎯 FIST-DETECTOR - Utilisation du script externe fist-detector-final.js');
+    
+    // Fonction pour obtenir le texte traduit
+    function getTranslatedText(key) {
+        const currentLang = localStorage.getItem('lfist_language') || 'fr';
+        return translations[currentLang][key] || translations['fr'][key] || key;
+    }
     import { 
         getDatabase, 
         ref, 
