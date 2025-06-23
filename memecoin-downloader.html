@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Téléchargeur de Logos Memecoin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #ff6b6b, #feca57);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .search-section {
+            margin-bottom: 30px;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .search-btn, .download-all-btn {
+            padding: 15px 25px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+
+        .search-btn:hover, .download-all-btn:hover {
+            background: #5a67d8;
+        }
+
+        .download-all-btn {
+            background: #48bb78;
+            margin-left: 10px;
+        }
+
+        .download-all-btn:hover {
+            background: #38a169;
+        }
+
+        .popular-coins {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .popular-coin {
+            padding: 8px 15px;
+            background: #f7fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .popular-coin:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .results {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .coin-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .coin-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-color: #667eea;
+        }
+
+        .coin-card.selected {
+            border-color: #48bb78;
+            background: #f0fff4;
+        }
+
+        .coin-image {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 15px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .coin-image img {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+        }
+
+        .coin-name {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 5px;
+            color: #2d3748;
+        }
+
+        .coin-symbol {
+            color: #718096;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .download-btn {
+            padding: 10px 20px;
+            background: #48bb78;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-right: 5px;
+        }
+
+        .download-btn:hover {
+            background: #38a169;
+        }
+
+        .select-btn {
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .select-btn:hover {
+            background: #5a67d8;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #718096;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error {
+            background: #fed7d7;
+            color: #c53030;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .success {
+            background: #c6f6d5;
+            color: #22543d;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .selected-count {
+            background: #667eea;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        @media (max-width: 768px) {
+            .search-box {
+                flex-direction: column;
+            }
+            
+            .results {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Memecoin Logo Downloader</h1>
+            <p>Téléchargez facilement les logos des memecoins pour votre jeu</p>
+        </div>
+
+        <div class="content">
+            <div class="search-section">
+                <div class="search-box">
+                    <input type="text" class="search-input" id="searchInput" placeholder="Rechercher une cryptomonnaie (ex: dogecoin, shiba, pepe)...">
+                    <button class="search-btn" onclick="searchCoins()">🔍 Rechercher</button>
+                    <button class="download-all-btn" onclick="downloadSelected()" id="downloadAllBtn" style="display: none;">
+                        📥 Télécharger Sélectionnés (<span id="selectedCount">0</span>)
+                    </button>
+                </div>
+
+                <div class="popular-coins">
+                    <div class="popular-coin" onclick="searchSpecific('dogecoin')">🐕 Dogecoin</div>
+                    <div class="popular-coin" onclick="searchSpecific('shiba-inu')">🐕 Shiba Inu</div>
+                    <div class="popular-coin" onclick="searchSpecific('pepe')">🐸 Pepe</div>
+                    <div class="popular-coin" onclick="searchSpecific('floki')">🐕 Floki</div>
+                    <div class="popular-coin" onclick="searchSpecific('safemoon')">🚀 SafeMoon</div>
+                    <div class="popular-coin" onclick="searchSpecific('bonk')">🔨 Bonk</div>
+                    <div class="popular-coin" onclick="searchSpecific('wojak')">😐 Wojak</div>
+                    <div class="popular-coin" onclick="loadPopularMemecoins()">🔥 Top Memecoins</div>
+                </div>
+            </div>
+
+            <div id="results" class="results"></div>
+            <div id="loading" class="loading" style="display: none;">
+                <div class="spinner"></div>
+                <p>Chargement des données...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedCoins = new Set();
+        let allCoins = [];
+
+        // Fonction pour rechercher des coins
+        async function searchCoins() {
+            const query = document.getElementById('searchInput').value.trim();
+            if (!query) {
+                loadPopularMemecoins();
+                return;
+            }
+
+            showLoading(true);
+            try {
+                const response = await fetch(`https://api.coingecko.com/api/v3/search?query=${encodeURIComponent(query)}`);
+                const data = await response.json();
+                
+                if (data.coins && data.coins.length > 0) {
+                    displayCoins(data.coins.slice(0, 20)); // Limiter à 20 résultats
+                } else {
+                    showError('Aucune cryptomonnaie trouvée pour cette recherche.');
+                }
+            } catch (error) {
+                showError('Erreur lors de la recherche: ' + error.message);
+            }
+            showLoading(false);
+        }
+
+        // Fonction pour rechercher une coin spécifique
+        async function searchSpecific(coinId) {
+            document.getElementById('searchInput').value = coinId;
+            showLoading(true);
+            try {
+                const response = await fetch(`https://api.coingecko.com/api/v3/coins/${coinId}`);
+                const coin = await response.json();
+                
+                if (coin.id) {
+                    const coinData = [{
+                        id: coin.id,
+                        name: coin.name,
+                        symbol: coin.symbol,
+                        large: coin.image.large,
+                        thumb: coin.image.thumb
+                    }];
+                    displayCoins(coinData);
+                }
+            } catch (error) {
+                showError('Erreur lors de la recherche: ' + error.message);
+            }
+            showLoading(false);
+        }
+
+        // Fonction pour charger les memecoins populaires
+        async function loadPopularMemecoins() {
+            showLoading(true);
+            try {
+                const memecoins = [
+                    'dogecoin', 'shiba-inu', 'pepe', 'floki', 'bonk', 'wojak',
+                    'baby-doge-coin', 'dogelon-mars', 'akita-inu', 'kishu-inu',
+                    'safemoon-2', 'hoge-finance', 'catecoin', 'samoyedcoin'
+                ];
+
+                const promises = memecoins.map(id => 
+                    fetch(`https://api.coingecko.com/api/v3/coins/${id}`)
+                        .then(response => response.json())
+                        .catch(() => null)
+                );
+
+                const results = await Promise.all(promises);
+                const validCoins = results.filter(coin => coin && coin.id).map(coin => ({
+                    id: coin.id,
+                    name: coin.name,
+                    symbol: coin.symbol,
+                    large: coin.image.large,
+                    thumb: coin.image.thumb
+                }));
+
+                displayCoins(validCoins);
+            } catch (error) {
+                showError('Erreur lors du chargement des memecoins populaires: ' + error.message);
+            }
+            showLoading(false);
+        }
+
+        // Fonction pour afficher les coins
+        function displayCoins(coins) {
+            allCoins = coins;
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '';
+
+            coins.forEach(coin => {
+                const coinCard = document.createElement('div');
+                coinCard.className = 'coin-card';
+                coinCard.innerHTML = `
+                    <div class="coin-image">
+                        <img src="${coin.large || coin.thumb}" alt="${coin.name}" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMzAiIGN5PSIzMCIgcj0iMzAiIGZpbGw9IiNFMkU4RjAiLz4KPHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4PSIxOCIgeT0iMTgiPgo8cGF0aCBkPSJNMTIgMkM2LjQ4IDIgMiA2LjQ4IDIgMTJTNi40OCAyMiAxMiAyMlMyMiAxNy41MiAyMiAxMlMxNy41MiAyIDEyIDJaTTEzIDE3SDE1VjE5SDEzVjE3Wk0xNS4wNyA5LjI1TDE0LjE3IDEwLjE3QzEzLjQ1IDEwLjkgMTMgMTEuNSAxMyAxM0gxMVYxMi41QzExIDExLjEyIDExLjYyIDkuODcgMTIuNzEgOC43OUwxNC4wNiA3LjQ0QzE0LjU1IDYuOTUgMTQuNTUgNi4wNSAxNC4wNiA1LjU2QzEzLjU3IDUuMDcgMTIuNjcgNS4wNyAxMi4xOCA1LjU2QzExLjY5IDYuMDUgMTEuNjkgNi45NSAxMi4xOCA3LjQ0TDEwLjc2IDguODZDOS42OCA3Ljc4IDkuNjggNi4wMiAxMC43NiA0Ljk0QzExLjg0IDMuODYgMTMuNiAzLjg2IDE0LjY4IDQuOTRDMTUuNzYgNi4wMiAxNS43NiA3Ljc4IDE0LjY4IDguODZMMTUuMDcgOS4yNVoiIGZpbGw9IiM3MTgwOTYiLz4KPC9zdmc+Cjwvc3ZnPgo='">
+                    </div>
+                    <div class="coin-name">${coin.name}</div>
+                    <div class="coin-symbol">${coin.symbol}</div>
+                    <button class="download-btn" onclick="downloadSingle('${coin.id}', '${coin.name}', '${coin.large || coin.thumb}')">
+                        📥 Télécharger
+                    </button>
+                    <button class="select-btn" onclick="toggleSelection('${coin.id}', this)">
+                        ✓ Sélectionner
+                    </button>
+                `;
+                resultsDiv.appendChild(coinCard);
+            });
+        }
+
+        // Fonction pour basculer la sélection
+        function toggleSelection(coinId, button) {
+            const card = button.closest('.coin-card');
+            
+            if (selectedCoins.has(coinId)) {
+                selectedCoins.delete(coinId);
+                card.classList.remove('selected');
+                button.textContent = '✓ Sélectionner';
+            } else {
+                selectedCoins.add(coinId);
+                card.classList.add('selected');
+                button.textContent = '✗ Désélectionner';
+            }
+            
+            updateSelectedCount();
+        }
+
+        // Fonction pour mettre à jour le compteur de sélection
+        function updateSelectedCount() {
+            const count = selectedCoins.size;
+            document.getElementById('selectedCount').textContent = count;
+            document.getElementById('downloadAllBtn').style.display = count > 0 ? 'inline-block' : 'none';
+        }
+
+        // Fonction pour télécharger une seule image
+        async function downloadSingle(coinId, coinName, imageUrl) {
+            try {
+                showSuccess(`Téléchargement de ${coinName}...`);
+                await downloadImage(imageUrl, `${coinId}.png`);
+                showSuccess(`${coinName} téléchargé avec succès !`);
+            } catch (error) {
+                showError(`Erreur lors du téléchargement de ${coinName}: ${error.message}`);
+            }
+        }
+
+        // Fonction pour télécharger les images sélectionnées
+        async function downloadSelected() {
+            if (selectedCoins.size === 0) {
+                showError('Aucune cryptomonnaie sélectionnée.');
+                return;
+            }
+
+            showSuccess(`Téléchargement de ${selectedCoins.size} images...`);
+            
+            for (const coinId of selectedCoins) {
+                const coin = allCoins.find(c => c.id === coinId);
+                if (coin) {
+                    try {
+                        await downloadImage(coin.large || coin.thumb, `${coin.id}.png`);
+                        await new Promise(resolve => setTimeout(resolve, 500)); // Délai entre téléchargements
+                    } catch (error) {
+                        console.error(`Erreur pour ${coin.name}:`, error);
+                    }
+                }
+            }
+            
+            showSuccess(`Téléchargement terminé ! ${selectedCoins.size} images téléchargées.`);
+        }
+
+        // Fonction pour télécharger une image
+        async function downloadImage(url, filename) {
+            const response = await fetch(url);
+            const blob = await response.blob();
+            
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(link.href);
+        }
+
+        // Fonctions utilitaires
+        function showLoading(show) {
+            document.getElementById('loading').style.display = show ? 'block' : 'none';
+            if (show) {
+                document.getElementById('results').innerHTML = '';
+            }
+        }
+
+        function showError(message) {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = `<div class="error">❌ ${message}</div>`;
+        }
+
+        function showSuccess(message) {
+            const resultsDiv = document.getElementById('results');
+            const successDiv = document.createElement('div');
+            successDiv.className = 'success';
+            successDiv.innerHTML = `✅ ${message}`;
+            resultsDiv.insertBefore(successDiv, resultsDiv.firstChild);
+            
+            // Supprimer le message après 3 secondes
+            setTimeout(() => {
+                if (successDiv.parentNode) {
+                    successDiv.parentNode.removeChild(successDiv);
+                }
+            }, 3000);
+        }
+
+        // Gestionnaire d'événements pour la touche Entrée
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchCoins();
+            }
+        });
+
+        // Charger les memecoins populaires au démarrage
+        window.addEventListener('load', loadPopularMemecoins);
+    </script>
+</body>
+</html>

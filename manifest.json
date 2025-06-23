@@ -1,0 +1,64 @@
+{
+  "name": "LFIST Game - The Ultimate Memecoin Destroyer",
+  "short_name": "LFIST Game",
+  "description": "Epic browser-based action game where you destroy falling memecoins with your powerful fists!",
+  "version": "1.0.0",
+  "start_url": "./lfist-game-optimized.html",
+  "display": "fullscreen",
+  "orientation": "any",
+  "theme_color": "#00ff88",
+  "background_color": "#0f2027",
+  "lang": "en",
+  "scope": "./",
+  "icons": [
+    {
+      "src": "bonus.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["games", "entertainment"],
+  "screenshots": [
+    {
+      "src": "bonus.png",
+      "sizes": "any",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "LFIST Game Screenshot"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Play Game",
+      "short_name": "Play",
+      "description": "Start playing LFIST Game",
+      "url": "./lfist-game-optimized.html",
+      "icons": [
+        {
+          "src": "bonus.png",
+          "sizes": "any"
+        }
+      ]
+    },
+    {
+      "name": "Home",
+      "short_name": "Home",
+      "description": "Go to home page",
+      "url": "./index.html",
+      "icons": [
+        {
+          "src": "bonus.png",
+          "sizes": "any"
+        }
+      ]
+    }
+  ],
+  "prefer_related_applications": false,
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  }
+}
