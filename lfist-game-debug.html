@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🥊 LFIST GAME - DEBUG VERSION</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Orbitron', Arial, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a, #1a1a2e, #16213e);
+            color: #fff;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        #gameContainer {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        canvas {
+            display: block;
+            background: linear-gradient(180deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            width: 100%;
+            height: 100%;
+            cursor: crosshair;
+        }
+
+        #debugInfo {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #00ff88;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            z-index: 9999;
+            max-width: 300px;
+            border: 1px solid #00ff88;
+        }
+
+        .game-ui {
+            position: fixed;
+            top: 10px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            z-index: 100;
+            pointer-events: none;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .ui-element {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 2px solid #00ff88;
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.8);
+            backdrop-filter: blur(10px);
+            margin: 2px;
+        }
+
+        .ui-element.lives {
+            border-color: #ff4444;
+            box-shadow: 0 0 15px rgba(255, 68, 68, 0.3);
+            text-shadow: 0 0 10px rgba(255, 68, 68, 0.8);
+        }
+
+        .ui-element.combo {
+            border-color: #ffd700;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+        }
+
+        .progress-container {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            z-index: 100;
+            pointer-events: none;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 25px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00ff88;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00ff88, #00cc66, #009944);
+            width: 0%;
+            transition: width 0.3s ease;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.8);
+        }
+
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 10px;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 1);
+            z-index: 101;
+        }
+
+        .modal-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(20px);
+        }
+
+        .modal-screen h1, .modal-screen h2 {
+            color: #00ff88;
+            text-align: center;
+            margin: 20px 0;
+            text-shadow: 0 0 20px #00ff88;
+            font-size: 18px;
+        }
+
+        .modal-screen p {
+            text-align: center;
+            margin: 10px 0;
+            max-width: 400px;
+            line-height: 1.6;
+            font-size: 11px;
+        }
+
+        .game-button {
+            background: linear-gradient(45deg, #00ff88, #00cc66);
+            border: none;
+            padding: 15px 25px;
+            border-radius: 10px;
+            color: #000;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 10px;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 255, 136, 0.3);
+            min-width: 150px;
+        }
+
+        .game-button:hover {
+            background: linear-gradient(45deg, #00cc66, #009944);
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(0, 255, 136, 0.5);
+        }
+
+        .game-button.secondary {
+            background: linear-gradient(45deg, #666, #444);
+            color: #fff;
+        }
+
+        .game-button.secondary:hover {
+            background: linear-gradient(45deg, #777, #555);
+        }
+
+        .start-screen {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .start-screen .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #00ff88;
+            text-shadow: 0 0 30px #00ff88;
+            margin-bottom: 20px;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 20px #00ff88, 0 0 30px #00ff88, 0 0 40px #00ff88;
+            }
+            to {
+                text-shadow: 0 0 30px #00ff88, 0 0 40px #00ff88, 0 0 50px #00ff88;
+            }
+        }
+
+        .game-info {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 15px;
+            border: 2px solid #00ff88;
+            margin: 20px 0;
+        }
+
+        .notification {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: 2px solid #00ff88;
+            font-size: 14px;
+            font-weight: bold;
+            z-index: 2000;
+            opacity: 0;
+            scale: 0.8;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            text-align: center;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+        }
+
+        .notification.show {
+            opacity: 1;
+            scale: 1;
+        }
+
+        .notification.trump-warning {
+            background: linear-gradient(45deg, #ffaa00, #ff6600);
+            border: 3px solid #ffd700;
+            color: #000;
+            font-weight: bold;
+            text-shadow: 0 0 5px #ffd700;
+            animation: trump-flash 0.5s ease-in-out infinite alternate;
+            font-size: 16px;
+            padding: 12px 20px;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.9);
+        }
+
+        @keyframes trump-flash {
+            0% { 
+                background: linear-gradient(45deg, #ffaa00, #ff6600);
+                box-shadow: 0 0 20px #ffd700;
+            }
+            100% { 
+                background: linear-gradient(45deg, #ffd700, #ffaa00);
+                box-shadow: 0 0 35px #ffd700;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="debugInfo">
+        <strong>🐛 DEBUG INFO:</strong><br>
+        Status: <span id="debugStatus">Initializing...</span><br>
+        Images loaded: <span id="debugImages">0/0</span><br>
+        Audio loaded: <span id="debugAudio">0/0</span><br>
+        Game state: <span id="debugGameState">-</span><br>
+        Memecoins: <span id="debugMemecoins">0</span><br>
+        Spawn timer: <span id="debugSpawnTimer">0</span><br>
+        Last error: <span id="debugError">None</span>
+    </div>
+
+    <div id="gameContainer">
+        <canvas id="gameCanvas"></canvas>
+        
+        <!-- Game UI -->
+        <div class="game-ui">
+            <div class="ui-left">
+                <div class="ui-element" id="scoreDisplay">SCORE: 0</div>
+                <div class="ui-element lives" id="livesDisplay">VIES: 3</div>
+            </div>
+            <div class="ui-right">
+                <div class="ui-element" id="levelDisplay">NIVEAU: 1</div>
+                <div class="ui-element combo" id="comboDisplay" style="display: none;">COMBO: 0</div>
+            </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+                <div class="progress-text" id="progressText">0 / 100</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notifications -->
+    <div class="notification" id="notification"></div>
+
+    <!-- Start Screen -->
+    <div class="modal-screen start-screen" id="startScreen">
+        <div class="logo">🥊 LFIST GAME DEBUG</div>
+        <h2>Version de Debug</h2>
+        
+        <div class="game-info">
+            <p><strong>🐛 Cette version affiche les informations de debug</strong></p>
+            <p>• Vérifiez le panneau debug en haut à droite</p>
+            <p>• Ouvrez la console (F12) pour plus d'infos</p>
+            <p>• Si ça marche ici, le problème vient des assets manquants</p>
+        </div>
+
+        <button class="game-button" onclick="startGame()">🚀 COMMENCER DEBUG</button>
+        <button class="game-button secondary" onclick="testAssets()">🔍 TESTER ASSETS</button>
+        <button class="game-button secondary" onclick="testWithoutAudio()">🔇 TEST SANS AUDIO</button>
+    </div>
+
+    <!-- Audio Elements (optionnels pour debug) -->
+    <audio id="introSound" preload="auto" loop>
+        <source src="./intro.mp3" type="audio/mpeg">
+        <source src="intro.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="ambianceSound" preload="auto" loop>
+        <source src="./ambiance.mp3" type="audio/mpeg">
+        <source src="ambiance.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="coupSound" preload="auto">
+        <source src="./coup.mp3" type="audio/mpeg">
+        <source src="coup.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="trumpSound" preload="auto">
+        <source src="./sontrump.mp3" type="audio/mpeg">
+        <source src="sontrump.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="bonusSound" preload="auto">
+        <source src="./bonus.mp3" type="audio/mpeg">
+        <source src="bonus.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="rotSound" preload="auto">
+        <source src="./rot.mp3" type="audio/mpeg">
+        <source src="rot.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        // Version debug simplifiée du jeu
+        class LFISTGameDebug {
+            constructor() {
+                console.log('🐛 Initializing DEBUG version...');
+                this.updateDebug('status', 'Initializing...');
+                
+                this.canvas = document.getElementById('gameCanvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.gameState = 'menu';
+                
+                this.resizeCanvas();
+                window.addEventListener('resize', () => this.resizeCanvas());
+                
+                // Variables de base
+                this.score = 0;
+                this.lives = 3;
+                this.level = 1;
+                this.memecoins = [];
+                this.memecoinSpawnTimer = 0;
+                this.memecoinSpawnRate = 60; // Plus lent pour debug
+                
+                // Load assets
+                this.loadAssets();
+                
+                // Start game loop
+                this.gameLoop();
+                
+                console.log('🐛 DEBUG Game initialized');
+                this.updateDebug('status', 'Initialized');
+            }
+            
+            updateDebug(key, value) {
+                const element = document.getElementById(`debug${key.charAt(0).toUpperCase() + key.slice(1)}`);
+                if (element) element.textContent = value;
+            }
+            
+            resizeCanvas() {
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+                console.log(`🐛 Canvas resized: ${this.canvas.width}x${this.canvas.height}`);
+            }
+            
+            loadAssets() {
+                // Créer des images de debug simples
+                this.memecoinImages = {};
+                const types = ['doge', 'pepe', 'chad', 'npc', 'boomer', 'wojak', 'trump'];
+                let imagesLoaded = 0;
+                
+                types.forEach(type => {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = 40;
+                    canvas.height = 40;
+                    const ctx = canvas.getContext('2d');
+                    
+                    // Dessiner un carré coloré avec le nom
+                    const colors = {
+                        doge: '#ffcc00',
+                        pepe: '#00ff00',
+                        chad: '#ff0000',
+                        npc: '#cccccc',
+                        boomer: '#8B4513',
+                        wojak: '#ffc0cb',
+                        trump: '#ffd700'
+                    };
+                    
+                    ctx.fillStyle = colors[type] || '#ffffff';
+                    ctx.fillRect(0, 0, 40, 40);
+                    ctx.fillStyle = '#000000';
+                    ctx.font = '8px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(type.substring(0, 4).toUpperCase(), 20, 25);
+                    
+                    this.memecoinImages[type] = canvas;
+                    imagesLoaded++;
+                });
+                
+                this.updateDebug('images', `${imagesLoaded}/${types.length}`);
+                console.log(`🐛 Created ${imagesLoaded} debug images`);
+                
+                // Test audio (sans bloquer)
+                this.testAudio();
+            }
+            
+            testAudio() {
+                const audioElements = ['introSound', 'ambianceSound', 'coupSound', 'trumpSound', 'bonusSound', 'rotSound'];
+                let audioLoaded = 0;
+                
+                audioElements.forEach(id => {
+                    const audio = document.getElementById(id);
+                    if (audio) {
+                        audio.addEventListener('canplaythrough', () => {
+                            audioLoaded++;
+                            this.updateDebug('audio', `${audioLoaded}/${audioElements.length}`);
+                        });
+                        audio.addEventListener('error', (e) => {
+                            console.warn(`🐛 Audio error for ${id}:`, e);
+                            this.updateDebug('error', `Audio: ${id} failed`);
+                        });
+                    }
+                });
+                
+                setTimeout(() => {
+                    this.updateDebug('audio', `${audioLoaded}/${audioElements.length} (timeout)`);
+                }, 3000);
+            }
+            
+            startGame() {
+                console.log('🐛 Starting debug game...');
+                this.gameState = 'playing';
+                this.hideAllScreens();
+                this.updateDebug('gameState', 'playing');
+                
+                // Essayer de jouer l'audio d'ambiance
+                const ambiance = document.getElementById('ambianceSound');
+                if (ambiance) {
+                    ambiance.play().catch(e => {
+                        console.warn('🐛 Ambiance audio failed:', e);
+                        this.updateDebug('error', 'Ambiance audio failed');
+                    });
+                }
+            }
+            
+            hideAllScreens() {
+                document.getElementById('startScreen').style.display = 'none';
+            }
+            
+            update() {
+                if (this.gameState !== 'playing') return;
+                
+                // Spawn simple de memecoins
+                this.memecoinSpawnTimer++;
+                this.updateDebug('spawnTimer', this.memecoinSpawnTimer);
+                
+                if (this.memecoinSpawnTimer >= this.memecoinSpawnRate) {
+                    this.spawnMemecoin();
+                    this.memecoinSpawnTimer = 0;
+                }
+                
+                // Update memecoins
+                for (let i = this.memecoins.length - 1; i >= 0; i--) {
+                    const memecoin = this.memecoins[i];
+                    memecoin.y += memecoin.speed;
+                    
+                    if (memecoin.y > this.canvas.height + 50) {
+                        this.memecoins.splice(i, 1);
+                    }
+                }
+                
+                this.updateDebug('memecoins', this.memecoins.length);
+            }
+            
+            spawnMemecoin() {
+                const types = ['doge', 'pepe', 'chad', 'npc', 'boomer', 'wojak'];
+                const type = types[Math.floor(Math.random() * types.length)];
+                
+                const memecoin = {
+                    x: Math.random() * (this.canvas.width - 40),
+                    y: -40,
+                    width: 40,
+                    height: 40,
+                    type: type,
+                    speed: 2 + Math.random() * 2
+                };
+                
+                this.memecoins.push(memecoin);
+                console.log(`🐛 Spawned ${type} memecoin at (${Math.floor(memecoin.x)}, ${Math.floor(memecoin.y)})`);
+            }
+            
+            render() {
+                // Clear canvas
+                this.ctx.fillStyle = 'linear-gradient(180deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%)';
+                this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+                
+                // Draw background
+                this.ctx.fillStyle = '#16213e';
+                this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+                
+                if (this.gameState === 'playing') {
+                    // Draw memecoins
+                    this.memecoins.forEach(memecoin => {
+                        if (this.memecoinImages[memecoin.type]) {
+                            this.ctx.drawImage(
+                                this.memecoinImages[memecoin.type],
+                                memecoin.x,
+                                memecoin.y,
+                                memecoin.width,
+                                memecoin.height
+                            );
+                        }
+                    });
+                }
+            }
+            
+            gameLoop() {
+                this.update();
+                this.render();
+                requestAnimationFrame(() => this.gameLoop());
+            }
+        }
+
+        // Initialize game
+        let game;
+        window.onload = function() {
+            try {
+                game = new LFISTGameDebug();
+                console.log('🐛 Debug game loaded successfully!');
+            } catch (error) {
+                console.error('🐛 Failed to load debug game:', error);
+                document.getElementById('debugError').textContent = error.message;
+            }
+        };
+
+        // Global functions
+        function startGame() {
+            if (game) game.startGame();
+        }
+
+        function testAssets() {
+            console.log('🐛 Testing assets...');
+            const images = ['doge.png', 'pepe.png', 'chad.png', 'trump.png'];
+            const audio = ['intro.mp3', 'ambiance.mp3', 'coup.mp3'];
+            
+            let testResults = '🐛 ASSET TEST RESULTS:\\n';
+            
+            // Test images
+            images.forEach(img => {
+                const testImg = new Image();
+                testImg.onload = () => {
+                    testResults += `✅ ${img} - OK\\n`;
+                    console.log(`✅ Image ${img} loaded`);
+                };
+                testImg.onerror = () => {
+                    testResults += `❌ ${img} - FAILED\\n`;
+                    console.error(`❌ Image ${img} failed`);
+                };
+                testImg.src = img;
+            });
+            
+            setTimeout(() => {
+                alert(testResults);
+            }, 2000);
+        }
+
+        function testWithoutAudio() {
+            console.log('🐛 Starting game without audio...');
+            // Disable all audio
+            document.querySelectorAll('audio').forEach(audio => {
+                audio.remove();
+            });
+            if (game) game.startGame();
+        }
+
+        // Error handling
+        window.onerror = function(msg, url, lineNo, columnNo, error) {
+            console.error('🐛 Global error:', msg, 'at', url, ':', lineNo);
+            document.getElementById('debugError').textContent = `${msg} (line ${lineNo})`;
+            return false;
+        };
+
+        console.log('🐛 Debug script loaded');
+    </script>
+</body>
+</html>
