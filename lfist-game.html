@@ -1,853 +1,666 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, viewport-fit=cover" />
-  <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="theme-color" content="#00ff88" />
-  <title>LFIST GAME - Destroy the Memecoins!</title>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Orbitron:wght@700&display=swap" rel="stylesheet" />
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Orbitron', sans-serif;
-      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-      color: #eee;
-      min-height: 100vh;
-      overflow: hidden;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      user-select: none;
-      -webkit-touch-callout: none;
-      -webkit-tap-highlight-color: transparent;
-      touch-action: manipulation;
-      /* Mobile optimizations */
-      -webkit-overflow-scrolling: touch;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-
-    /* Force portrait orientation */
-    @media screen and (orientation: landscape) and (max-width: 768px) {
-      body::before {
-        content: "🔄 Please rotate your device to portrait mode for the best experience";
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.9);
-        color: #00ff88;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        font-family: 'Press Start 2P', cursive;
-        font-size: 12px;
-        z-index: 9999;
-        padding: 20px;
-        line-height: 1.5;
-      }
-    }
-
-    /* Header - Compact for mobile */
-    header {
-      background: linear-gradient(135deg, #111, #222);
-      padding: 0.75rem 1rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 1000;
-      box-shadow: 0 2px 10px rgba(0, 255, 136, 0.3);
-      backdrop-filter: blur(10px);
-      border-bottom: 2px solid #00ff88;
-    }
-
-    .logo {
-      font-family: 'Press Start 2P', cursive;
-      font-size: 1.2rem;
-      color: #00ff88;
-      text-shadow: 0 0 10px #00ff88;
-    }
-
-    .nav-menu {
-      display: flex;
-      gap: 1rem;
-    }
-
-    .nav-menu a {
-      color: #eee;
-      text-decoration: none;
-      transition: color 0.3s;
-      font-size: 0.7rem;
-      padding: 0.5rem;
-      border-radius: 5px;
-      background: rgba(255, 255, 255, 0.1);
-    }
-
-    .nav-menu a:hover {
-      color: #00ff88;
-      background: rgba(0, 255, 136, 0.2);
-    }
-
-    /* Game Container - Mobile First */
-    #gameContainer {
-      position: relative;
-      width: 100vw;
-      height: calc(100vh - 60px);
-      margin-top: 60px;
-      background: #000;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* Game Canvas - Responsive */
-    #gameCanvas {
-      display: block;
-      background: transparent;
-      cursor: none;
-      width: 100%;
-      height: 100%;
-      /* Mobile performance optimizations */
-      -webkit-transform: translateZ(0);
-      transform: translateZ(0);
-      -webkit-backface-visibility: hidden;
-      backface-visibility: hidden;
-      -webkit-perspective: 1000;
-      perspective: 1000;
-      /* Prevent canvas scaling issues */
-      image-rendering: -webkit-optimize-contrast;
-      image-rendering: -moz-crisp-edges;
-      image-rendering: pixelated;
-      touch-action: none;
-    }
-
-    /* Game UI - Mobile Optimized */
-    .game-ui {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      right: 10px;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      z-index: 100;
-      font-family: 'Press Start 2P', cursive;
-      font-size: 8px;
-    }
-
-    .ui-left, .ui-right {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-    }
-
-    .ui-right {
-      align-items: flex-end;
-    }
-
-    .ui-item {
-      background: rgba(0, 0, 0, 0.85);
-      padding: 6px 10px;
-      border-radius: 8px;
-      border: 1px solid #00ff88;
-      color: #00ff88;
-      text-shadow: 0 0 8px #00ff88;
-      backdrop-filter: blur(5px);
-      white-space: nowrap;
-      font-size: 7px;
-    }
-
-    .lives {
-      color: #ff4444;
-      border-color: #ff4444;
-      text-shadow: 0 0 8px #ff4444;
-    }
-
-    /* Level Progress - Bottom positioned for mobile */
-    .level-progress {
-      position: absolute;
-      bottom: 10px;
-      left: 10px;
-      right: 10px;
-      background: rgba(0, 0, 0, 0.85);
-      padding: 8px 12px;
-      border-radius: 12px;
-      border: 1px solid #00ff88;
-      font-family: 'Press Start 2P', cursive;
-      font-size: 6px;
-      color: #00ff88;
-      z-index: 100;
-      text-align: center;
-      backdrop-filter: blur(5px);
-    }
-
-    .progress-bar {
-      width: 100%;
-      height: 6px;
-      background: #333;
-      border-radius: 3px;
-      margin: 4px 0;
-      overflow: hidden;
-    }
-
-    .progress-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #00ff88, #00cc66);
-      transition: width 0.3s ease;
-      border-radius: 3px;
-    }
-
-    /* Combo Display - Mobile positioned */
-    .combo-display {
-      position: absolute;
-      top: 80px;
-      right: 10px;
-      font-family: 'Press Start 2P', cursive;
-      font-size: 10px;
-      color: #ffaa00;
-      text-shadow: 0 0 15px #ffaa00;
-      z-index: 100;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      background: rgba(0, 0, 0, 0.7);
-      padding: 5px 8px;
-      border-radius: 5px;
-    }
-
-    .combo-display.show {
-      opacity: 1;
-      animation: comboShake 0.5s ease;
-    }
-
-    @keyframes comboShake {
-      0%, 100% { transform: translateX(0); }
-      25% { transform: translateX(-3px); }
-      75% { transform: translateX(3px); }
-    }
-
-    /* Modal Screens - Mobile Optimized */
-    .game-over, .level-complete, .game-start {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.95);
-      backdrop-filter: blur(10px);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      z-index: 200;
-      font-family: 'Press Start 2P', cursive;
-      padding: 20px;
-      overflow-y: auto;
-      display: none;
-    }
-
-    .game-completed {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(45deg, rgba(255, 215, 0, 0.1), rgba(255, 0, 119, 0.1), rgba(0, 255, 136, 0.1));
-      backdrop-filter: blur(15px);
-      padding: 20px;
-      overflow-y: auto;
-      z-index: 300;
-      display: none;
-      text-align: center;
-    }
-
-    .game-completed h2 {
-      color: #ffd700 !important;
-      text-shadow: 0 0 20px #ffd700 !important;
-      font-size: 1.5em !important;
-      margin-bottom: 10px;
-    }
-
-    .game-completed h3 {
-      color: #00ff88 !important;
-      text-shadow: 0 0 15px #00ff88 !important;
-      margin-bottom: 15px;
-      font-size: 1em !important;
-    }
-
-    .game-over h2, .level-complete h2, .game-start h2 {
-      color: #ff4444;
-      margin-bottom: 15px;
-      font-size: 16px;
-      text-shadow: 0 0 15px #ff4444;
-    }
-
-    .level-complete h2, .game-start h2 {
-      color: #00ff88;
-      text-shadow: 0 0 15px #00ff88;
-    }
-
-    /* Buttons - Touch Optimized */
-    .game-button {
-      background: linear-gradient(45deg, #00ff88, #00cc66);
-      color: #000;
-      border: none;
-      padding: 12px 20px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-family: 'Press Start 2P', cursive;
-      font-size: 8px;
-      margin: 8px;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(0, 255, 136, 0.3);
-      min-width: 140px;
-      min-height: 44px; /* Touch target size */
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .game-button:hover, .game-button:active {
-      background: linear-gradient(45deg, #00cc66, #009944);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(0, 255, 136, 0.5);
-    }
-
-    .game-button.secondary {
-      background: linear-gradient(45deg, #666, #555);
-      color: #eee;
-    }
-
-    .game-button.secondary:hover, .game-button.secondary:active {
-      background: linear-gradient(45deg, #777, #666);
-    }
-
-    /* Share Section - Mobile Optimized */
-    .share-section {
-      margin: 15px 0;
-      padding: 15px;
-      background: rgba(0, 0, 0, 0.3);
-      border-radius: 12px;
-      border: 2px solid #ff0077;
-      width: 100%;
-      max-width: 300px;
-    }
-
-    .share-section h3 {
-      color: #00ff88;
-      margin-bottom: 12px;
-      text-shadow: 0 0 10px #00ff88;
-      font-size: 8px;
-    }
-
-    .share-buttons {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      align-items: center;
-    }
-
-    .share-button {
-      padding: 10px 16px;
-      border: none;
-      border-radius: 20px;
-      font-size: 7px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      max-width: 200px;
-      min-height: 40px;
-    }
-
-    .share-button.twitter {
-      background: linear-gradient(135deg, #1da1f2, #0d8bd9);
-      color: white;
-    }
-
-    .share-button.twitter:hover, .share-button.twitter:active {
-      background: linear-gradient(135deg, #0d8bd9, #0a7bc4);
-      transform: translateY(-1px);
-    }
-
-    .share-button.facebook {
-      background: linear-gradient(135deg, #4267b2, #365899);
-      color: white;
-    }
-
-    .share-button.facebook:hover, .share-button.facebook:active {
-      background: linear-gradient(135deg, #365899, #2d4373);
-      transform: translateY(-1px);
-    }
-
-    .share-button.telegram {
-      background: linear-gradient(135deg, #0088cc, #006699);
-      color: white;
-    }
-
-    .share-button.telegram:hover, .share-button.telegram:active {
-      background: linear-gradient(135deg, #006699, #004466);
-      transform: translateY(-1px);
-    }
-
-    .share-button.copy {
-      background: linear-gradient(135deg, #ff6600, #cc5500);
-      color: white;
-    }
-
-    .share-button.copy:hover, .share-button.copy:active {
-      background: linear-gradient(135deg, #cc5500, #aa4400);
-      transform: translateY(-1px);
-    }
-
-    /* Instructions - Mobile Readable */
-    .instructions {
-      margin: 15px 0;
-      color: #ccc;
-      font-size: 6px;
-      line-height: 1.6;
-      max-width: 280px;
-    }
-
-    .instructions p {
-      margin-bottom: 5px;
-    }
-
-    /* Powerup Notification - Mobile Positioned */
-    .powerup-notification {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: rgba(255, 170, 0, 0.95);
-      color: white;
-      padding: 15px 25px;
-      border-radius: 12px;
-      border: 2px solid #fff;
-      font-family: 'Press Start 2P', cursive;
-      font-size: 10px;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-      z-index: 1000;
-      opacity: 0;
-      transform: translate(-50%, -50%) scale(0.5);
-      transition: all 0.3s ease;
-      pointer-events: none;
-    }
-
-    .powerup-notification.show {
-      opacity: 1;
-      transform: translate(-50%, -50%) scale(1);
-    }
-
-    /* Power-up glow effect */
-    .powerup-glow {
-      box-shadow: 0 0 15px #ffaa00, 0 0 30px #ffaa00, 0 0 45px #ffaa00;
-      animation: pulse 1s infinite alternate;
-    }
-
-    @keyframes pulse {
-      from { opacity: 0.7; }
-      to { opacity: 1; }
-    }
-
-    /* Mobile Virtual Controls */
-    .mobile-controls {
-      position: absolute;
-      bottom: 60px;
-      left: 0;
-      right: 0;
-      z-index: 90;
-      display: none; /* Hidden by default, shown via JavaScript on mobile */
-      padding: 0 15px;
-    }
-
-    .control-instructions {
-      background: rgba(0, 0, 0, 0.8);
-      border: 1px solid #00ff88;
-      border-radius: 8px;
-      padding: 8px 12px;
-      margin-bottom: 10px;
-      text-align: center;
-      backdrop-filter: blur(5px);
-    }
-
-    .instruction-text {
-      font-family: 'Press Start 2P', cursive;
-      font-size: 6px;
-      color: #00ff88;
-      text-shadow: 0 0 8px #00ff88;
-      margin-bottom: 3px;
-    }
-
-    .instruction-subtext {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 5px;
-      color: #ccc;
-      opacity: 0.8;
-    }
-
-    .virtual-buttons {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-    }
-
-    .virtual-btn {
-      background: linear-gradient(45deg, rgba(0, 255, 136, 0.8), rgba(0, 204, 102, 0.8));
-      border: 2px solid #00ff88;
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      font-size: 20px;
-      color: #000;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 4px 15px rgba(0, 255, 136, 0.3);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      touch-action: manipulation;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .virtual-btn:active {
-      transform: scale(0.95);
-      background: linear-gradient(45deg, rgba(0, 204, 102, 0.9), rgba(0, 153, 68, 0.9));
-      box-shadow: 0 2px 8px rgba(0, 255, 136, 0.5);
-    }
-
-    .pause-btn {
-      background: linear-gradient(45deg, rgba(255, 170, 0, 0.8), rgba(255, 136, 0, 0.8));
-      border-color: #ffaa00;
-      box-shadow: 0 4px 15px rgba(255, 170, 0, 0.3);
-    }
-
-    .pause-btn:active {
-      background: linear-gradient(45deg, rgba(255, 136, 0, 0.9), rgba(204, 102, 0, 0.9));
-      box-shadow: 0 2px 8px rgba(255, 170, 0, 0.5);
-    }
-
-    /* Show mobile controls only on mobile devices */
-    @media (max-width: 768px) and (pointer: coarse) {
-      .mobile-controls {
-        display: block;
-      }
-    }
-
-    /* Particle Effects */
-    .particle {
-      position: absolute;
-      pointer-events: none;
-      z-index: 50;
-    }
-
-    /* Desktop Styles - Only for larger screens */
-    @media (min-width: 769px) {
-      .logo {
-        font-size: 1.5rem;
-      }
-
-      .nav-menu a {
-        font-size: 0.9rem;
-      }
-
-      .game-ui {
-        font-size: 12px;
-        top: 20px;
-        left: 20px;
-        right: 20px;
-      }
-
-      .ui-item {
-        padding: 10px 15px;
-        font-size: 10px;
-      }
-
-      .level-progress {
-        font-size: 8px;
-        bottom: 20px;
-        left: 50%;
-        right: auto;
-        transform: translateX(-50%);
-        width: auto;
-        min-width: 250px;
-      }
-
-      .progress-bar {
-        width: 200px;
-        height: 8px;
-      }
-
-      .combo-display {
-        font-size: 14px;
-        top: 100px;
-      }
-
-      .game-button {
-        font-size: 10px;
-        padding: 15px 25px;
-        min-width: 160px;
-      }
-
-      .share-buttons {
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
-      }
-
-      .share-button {
-        width: auto;
-        min-width: 150px;
-        font-size: 9px;
-      }
-
-      .instructions {
-        font-size: 8px;
-        max-width: 400px;
-      }
-
-      .powerup-notification {
-        font-size: 14px;
-        padding: 20px 35px;
-      }
-
-      /* Desktop fullscreen mode */
-      #gameContainer {
-        height: calc(100vh - 80px);
-        margin-top: 80px;
-      }
-
-      header {
-        padding: 1rem 2rem;
-      }
-    }
-
-    /* Large Desktop */
-    @media (min-width: 1200px) {
-      .game-ui {
-        font-size: 14px;
-      }
-
-      .ui-item {
-        font-size: 12px;
-      }
-
-      .level-progress {
-        font-size: 10px;
-      }
-
-      .combo-display {
-        font-size: 16px;
-      }
-
-      .game-button {
-        font-size: 12px;
-      }
-
-      .share-button {
-        font-size: 11px;
-      }
-
-      .instructions {
-        font-size: 10px;
-      }
-    }
-
-    /* Safe area handling for notched devices */
-    @supports (padding: max(0px)) {
-      header {
-        padding-left: max(1rem, env(safe-area-inset-left));
-        padding-right: max(1rem, env(safe-area-inset-right));
-        padding-top: max(0.75rem, env(safe-area-inset-top));
-      }
-
-      .game-ui {
-        left: max(10px, env(safe-area-inset-left));
-        right: max(10px, env(safe-area-inset-right));
-      }
-
-      .level-progress {
-        left: max(10px, env(safe-area-inset-left));
-        right: max(10px, env(safe-area-inset-right));
-        bottom: max(10px, env(safe-area-inset-bottom));
-      }
-    }
-
-    /* High DPI displays */
-    @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-      #gameCanvas {
-        image-rendering: auto;
-      }
-    }
-
-    /* Reduce motion for accessibility */
-    @media (prefers-reduced-motion: reduce) {
-      * {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#00ff88">
+    <title>🥊 LFIST GAME - Destroy the Memecoins!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Orbitron', monospace;
+            background: linear-gradient(135deg, #0a0a0a, #1a1a2e, #16213e);
+            color: #ffffff;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            position: fixed;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+
+        /* Force portrait mode on mobile */
+        @media screen and (orientation: landscape) and (max-width: 768px) {
+            body::before {
+                content: "🔄 Veuillez faire pivoter votre appareil en mode portrait pour une meilleure expérience !";
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.95);
+                color: #00ff88;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                font-family: 'Press Start 2P', cursive;
+                font-size: 12px;
+                z-index: 99999;
+                padding: 20px;
+                line-height: 1.8;
+            }
+        }
+
+        /* Game Container */
+        #gameContainer {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            background: radial-gradient(ellipse at center, #0f1419 0%, #000000 100%);
+            overflow: hidden;
+        }
+
+        /* Game Canvas */
+        #gameCanvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            touch-action: none;
+            cursor: none;
+            image-rendering: pixelated;
+            -webkit-transform: translateZ(0);
+            transform: translateZ(0);
+        }
+
+        /* Game UI */
+        .game-ui {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            z-index: 100;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 10px;
+            pointer-events: none;
+        }
+
+        .ui-left, .ui-right {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .ui-right {
+            align-items: flex-end;
+        }
+
+        .ui-element {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00ff88;
+            border-radius: 8px;
+            padding: 8px 12px;
+            color: #00ff88;
+            text-shadow: 0 0 10px #00ff88;
+            backdrop-filter: blur(10px);
+            white-space: nowrap;
+        }
+
+        .ui-element.lives {
+            border-color: #ff4444;
+            color: #ff4444;
+            text-shadow: 0 0 10px #ff4444;
+        }
+
+        .ui-element.combo {
+            border-color: #ffaa00;
+            color: #ffaa00;
+            text-shadow: 0 0 10px #ffaa00;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            z-index: 100;
+            pointer-events: none;
+        }
+
+        .progress-info {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 8px;
+            color: #00ff88;
+            text-align: center;
+            margin-bottom: 5px;
+            text-shadow: 0 0 8px #00ff88;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00ff88;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00ff88, #00cc66, #ffaa00);
+            transition: width 0.3s ease;
+            box-shadow: 0 0 10px #00ff88;
+        }
+
+        /* Modal Screens */
+        .modal-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(15px);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+            text-align: center;
+            font-family: 'Press Start 2P', cursive;
+        }
+
+        .modal-screen h2 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px currentColor;
+        }
+
+        .modal-screen.start h2 {
+            color: #00ff88;
+        }
+
+        .modal-screen.gameover h2 {
+            color: #ff4444;
+        }
+
+        .modal-screen.levelup h2 {
+            color: #ffaa00;
+        }
+
+        .modal-screen.victory h2 {
+            color: #ffd700;
+            font-size: 24px;
+        }
+
+        /* Buttons */
+        .game-button {
+            background: linear-gradient(45deg, #00ff88, #00cc66);
+            border: none;
+            border-radius: 12px;
+            color: #000;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 10px;
+            padding: 15px 25px;
+            margin: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 255, 136, 0.4);
+            min-width: 150px;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-transform: uppercase;
+        }
+
+        .game-button:hover {
+            background: linear-gradient(45deg, #00cc66, #009944);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(0, 255, 136, 0.6);
+        }
+
+        .game-button:active {
+            transform: translateY(0);
+        }
+
+        .game-button.secondary {
+            background: linear-gradient(45deg, #666, #444);
+            color: #fff;
+        }
+
+        .game-button.secondary:hover {
+            background: linear-gradient(45deg, #777, #555);
+        }
+
+        /* Notifications */
+        .notification {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            border: 3px solid #fff;
+            border-radius: 15px;
+            padding: 20px 30px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 14px;
+            text-align: center;
+            z-index: 2000;
+            opacity: 0;
+            scale: 0.5;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+        }
+
+        .notification.show {
+            opacity: 1;
+            scale: 1;
+        }
+
+        .notification.trump {
+            background: linear-gradient(45deg, rgba(255, 102, 0, 0.9), rgba(255, 170, 0, 0.9));
+            color: #fff;
+            border-color: #ffd700;
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.8);
+        }
+
+        .notification.trump-warning {
+            background: linear-gradient(45deg, #ffaa00, #ff6600);
+            border: 3px solid #ffd700;
+            color: #000;
+            font-weight: bold;
+            text-shadow: 0 0 5px #ffd700;
+            animation: trump-flash 0.5s ease-in-out infinite alternate;
+            font-size: 16px;
+            padding: 12px 20px;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.9);
+        }
+
+        @keyframes trump-flash {
+            0% { 
+                background: linear-gradient(45deg, #ffaa00, #ff6600);
+                box-shadow: 0 0 20px #ffd700;
+            }
+            100% { 
+                background: linear-gradient(45deg, #ffd700, #ffaa00);
+                box-shadow: 0 0 35px #ffd700;
+            }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .notification.beer {
+            background: linear-gradient(45deg, rgba(255, 170, 0, 0.9), rgba(255, 215, 0, 0.9));
+            color: #000;
+            border-color: #fff;
+            box-shadow: 0 0 30px rgba(255, 170, 0, 0.8);
+        }
+
+        /* Share Section */
+        .share-section {
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid #00ff88;
+            border-radius: 12px;
+            max-width: 300px;
+        }
+
+        .share-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .share-button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 40px;
+        }
+
+        .share-button.twitter {
+            background: linear-gradient(135deg, #1da1f2, #0d8bd9);
+            color: white;
+        }
+
+        .share-button.facebook {
+            background: linear-gradient(135deg, #4267b2, #365899);
+            color: white;
+        }
+
+        .share-button.telegram {
+            background: linear-gradient(135deg, #0088cc, #006699);
+            color: white;
+        }
+
+        .share-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Instructions */
+        .instructions {
+            font-size: 8px;
+            color: #ccc;
+            line-height: 1.6;
+            margin: 15px 0;
+            max-width: 280px;
+        }
+
+        /* Mobile Controls Hint */
+        .mobile-hint {
+            position: absolute;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Press Start 2P', cursive;
+            font-size: 8px;
+            color: #00ff88;
+            text-align: center;
+            opacity: 0.7;
+            z-index: 50;
+            pointer-events: none;
+        }
+
+        /* Animations */
+        @keyframes pulse {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 5px currentColor; }
+            50% { box-shadow: 0 0 20px currentColor; }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 480px) {
+            .game-ui {
+                top: 10px;
+                left: 10px;
+                right: 10px;
+                font-size: 8px;
+            }
+
+            .progress-container {
+                bottom: 10px;
+                left: 10px;
+                right: 10px;
+            }
+
+            .modal-screen h2 {
+                font-size: 14px;
+            }
+
+            .game-button {
+                font-size: 8px;
+                padding: 12px 20px;
+                min-width: 120px;
+                min-height: 44px;
+            }
+            
+            .notification {
+                font-size: 12px;
+                padding: 8px 12px;
+                max-width: 80%;
+            }
+        }
+
+        /* Tablet optimizations */
+        @media (min-width: 481px) and (max-width: 1024px) {
+            .game-ui {
+                font-size: 12px;
+                padding: 15px;
+            }
+            
+            .game-button {
+                font-size: 10px;
+                padding: 14px 24px;
+                min-width: 140px;
+                min-height: 48px;
+            }
+            
+            .modal-screen {
+                padding: 20px;
+                max-width: 80%;
+            }
+        }
+
+        /* Force portrait mode for mobile */
+        @media (max-width: 768px) and (orientation: landscape) {
+            body::before {
+                content: "🔄 Veuillez tourner votre appareil en mode portrait pour une meilleure expérience";
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.95);
+                color: white;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                z-index: 10000;
+                font-size: 16px;
+                padding: 20px;
+            }
+        }
+
+        /* Improve touch targets */
+        @media (max-width: 768px) {
+            .game-button {
+                min-height: 48px;
+                touch-action: manipulation;
+            }
+            
+            canvas {
+                touch-action: none;
+            }
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <div class="logo">LFIST GAME 💥</div>
-    <nav class="nav-menu">
-      <a href="Index.html">🏠 Home</a>
-      <a href="fist-detector.html">🔍 Fist-Detector</a>
-      <a href="whitepaper.html" target="_blank">📄 White Paper</a>
-    </nav>
-  </header>
+    <div id="gameContainer">
+        <canvas id="gameCanvas"></canvas>
+        
+        <!-- Game UI -->
+        <div class="game-ui">
+            <div class="ui-left">
+                <div class="ui-element" id="scoreDisplay">SCORE: 0</div>
+                <div class="ui-element lives" id="livesDisplay">LIVES: 3</div>
+            </div>
+            <div class="ui-right">
+                <div class="ui-element" id="levelDisplay">LEVEL: 1</div>
+                <div class="ui-element combo" id="comboDisplay" style="display: none;">COMBO: 0</div>
+            </div>
+        </div>
 
-  <div id="gameContainer">
-    <canvas id="gameCanvas"></canvas>
-    
-    <!-- Game UI -->
-    <div class="game-ui">
-      <div class="ui-left">
-        <div class="ui-item">Score: <span id="score">0</span></div>
-        <div class="ui-item">Level: <span id="level">1</span></div>
-        <div class="ui-item">Combo: <span id="combo">0</span></div>
-      </div>
-      <div class="ui-right">
-        <div class="ui-item lives">Lives: <span id="lives">3</span></div>
-        <div class="ui-item">Target: <span id="target">10</span></div>
-      </div>
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-info" id="progressInfo">MEMECOINS DÉTRUITS: 0/10</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <!-- Mobile Control Hint -->
+        <div class="mobile-hint" id="mobileHint">
+            TOUCHEZ L'ÉCRAN POUR DÉPLACER LFIST
+        </div>
     </div>
 
-    <!-- Combo Display -->
-    <div class="combo-display" id="comboDisplay">COMBO x<span id="comboMultiplier">1</span>!</div>
+    <!-- Start Screen -->
+    <div class="modal-screen start" id="startScreen">
+        <div style="margin-bottom: 30px;">
+            <h2>🥊 LFIST GAME 🥊</h2>
+            <p style="color: #00ff88; font-size: 10px; margin: 20px 0;">
+                DÉTRUISEZ LES MEMECOINS !
+            </p>
+        </div>
 
-    <!-- Powerup Notification -->
-    <div class="powerup-notification" id="powerupNotification">BEER BREAK!</div>
+        <div class="instructions">
+            <p><strong>🎯 OBJECTIF :</strong></p>
+            <p>• Détruisez les memecoins qui tombent</p>
+            <p>• Évitez qu'ils touchent le sol</p>
+            <p>• Survivez aux 50 niveaux !</p>
+            <br>
+            <p><strong>🎮 CONTRÔLES :</strong></p>
+            <p>• PC: Flèches ou WASD</p>
+            <p>• Mobile: Touchez l'écran</p>
+            <p>• Destruction automatique au contact</p>
+            <br>
+            <p><strong>💎 SPÉCIAUX :</strong></p>
+            <p>• 🍺 Bières dorées = Power-ups</p>
+            <p>• 🚨 Trump coins = MEGA bonus</p>
+            <p>• 💥 Combos = Points x2, x3...</p>
+        </div>
 
-    <!-- Level Progress -->
-    <div class="level-progress">
-      <div>Level Progress</div>
-      <div class="progress-bar">
-        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
-      </div>
-      <div><span id="destroyed">0</span> / <span id="levelTarget">10</span></div>
-    </div>
-
-    <!-- Mobile Virtual Controls -->
-    <div class="mobile-controls" id="mobileControls">
-      <div class="control-instructions">
-        <div class="instruction-text">👆 Tap anywhere to move LFIST and punch!</div>
-        <div class="instruction-subtext">Hold and drag to move continuously</div>
-      </div>
-      <div class="virtual-buttons">
-        <button class="virtual-btn pause-btn" onclick="togglePause()" id="pauseBtn">⏸️</button>
-        <button class="virtual-btn punch-btn" onclick="manualPunch()" id="punchBtn">👊</button>
-      </div>
-    </div>
-
-    <!-- Game Start Screen -->
-    <div class="game-start" id="gameStart">
-      <h2>🎮 LFIST GAME 🎮</h2>
-      <div class="instructions">
-        <p>🥊 Use arrows or WASD to move LFIST</p>
-        <p>💥 Destroy the falling memecoins!</p>
-        <p>💎 Collect golden fists for bonus points</p>
-        <p>❤️ Don't let memecoins hit the ground!</p>
-        <p>🏆 Survive all 50 levels of increasing difficulty</p>
-        <p style="color: #ffaa00; font-size: 0.8em; margin-top: 10px;">🧪 Debug Mode: T = all memecoins | R = Trump coin</p>
-      </div>
-      <button class="game-button" onclick="startGame()">🚀 START GAME</button>
-      <button class="game-button secondary" onclick="showControls()">🎮 CONTROLS</button>
+        <button class="game-button" onclick="startGame()">🚀 START GAME</button>
+        <button class="game-button secondary" onclick="showInstructions()">📖 HELP</button>
+        <button class="game-button secondary" onclick="enableAudio()" id="audioButton">🔊 ENABLE AUDIO</button>
     </div>
 
     <!-- Game Over Screen -->
-    <div class="game-over" id="gameOver">
-      <h2>💀 GAME OVER 💀</h2>
-      <p>Final Score: <span id="finalScore">0</span></p>
-      <p>Level Reached: <span id="finalLevel">1</span></p>
-      
-      <!-- Share buttons -->
-      <div class="share-section">
-        <h3>🚀 Share your score!</h3>
-        <div class="share-buttons">
-          <button class="share-button twitter" onclick="shareOnTwitter()">
-            🐦 Share on X
-          </button>
-          <button class="share-button facebook" onclick="shareOnFacebook()">
-            📘 Share on Facebook
-          </button>
-          <button class="share-button telegram" onclick="shareOnTelegram()">
-            ✈️ Share on Telegram
-          </button>
-          <button class="share-button copy" onclick="copyShareText()">
-            📋 Copy message
-          </button>
+    <div class="modal-screen gameover" id="gameOverScreen">
+        <h2>💥 GAME OVER 💥</h2>
+        <div style="margin: 20px 0; font-size: 10px;">
+            <p>Score final: <span id="finalScore">0</span></p>
+            <p>Niveau atteint: <span id="finalLevel">1</span></p>
+            <p>Combo max: <span id="finalCombo">0</span></p>
+            <p>Total détruit: <span id="finalDestroyed">0</span></p>
         </div>
-      </div>
-      
-      <button class="game-button" onclick="restartGame()">🔄 PLAY AGAIN</button>
-      <button class="game-button secondary" onclick="goHome()">🏠 HOME</button>
+
+        <div class="share-section">
+            <h3 style="color: #00ff88; margin-bottom: 15px; font-size: 8px;">🚀 PARTAGEZ VOTRE SCORE</h3>
+            <div class="share-buttons">
+                <button class="share-button twitter" onclick="shareScore('twitter')">🐦 TWITTER</button>
+                <button class="share-button facebook" onclick="shareScore('facebook')">📘 FACEBOOK</button>
+                <button class="share-button telegram" onclick="shareScore('telegram')">✈️ TELEGRAM</button>
+            </div>
+        </div>
+
+        <button class="game-button" onclick="restartGame()">🔄 REJOUER</button>
+        <button class="game-button secondary" onclick="showStartScreen()">🏠 MENU</button>
     </div>
 
     <!-- Level Complete Screen -->
-    <div class="level-complete" id="levelComplete">
-      <h2>🏆 LEVEL COMPLETE! 🏆</h2>
-      <p>Score: <span id="levelScore">0</span></p>
-      <p>Level Bonus: <span id="levelBonus">0</span></p>
-      <button class="game-button" onclick="nextLevel()">➡️ NEXT LEVEL</button>
-      <button class="game-button secondary" onclick="restartGame()">🔄 RESTART</button>
-    </div>
-
-    <!-- Game Completed Screen -->
-    <div class="game-completed" id="gameCompleted">
-      <h2>🎉 CONGRATULATIONS! 🎉</h2>
-      <h3>🏆 GAME COMPLETED! 🏆</h3>
-      <p>Final Score: <span id="completedScore">0</span></p>
-      <p>All 50 levels completed!</p>
-      <p>Max Combo: <span id="completedMaxCombo">0</span></p>
-      <p>Total Destroyed: <span id="completedTotalDestroyed">0</span></p>
-      
-      <!-- Share buttons -->
-      <div class="share-section">
-        <h3>🚀 Share your achievement!</h3>
-        <div class="share-buttons">
-          <button class="share-button twitter" onclick="shareGameCompleted()">
-            🐦 Share on X
-          </button>
-          <button class="share-button facebook" onclick="shareGameCompletedFacebook()">
-            📘 Share on Facebook
-          </button>
-          <button class="share-button telegram" onclick="shareGameCompletedTelegram()">
-            ✈️ Share on Telegram
-          </button>
-          <button class="share-button copy" onclick="copyGameCompletedText()">
-            📋 Copy message
-          </button>
+    <div class="modal-screen levelup" id="levelCompleteScreen">
+        <h2>🎉 LEVEL COMPLETE! 🎉</h2>
+        <div style="margin: 20px 0; font-size: 10px;">
+            <p>Level <span id="completedLevel">1</span> completed!</p>
+            <p>Level bonus: <span id="levelBonus">0</span> points</p>
         </div>
-      </div>
-      
-      <button class="game-button" onclick="restartGame()">🔄 PLAY AGAIN</button>
-      <button class="game-button secondary" onclick="goHome()">🏠 HOME</button>
+        <button class="game-button" onclick="nextLevel()">➡️ NEXT LEVEL</button>
     </div>
-  </div>
 
-  <script src="lfist-game-complete.js"></script>
+    <!-- Victory Screen -->
+    <div class="modal-screen victory" id="victoryScreen">
+        <h2>🏆 TOTAL VICTORY! 🏆</h2>
+        <div style="margin: 20px 0; font-size: 12px;">
+            <p style="color: #ffd700;">🎉 50 LEVELS COMPLETED! 🎉</p>
+            <p>Final score: <span id="victoryScore">0</span></p>
+            <p>Max combo: <span id="victoryCombo">0</span></p>
+            <p>Total destroyed: <span id="victoryDestroyed">0</span></p>
+        </div>
+
+        <div class="share-section">
+            <h3 style="color: #ffd700; margin-bottom: 15px; font-size: 8px;">🏆 PARTAGEZ VOTRE VICTOIRE</h3>
+            <div class="share-buttons">
+                <button class="share-button twitter" onclick="shareVictory('twitter')">🐦 TWITTER</button>
+                <button class="share-button facebook" onclick="shareVictory('facebook')">📘 FACEBOOK</button>
+                <button class="share-button telegram" onclick="shareVictory('telegram')">✈️ TELEGRAM</button>
+            </div>
+        </div>
+
+        <button class="game-button" onclick="restartGame()">🔄 REJOUER</button>
+        <button class="game-button secondary" onclick="showStartScreen()">🏠 MENU</button>
+    </div>
+
+    <!-- Notification Element -->
+    <div class="notification" id="notification"></div>
+
+    <!-- Audio Elements -->
+    <audio id="introSound" preload="auto" loop>
+        <source src="intro.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="ambianceSound" preload="auto" loop>
+        <source src="ambiance.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="punchSound" preload="auto">
+        <source src="coup.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="powerupSound" preload="auto">
+        <source src="bonus.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="trumpSound" preload="auto">
+        <source src="sontrump.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="rotSound" preload="auto">
+        <source src="rot.mp3" type="audio/mpeg">
+    </audio>
+
+    <script src="lfist-game.js"></script>
+    <script>
+        function enableAudio() {
+            // Fonction pour démarrer l'audio (requis par les navigateurs modernes)
+            const audioButton = document.getElementById('audioButton');
+            
+            if (game && game.sounds) {
+                // Essayer de jouer un son court pour activer l'audio
+                const introSound = game.sounds.intro;
+                if (introSound) {
+                    introSound.play().then(() => {
+                        console.log('🔊 Audio activé avec succès!');
+                        audioButton.textContent = '🔊 AUDIO ACTIVÉ';
+                        audioButton.style.background = 'linear-gradient(45deg, #00ff88, #00cc66)';
+                        audioButton.style.color = '#000';
+                        
+                        setTimeout(() => {
+                            audioButton.style.display = 'none';
+                        }, 2000);
+                    }).catch(e => {
+                        console.error('❌ Erreur activation audio:', e);
+                        audioButton.textContent = '❌ ERREUR AUDIO';
+                        audioButton.style.background = 'linear-gradient(45deg, #ff4444, #cc3333)';
+                    });
+                }
+            } else {
+                console.error('❌ Jeu non initialisé');
+                audioButton.textContent = '❌ JEU NON PRÊT';
+            }
+        }
+    </script>
 </body>
 </html>

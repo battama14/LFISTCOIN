@@ -1,890 +1,1271 @@
-// LFIST Game - JavaScript Game Engine Complet
+// 🥊 LFIST GAME - Version Optimisée PC/Mobile
+// Jeu de destruction de memecoins avec LFIST
+
 class LFistGame {
-  constructor() {
-    this.canvas = document.getElementById('gameCanvas');
-    this.ctx = this.canvas.getContext('2d');
-    this.gameRunning = false;
-    this.gamePaused = false;
-    
-    // Game state
-    this.score = 0;
-    this.level = 1;
-    this.lives = 3;
-    this.combo = 0;
-    this.maxCombo = 0;
-    this.destroyed = 0;
-    this.levelTarget = 10;
-    
-    // Player
-    this.player = {
-      x: 0,
-      y: 0,
-      width: 80,
-      height: 80,
-      speed: 8,
-      punchRadius: 100,
-      isPunching: false,
-      punchTimer: 0,
-      sprite: null
-    };
-    
-    // Game objects
-    this.memecoins = [];
-    this.powerups = [];
-    this.particles = [];
-    this.animations = [];
-    
-    // Input handling
-    this.keys = {};
-    this.lastTime = 0;
-    
-    // Game settings
-    this.spawnRate = 60; // frames between spawns
-    this.spawnTimer = 0;
-    this.powerupSpawnRate = 300;
-    this.powerupSpawnTimer = 0;
-    
-    // Initialize
-    this.init();
-  }
-
-  init() {
-    // Initialize canvas with proper dimensions
-    this.initializeCanvas();
-    this.setupEventListeners();
-    this.loadAssets();
-    this.resetPlayerPosition();
-    
-    // Show start screen
-    document.getElementById('gameStart').style.display = 'block';
-  }
-
-  initializeCanvas() {
-    // Set initial canvas size
-    this.resizeCanvas();
-    
-    // Ensure canvas context is properly configured
-    this.ctx.imageSmoothingEnabled = false;
-    this.ctx.webkitImageSmoothingEnabled = false;
-    this.ctx.mozImageSmoothingEnabled = false;
-    this.ctx.msImageSmoothingEnabled = false;
-    
-    console.log('Canvas initialized:', this.canvas.width, 'x', this.canvas.height);
-  }
-
-  resizeCanvas() {
-    // Get the actual display size of the canvas
-    const rect = this.canvas.getBoundingClientRect();
-    
-    // Set canvas internal resolution to match display size
-    this.canvas.width = rect.width;
-    this.canvas.height = rect.height;
-    
-    // Store the scale factors for touch calibration
-    this.scaleX = this.canvas.width / rect.width;
-    this.scaleY = this.canvas.height / rect.height;
-    
-    this.resetPlayerPosition();
-  }
-
-  resetPlayerPosition() {
-    this.player.x = this.canvas.width / 2 - this.player.width / 2;
-    this.player.y = this.canvas.height - this.player.height - 20;
-  }
-
-  setupEventListeners() {
-    // Keyboard input
-    document.addEventListener('keydown', (e) => {
-      this.keys[e.code] = true;
-      if (e.code === 'Space') {
-        e.preventDefault();
-        this.punch();
-      }
-    });
-
-    document.addEventListener('keyup', (e) => {
-      this.keys[e.code] = false;
-    });
-
-    // Mouse/Touch input for mobile
-    this.canvas.addEventListener('click', (e) => {
-      if (this.gameRunning) {
-        this.punch();
-      }
-    });
-
-    this.canvas.addEventListener('mousemove', (e) => {
-      if (this.gameRunning) {
-        const rect = this.canvas.getBoundingClientRect();
-        // Apply proper scaling for coordinate conversion
-        const scaleX = this.canvas.width / rect.width;
-        const scaleY = this.canvas.height / rect.height;
-        this.player.x = (e.clientX - rect.left) * scaleX - this.player.width / 2;
-        this.player.y = (e.clientY - rect.top) * scaleY - this.player.height / 2;
-        this.constrainPlayer();
-      }
-    });
-
-    // Touch events for mobile
-    this.canvas.addEventListener('touchmove', (e) => {
-      e.preventDefault();
-      if (this.gameRunning && e.touches.length > 0) {
-        const rect = this.canvas.getBoundingClientRect();
-        // Apply proper scaling for coordinate conversion
-        const scaleX = this.canvas.width / rect.width;
-        const scaleY = this.canvas.height / rect.height;
-        this.player.x = (e.touches[0].clientX - rect.left) * scaleX - this.player.width / 2;
-        this.player.y = (e.touches[0].clientY - rect.top) * scaleY - this.player.height / 2;
-        this.constrainPlayer();
-      }
-    });
-
-    this.canvas.addEventListener('touchstart', (e) => {
-      e.preventDefault();
-      if (this.gameRunning) {
-        // Update player position on touch start
-        const rect = this.canvas.getBoundingClientRect();
-        const scaleX = this.canvas.width / rect.width;
-        const scaleY = this.canvas.height / rect.height;
-        this.player.x = (e.touches[0].clientX - rect.left) * scaleX - this.player.width / 2;
-        this.player.y = (e.touches[0].clientY - rect.top) * scaleY - this.player.height / 2;
-        this.constrainPlayer();
-        this.punch();
-      }
-    });
-
-    this.canvas.addEventListener('touchend', (e) => {
-      e.preventDefault();
-    });
-
-    // Window resize
-    window.addEventListener('resize', () => {
-      setTimeout(() => {
-        this.resizeCanvas();
-      }, 100); // Small delay to ensure proper resize
-    });
-  }
-
-  loadAssets() {
-    // Create simple sprites using canvas drawing
-    this.createSprites();
-    // Load bonus image
-    this.loadBonusImage();
-  }
-
-  createSprites() {
-    // Create LFIST sprite with transparent background
-    const lfistCanvas = document.createElement('canvas');
-    lfistCanvas.width = 80;
-    lfistCanvas.height = 80;
-    const lfistCtx = lfistCanvas.getContext('2d');
-    
-    // Clear canvas to ensure transparency
-    lfistCtx.clearRect(0, 0, 80, 80);
-    
-    // Draw LFIST character with better visibility
-    // Body (green shirt)
-    lfistCtx.fillStyle = '#00ff88';
-    lfistCtx.fillRect(20, 30, 40, 40);
-    
-    // Head (skin color)
-    lfistCtx.fillStyle = '#ffcc88';
-    lfistCtx.fillRect(25, 10, 30, 25);
-    
-    // Left fist (red glove)
-    lfistCtx.fillStyle = '#ff4444';
-    lfistCtx.fillRect(5, 35, 20, 15);
-    
-    // Right fist (red glove)
-    lfistCtx.fillStyle = '#ff4444';
-    lfistCtx.fillRect(55, 35, 20, 15);
-    
-    // Eyes (black)
-    lfistCtx.fillStyle = '#000000';
-    lfistCtx.fillRect(30, 18, 4, 4);
-    lfistCtx.fillRect(46, 18, 4, 4);
-    
-    // Mouth (red)
-    lfistCtx.fillStyle = '#ff0000';
-    lfistCtx.fillRect(35, 25, 10, 3);
-    
-    // Add outline for better visibility
-    lfistCtx.strokeStyle = '#ffffff';
-    lfistCtx.lineWidth = 1;
-    lfistCtx.strokeRect(20, 30, 40, 40); // Body outline
-    lfistCtx.strokeRect(25, 10, 30, 25); // Head outline
-    
-    this.player.sprite = lfistCanvas;
-    console.log('Player sprite created successfully');
-  }
-
-  loadBonusImage() {
-    // Load bonus.png image
-    this.bonusImage = new Image();
-    this.bonusImage.onload = () => {
-      console.log('Bonus image loaded successfully', this.bonusImage.width, 'x', this.bonusImage.height);
-    };
-    this.bonusImage.onerror = () => {
-      console.error('Failed to load bonus image, creating fallback');
-      this.createBonusSprite();
-    };
-    this.bonusImage.src = 'bonus.png';
-    
-    // Timeout fallback
-    setTimeout(() => {
-      if (!this.bonusImage.complete || this.bonusImage.naturalWidth === 0) {
-        console.log('Bonus image timeout, creating fallback');
-        this.createBonusSprite();
-      }
-    }, 2000);
-  }
-
-  createBonusSprite() {
-    // Create a simple bonus sprite as fallback
-    const bonusCanvas = document.createElement('canvas');
-    bonusCanvas.width = 40;
-    bonusCanvas.height = 40;
-    const bonusCtx = bonusCanvas.getContext('2d');
-    
-    // Clear canvas
-    bonusCtx.clearRect(0, 0, 40, 40);
-    
-    // Draw beer mug
-    bonusCtx.fillStyle = '#ffaa00';
-    bonusCtx.fillRect(8, 12, 20, 24); // Mug body
-    bonusCtx.fillStyle = '#ffffff';
-    bonusCtx.fillRect(10, 14, 16, 8); // Foam
-    bonusCtx.fillStyle = '#ffaa00';
-    bonusCtx.fillRect(28, 18, 6, 12); // Handle
-    bonusCtx.fillRect(30, 20, 2, 8); // Handle hole
-    
-    // Convert canvas to image
-    this.bonusImage = new Image();
-    this.bonusImage.src = bonusCanvas.toDataURL();
-  }
-
-  constrainPlayer() {
-    this.player.x = Math.max(0, Math.min(this.canvas.width - this.player.width, this.player.x));
-    this.player.y = Math.max(0, Math.min(this.canvas.height - this.player.height, this.player.y));
-  }
-
-  handleInput() {
-    if (!this.gameRunning) return;
-
-    // Keyboard movement
-    if (this.keys['ArrowLeft'] || this.keys['KeyA']) {
-      this.player.x -= this.player.speed;
-    }
-    if (this.keys['ArrowRight'] || this.keys['KeyD']) {
-      this.player.x += this.player.speed;
-    }
-    if (this.keys['ArrowUp'] || this.keys['KeyW']) {
-      this.player.y -= this.player.speed;
-    }
-    if (this.keys['ArrowDown'] || this.keys['KeyS']) {
-      this.player.y += this.player.speed;
-    }
-
-    this.constrainPlayer();
-  }
-
-  punch() {
-    if (this.player.isPunching) return;
-    
-    this.player.isPunching = true;
-    this.player.punchTimer = 20; // frames
-    
-    // Check for hits
-    this.checkPunchHits();
-    
-    // Create punch effect
-    this.createPunchEffect();
-  }
-
-  checkPunchHits() {
-    const punchX = this.player.x + this.player.width / 2;
-    const punchY = this.player.y + this.player.height / 2;
-    
-    // Check memecoins
-    for (let i = this.memecoins.length - 1; i >= 0; i--) {
-      const memecoin = this.memecoins[i];
-      const distance = Math.sqrt(
-        Math.pow(memecoin.x + memecoin.width / 2 - punchX, 2) +
-        Math.pow(memecoin.y + memecoin.height / 2 - punchY, 2)
-      );
-      
-      if (distance < this.player.punchRadius) {
-        this.destroyMemecoin(i);
-      }
-    }
-    
-    // Check powerups
-    for (let i = this.powerups.length - 1; i >= 0; i--) {
-      const powerup = this.powerups[i];
-      const distance = Math.sqrt(
-        Math.pow(powerup.x + powerup.width / 2 - punchX, 2) +
-        Math.pow(powerup.y + powerup.height / 2 - punchY, 2)
-      );
-      
-      if (distance < this.player.punchRadius) {
-        this.collectPowerup(i);
-      }
-    }
-  }
-
-  createPunchEffect() {
-    const centerX = this.player.x + this.player.width / 2;
-    const centerY = this.player.y + this.player.height / 2;
-    
-    // Create punch particles
-    for (let i = 0; i < 10; i++) {
-      this.particles.push({
-        x: centerX + (Math.random() - 0.5) * 60,
-        y: centerY + (Math.random() - 0.5) * 60,
-        vx: (Math.random() - 0.5) * 10,
-        vy: (Math.random() - 0.5) * 10,
-        life: 30,
-        maxLife: 30,
-        color: '#ffaa00',
-        size: Math.random() * 5 + 2
-      });
-    }
-  }
-
-  destroyMemecoin(index) {
-    const memecoin = this.memecoins[index];
-    
-    // Add score with combo multiplier
-    const baseScore = 100;
-    const comboMultiplier = Math.floor(this.combo / 5) + 1;
-    const points = baseScore * comboMultiplier;
-    this.score += points;
-    this.combo++;
-    this.destroyed++;
-    
-    // Update max combo
-    if (this.combo > this.maxCombo) {
-      this.maxCombo = this.combo;
-    }
-    
-    // Show combo if high enough
-    if (this.combo >= 5) {
-      this.showCombo();
-    }
-    
-    // Create destruction particles
-    this.createDestructionEffect(memecoin.x + memecoin.width / 2, memecoin.y + memecoin.height / 2);
-    
-    // Remove memecoin
-    this.memecoins.splice(index, 1);
-    
-    // Check level completion
-    if (this.destroyed >= this.levelTarget) {
-      this.completeLevel();
-    }
-    
-    this.updateUI();
-  }
-
-  collectPowerup(index) {
-    const powerup = this.powerups[index];
-    
-    // Add bonus points
-    this.score += 500;
-    this.combo += 3;
-    
-    // Special effects based on powerup type
-    if (powerup.type === 'fist') {
-      // Temporary punch radius increase
-      this.player.punchRadius = 150;
-      setTimeout(() => {
-        this.player.punchRadius = 100;
-      }, 5000);
-    }
-    
-    // Create collection effect
-    this.createCollectionEffect(powerup.x + powerup.width / 2, powerup.y + powerup.height / 2);
-    
-    // Remove powerup
-    this.powerups.splice(index, 1);
-    
-    this.updateUI();
-  }
-
-  createDestructionEffect(x, y) {
-    for (let i = 0; i < 15; i++) {
-      this.particles.push({
-        x: x,
-        y: y,
-        vx: (Math.random() - 0.5) * 15,
-        vy: (Math.random() - 0.5) * 15,
-        life: 40,
-        maxLife: 40,
-        color: '#ff4444',
-        size: Math.random() * 4 + 1
-      });
-    }
-  }
-
-  createCollectionEffect(x, y) {
-    for (let i = 0; i < 20; i++) {
-      this.particles.push({
-        x: x,
-        y: y,
-        vx: (Math.random() - 0.5) * 12,
-        vy: (Math.random() - 0.5) * 12,
-        life: 50,
-        maxLife: 50,
-        color: '#ffaa00',
-        size: Math.random() * 6 + 2
-      });
-    }
-  }
-
-  showCombo() {
-    const comboDisplay = document.getElementById('comboDisplay');
-    const multiplier = Math.floor(this.combo / 5) + 1;
-    document.getElementById('comboMultiplier').textContent = multiplier;
-    comboDisplay.classList.add('show');
-    
-    setTimeout(() => {
-      comboDisplay.classList.remove('show');
-    }, 2000);
-  }
-
-  spawnMemecoin() {
-    const types = ['doge', 'pepe', 'shiba', 'floki'];
-    const type = types[Math.floor(Math.random() * types.length)];
-    
-    const memecoin = {
-      x: Math.random() * (this.canvas.width - 40),
-      y: -40,
-      width: 40,
-      height: 40,
-      speed: 2 + this.level * 0.5 + Math.random() * 2,
-      type: type,
-      rotation: 0,
-      rotationSpeed: (Math.random() - 0.5) * 0.2
-    };
-    
-    this.memecoins.push(memecoin);
-  }
-
-  spawnPowerup() {
-    const powerup = {
-      x: Math.random() * (this.canvas.width - 40),
-      y: -50,
-      width: 40,
-      height: 40,
-      speed: 3 + Math.random(),
-      type: 'fist',
-      rotation: 0,
-      rotationSpeed: 0.1,
-      glow: 0
-    };
-    
-    this.powerups.push(powerup);
-  }
-
-  updateMemecoins() {
-    for (let i = this.memecoins.length - 1; i >= 0; i--) {
-      const memecoin = this.memecoins[i];
-      memecoin.y += memecoin.speed;
-      memecoin.rotation += memecoin.rotationSpeed;
-      
-      // Check if memecoin reached bottom
-      if (memecoin.y > this.canvas.height) {
-        this.memecoins.splice(i, 1);
-        this.loseLife();
-      }
-    }
-  }
-
-  updatePowerups() {
-    for (let i = this.powerups.length - 1; i >= 0; i--) {
-      const powerup = this.powerups[i];
-      powerup.y += powerup.speed;
-      powerup.rotation += powerup.rotationSpeed;
-      powerup.glow += 0.1;
-      
-      // Remove if off screen
-      if (powerup.y > this.canvas.height) {
-        this.powerups.splice(i, 1);
-      }
-    }
-  }
-
-  updateParticles() {
-    for (let i = this.particles.length - 1; i >= 0; i--) {
-      const particle = this.particles[i];
-      particle.x += particle.vx;
-      particle.y += particle.vy;
-      particle.life--;
-      
-      // Add gravity
-      particle.vy += 0.2;
-      
-      if (particle.life <= 0) {
-        this.particles.splice(i, 1);
-      }
-    }
-  }
-
-  loseLife() {
-    this.lives--;
-    this.combo = 0; // Reset combo on life lost
-    
-    if (this.lives <= 0) {
-      this.gameOver();
-    } else {
-      // Flash effect
-      this.createLifeLostEffect();
-    }
-    
-    this.updateUI();
-  }
-
-  createLifeLostEffect() {
-    // Screen flash effect
-    this.ctx.fillStyle = 'rgba(255, 0, 0, 0.3)';
-    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-  }
-
-  completeLevel() {
-    this.gameRunning = false;
-    
-    // Calculate level bonus
-    const levelBonus = this.level * 1000 + this.combo * 100;
-    this.score += levelBonus;
-    
-    // Show level complete screen
-    document.getElementById('levelScore').textContent = this.score;
-    document.getElementById('levelBonus').textContent = levelBonus;
-    document.getElementById('levelComplete').style.display = 'block';
-  }
-
-  nextLevel() {
-    this.level++;
-    this.destroyed = 0;
-    this.levelTarget = Math.floor(10 + this.level * 2.5);
-    
-    // Increase difficulty
-    this.spawnRate = Math.max(20, 60 - this.level * 2);
-    this.powerupSpawnRate = Math.max(150, 300 - this.level * 5);
-    
-    // Clear objects
-    this.memecoins = [];
-    this.powerups = [];
-    this.particles = [];
-    
-    // Hide level complete screen
-    document.getElementById('levelComplete').style.display = 'none';
-    
-    // Check if game completed (50 levels)
-    if (this.level > 50) {
-      this.gameCompleted();
-      return;
-    }
-    
-    this.updateUI();
-    this.gameRunning = true;
-  }
-
-  gameCompleted() {
-    // Show special completion screen
-    alert(`🏆 FÉLICITATIONS ! 🏆\n\nVous avez terminé tous les 50 niveaux !\n\nScore Final: ${this.score}\nCombo Maximum: ${this.maxCombo}\n\nVous êtes un vrai maître LFIST !`);
-    this.restartGame();
-  }
-
-  gameOver() {
-    this.gameRunning = false;
-    
-    // Show game over screen
-    document.getElementById('finalScore').textContent = this.score;
-    document.getElementById('finalLevel').textContent = this.level;
-    document.getElementById('gameOver').style.display = 'block';
-  }
-
-  updateUI() {
-    document.getElementById('score').textContent = this.score;
-    document.getElementById('level').textContent = this.level;
-    document.getElementById('lives').textContent = this.lives;
-    document.getElementById('combo').textContent = this.combo;
-    document.getElementById('target').textContent = this.levelTarget;
-    document.getElementById('destroyed').textContent = this.destroyed;
-    document.getElementById('levelTarget').textContent = this.levelTarget;
-    
-    // Update progress bar
-    const progress = (this.destroyed / this.levelTarget) * 100;
-    document.getElementById('progressFill').style.width = progress + '%';
-  }
-
-  update(currentTime) {
-    if (!this.gameRunning) return;
-    
-    const deltaTime = currentTime - this.lastTime;
-    this.lastTime = currentTime;
-    
-    // Handle input
-    this.handleInput();
-    
-    // Update punch timer
-    if (this.player.punchTimer > 0) {
-      this.player.punchTimer--;
-      if (this.player.punchTimer <= 0) {
+    constructor() {
+        // Canvas et contexte
+        this.canvas = document.getElementById('gameCanvas');
+        this.ctx = this.canvas.getContext('2d');
+        
+        // État du jeu
+        this.gameState = 'menu'; // 'menu', 'playing', 'paused', 'gameover', 'levelcomplete', 'victory'
+        this.score = 0;
+        this.level = 1;
+        this.lives = 3;
+        this.combo = 0;
+        this.maxCombo = 0;
+        this.destroyed = 0;
+        this.totalDestroyed = 0;
+        
+        // Paramètres de niveau
+        this.levelTarget = 10;
+        this.maxLevel = 50;
+        
+        // Joueur LFIST
+        this.player = {
+            x: 0,
+            y: 0,
+            width: 60,
+            height: 60,
+            speed: 6,
+            hitRadius: 40,
+            color: '#00ff88',
+            trail: []
+        };
+        
+        // Collections d'objets
+        this.memecoins = [];
+        this.powerups = [];
+        this.particles = [];
+        this.stars = [];
+        
+        // Contrôles
+        this.keys = {};
+        this.touch = { active: false, x: 0, y: 0 };
+        
+        // Temps et animation
+        this.lastTime = 0;
+        this.deltaTime = 0;
+        this.gameTime = 0;
+        
+        // Spawn des objets
+        this.memecoinSpawnTimer = 0;
+        this.memecoinSpawnRate = 60; // frames
+        this.powerupSpawnTimer = 0;
+        this.powerupSpawnRate = 600; // frames
+        this.trumpSpawnCounter = 0;
+        
+        // Effets et animations
+        this.screenShake = 0;
+        this.comboTimer = 0;
+        
+        // Audio
+        this.sounds = {
+            intro: document.getElementById('introSound'),
+            ambiance: document.getElementById('ambianceSound'),
+            punch: document.getElementById('punchSound'),
+            powerup: document.getElementById('powerupSound'),
+            trump: document.getElementById('trumpSound'),
+            rot: document.getElementById('rotSound')
+        };
+        
+        // Compteur de bonus pour le son rot
+        this.bonusCollected = 0;
+        
+        // Types de memecoins avec images
+        this.memecoinTypes = {
+            doge: { image: 'memecoins/binance-peg-dogecoin_4_11zon.webp', points: 100, speed: 2 },
+            pepe: { image: 'memecoins/pepe_13_11zon.webp', points: 150, speed: 2.5 },
+            shiba: { image: 'memecoins/shiba-inu_16_11zon.webp', points: 120, speed: 2.2 },
+            floki: { image: 'memecoins/floki_10_11zon.webp', points: 130, speed: 2.3 },
+            bonk: { image: 'memecoins/bonk_7_11zon.webp', points: 110, speed: 2.1 },
+            wojak: { image: 'memecoins/wojak_19_11zon.webp', points: 140, speed: 2.4 },
+            akita: { image: 'memecoins/akita-inu_1_11zon.webp', points: 125, speed: 2.3 },
+            trump: { image: 'memecoins/trump_17_11zon.webp', points: 500, speed: 3, rare: true }
+        };
+        
+        // Images du personnage
+        this.playerImages = {
+            normal: null, // persofix.png
+            punching: null // persopoing.png
+        };
+        
+        // Image du power-up
+        this.powerupImage = null; // bonus.png
+        
+        // Images des memecoins chargées
+        this.memecoinImages = {};
+        
+        // État du joueur
         this.player.isPunching = false;
-      }
+        this.player.punchTimer = 0;
+        
+        // Initialisation
+        this.init();
     }
     
-    // Spawn objects
-    this.spawnTimer++;
-    if (this.spawnTimer >= this.spawnRate) {
-      this.spawnMemecoin();
-      this.spawnTimer = 0;
+    init() {
+        this.setupCanvas();
+        this.setupEventListeners();
+        this.createStarField();
+        this.resetPlayer();
+        this.loadAssets();
+        this.showStartScreen();
+        this.gameLoop();
+        
+        // Démarrer la musique d'intro automatiquement
+        setTimeout(() => {
+            this.tryAutoplayIntro();
+        }, 500);
     }
     
-    this.powerupSpawnTimer++;
-    if (this.powerupSpawnTimer >= this.powerupSpawnRate) {
-      this.spawnPowerup();
-      this.powerupSpawnTimer = 0;
+    loadAssets() {
+        console.log('🔄 Chargement des images...');
+        
+        // Charger les images du personnage
+        this.playerImages.normal = new Image();
+        this.playerImages.normal.onload = () => console.log('✅ persofix.png chargée');
+        this.playerImages.normal.onerror = () => console.error('❌ Erreur persofix.png');
+        this.playerImages.normal.src = 'persofix.png';
+        
+        this.playerImages.punching = new Image();
+        this.playerImages.punching.onload = () => console.log('✅ persopoing.png chargée');
+        this.playerImages.punching.onerror = () => console.error('❌ Erreur persopoing.png');
+        this.playerImages.punching.src = 'persopoing.png';
+        
+        // Charger l'image du power-up
+        this.powerupImage = new Image();
+        this.powerupImage.onload = () => console.log('✅ bonus.png chargée');
+        this.powerupImage.onerror = () => console.error('❌ Erreur bonus.png');
+        this.powerupImage.src = 'bonus.png';
+        
+        // Charger les images des memecoins
+        for (const [type, data] of Object.entries(this.memecoinTypes)) {
+            const img = new Image();
+            img.onload = () => console.log(`✅ ${type} chargé: ${data.image}`);
+            img.onerror = () => console.error(`❌ Erreur ${type}: ${data.image}`);
+            img.src = data.image;
+            this.memecoinImages[type] = img;
+        }
+        
+        console.log('🎮 Chargement des images LFIST Game lancé!');
+        
+        // Configuration audio
+        this.setupAudio();
     }
     
-    // Update game objects
-    this.updateMemecoins();
-    this.updatePowerups();
-    this.updateParticles();
-  }
-
-  drawPlayer() {
-    this.ctx.save();
-    
-    // Draw punch effect
-    if (this.player.isPunching) {
-      this.ctx.strokeStyle = '#ffaa00';
-      this.ctx.lineWidth = 5;
-      this.ctx.beginPath();
-      this.ctx.arc(
-        this.player.x + this.player.width / 2,
-        this.player.y + this.player.height / 2,
-        this.player.punchRadius,
-        0,
-        Math.PI * 2
-      );
-      this.ctx.stroke();
+    setupAudio() {
+        // Volumes par défaut
+        this.setVolume('intro', 0.6);
+        this.setVolume('ambiance', 0.4);
+        this.setVolume('punch', 0.7);
+        this.setVolume('powerup', 0.8);
+        this.setVolume('trump', 0.9);
+        this.setVolume('rot', 0.8);
+        
+        // Logs de vérification des fichiers audio
+        Object.keys(this.sounds).forEach(key => {
+            const sound = this.sounds[key];
+            if (sound) {
+                sound.addEventListener('loadeddata', () => {
+                    console.log(`✅ Audio chargé: ${key} (${Math.round(sound.duration)}s)`);
+                });
+                sound.addEventListener('error', (e) => {
+                    console.error(`❌ Erreur audio: ${key}`, e);
+                });
+            }
+        });
+        
+        console.log('🔊 Configuration audio terminée');
     }
     
-    // Draw player sprite
-    if (this.player.sprite) {
-      this.ctx.drawImage(
-        this.player.sprite,
-        this.player.x,
-        this.player.y,
-        this.player.width,
-        this.player.height
-      );
-    } else {
-      // Fallback: draw a simple rectangle if sprite is not loaded
-      this.ctx.fillStyle = '#00ff88';
-      this.ctx.fillRect(this.player.x, this.player.y, this.player.width, this.player.height);
-      this.ctx.fillStyle = '#ffffff';
-      this.ctx.font = '12px Arial';
-      this.ctx.textAlign = 'center';
-      this.ctx.fillText('LFIST', this.player.x + this.player.width / 2, this.player.y + this.player.height / 2);
-      console.warn('Player sprite not loaded, using fallback');
+    tryAutoplayIntro() {
+        const introSound = this.sounds.intro;
+        if (introSound) {
+            // Vérifier d'abord si l'audio est prêt
+            if (introSound.readyState >= 2) {
+                introSound.volume = 0.6; // Volume approprié
+                introSound.play().then(() => {
+                    console.log('🎵 Musique d\'intro lancée automatiquement');
+                    this.audioEnabled = true;
+                }).catch(e => {
+                    console.log('🔇 Autoplay bloqué par le navigateur');
+                    this.showAudioPrompt();
+                });
+            } else {
+                // Si pas prêt, réessayer dans 500ms
+                setTimeout(() => this.tryAutoplayIntro(), 500);
+            }
+        }
     }
     
-    this.ctx.restore();
-  }
-
-  drawMemecoin(memecoin) {
-    this.ctx.save();
-    this.ctx.translate(memecoin.x + memecoin.width / 2, memecoin.y + memecoin.height / 2);
-    this.ctx.rotate(memecoin.rotation);
-    
-    // Draw memecoin based on type
-    const colors = {
-      doge: '#ffaa00',
-      pepe: '#00ff00',
-      shiba: '#ff6600',
-      floki: '#ff00ff'
-    };
-    
-    this.ctx.fillStyle = colors[memecoin.type] || '#ffaa00';
-    this.ctx.fillRect(-memecoin.width / 2, -memecoin.height / 2, memecoin.width, memecoin.height);
-    
-    // Add simple face
-    this.ctx.fillStyle = '#000';
-    this.ctx.fillRect(-8, -8, 3, 3); // Left eye
-    this.ctx.fillRect(5, -8, 3, 3);  // Right eye
-    this.ctx.fillRect(-5, 2, 10, 2); // Mouth
-    
-    this.ctx.restore();
-  }
-
-  drawPowerup(powerup) {
-    this.ctx.save();
-    this.ctx.translate(powerup.x + powerup.width / 2, powerup.y + powerup.height / 2);
-    this.ctx.rotate(powerup.rotation);
-    
-    // Glow effect
-    const glowIntensity = Math.sin(powerup.glow) * 0.5 + 0.5;
-    this.ctx.shadowColor = '#ffaa00';
-    this.ctx.shadowBlur = 20 * glowIntensity;
-    
-    // Draw bonus image if loaded, otherwise fallback to rectangle
-    if (this.bonusImage && this.bonusImage.complete && this.bonusImage.naturalWidth > 0) {
-      this.ctx.drawImage(
-        this.bonusImage,
-        -powerup.width / 2,
-        -powerup.height / 2,
-        powerup.width,
-        powerup.height
-      );
-    } else {
-      // Fallback: Draw fist powerup
-      this.ctx.fillStyle = '#ffaa00';
-      this.ctx.fillRect(-powerup.width / 2, -powerup.height / 2, powerup.width, powerup.height);
-      
-      // Add fist details
-      this.ctx.fillStyle = '#ff6600';
-      this.ctx.fillRect(-8, -8, 16, 10);
-      this.ctx.fillRect(-6, 2, 12, 8);
+    showAudioPrompt() {
+        const audioButton = document.getElementById('audioButton');
+        if (audioButton) {
+            audioButton.style.background = 'linear-gradient(45deg, #ff6600, #ff4400)';
+            audioButton.textContent = '🔊 CLIQUER POUR DÉMARRER L\'AUDIO';
+            audioButton.style.animation = 'pulse 1s infinite';
+            audioButton.style.fontSize = '9px';
+        }
     }
     
-    // Reset shadow for text
-    this.ctx.shadowBlur = 0;
-    
-    // Draw "pause biere" text below the bonus
-    this.ctx.fillStyle = '#ffaa00';
-    this.ctx.font = '10px Arial';
-    this.ctx.textAlign = 'center';
-    this.ctx.fillText('pause biere', 0, powerup.height / 2 + 15);
-    
-    this.ctx.restore();
-  }
-
-  drawParticle(particle) {
-    this.ctx.save();
-    
-    const alpha = particle.life / particle.maxLife;
-    this.ctx.globalAlpha = alpha;
-    this.ctx.fillStyle = particle.color;
-    
-    this.ctx.beginPath();
-    this.ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-    this.ctx.fill();
-    
-    this.ctx.restore();
-  }
-
-  render() {
-    // Clear canvas
-    this.ctx.fillStyle = 'rgba(15, 32, 39, 0.1)';
-    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-    
-    // Draw background stars
-    this.drawStars();
-    
-    // Draw game objects
-    this.particles.forEach(particle => this.drawParticle(particle));
-    this.memecoins.forEach(memecoin => this.drawMemecoin(memecoin));
-    this.powerups.forEach(powerup => this.drawPowerup(powerup));
-    this.drawPlayer();
-  }
-
-  drawStars() {
-    this.ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
-    for (let i = 0; i < 50; i++) {
-      const x = (i * 137.5) % this.canvas.width;
-      const y = (i * 73.3) % this.canvas.height;
-      this.ctx.fillRect(x, y, 1, 1);
+    setupCanvas() {
+        this.resizeCanvas();
+        this.ctx.imageSmoothingEnabled = false;
+        window.addEventListener('resize', () => this.resizeCanvas());
     }
-  }
-
-  gameLoop(currentTime) {
-    this.update(currentTime);
-    this.render();
-    requestAnimationFrame((time) => this.gameLoop(time));
-  }
-
-  start() {
-    this.gameRunning = true;
-    this.lastTime = performance.now();
-    this.gameLoop(this.lastTime);
-  }
-
-  reset() {
-    this.score = 0;
-    this.level = 1;
-    this.lives = 3;
-    this.combo = 0;
-    this.maxCombo = 0;
-    this.destroyed = 0;
-    this.levelTarget = 10;
-    this.spawnRate = 60;
-    this.spawnTimer = 0;
-    this.powerupSpawnRate = 300;
-    this.powerupSpawnTimer = 0;
     
-    this.memecoins = [];
-    this.powerups = [];
-    this.particles = [];
+    resizeCanvas() {
+        const container = document.getElementById('gameContainer');
+        this.canvas.width = container.clientWidth;
+        this.canvas.height = container.clientHeight;
+        this.resetPlayer();
+    }
     
-    this.resetPlayerPosition();
-    this.updateUI();
-  }
+    resetPlayer() {
+        this.player.x = this.canvas.width / 2 - this.player.width / 2;
+        this.player.y = this.canvas.height - this.player.height - 40;
+    }
+    
+    setupEventListeners() {
+        // Clavier
+        document.addEventListener('keydown', (e) => {
+            this.keys[e.code] = true;
+            if (e.code === 'KeyP' && this.gameState === 'playing') {
+                this.togglePause();
+            }
+            e.preventDefault();
+        });
+        
+        document.addEventListener('keyup', (e) => {
+            this.keys[e.code] = false;
+        });
+        
+        // Tactile
+        this.canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            const rect = this.canvas.getBoundingClientRect();
+            this.touch.active = true;
+            this.touch.x = e.touches[0].clientX - rect.left;
+            this.touch.y = e.touches[0].clientY - rect.top;
+        });
+        
+        this.canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            if (this.touch.active) {
+                const rect = this.canvas.getBoundingClientRect();
+                this.touch.x = e.touches[0].clientX - rect.left;
+                this.touch.y = e.touches[0].clientY - rect.top;
+            }
+        });
+        
+        this.canvas.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            this.touch.active = false;
+        });
+        
+        // Souris (pour les tests)
+        this.canvas.addEventListener('mousemove', (e) => {
+            if (this.gameState === 'playing') {
+                const rect = this.canvas.getBoundingClientRect();
+                this.touch.x = e.clientX - rect.left;
+                this.touch.y = e.clientY - rect.top;
+                this.touch.active = true;
+            }
+        });
+    }
+    
+    createStarField() {
+        this.stars = [];
+        for (let i = 0; i < 100; i++) {
+            this.stars.push({
+                x: Math.random() * this.canvas.width,
+                y: Math.random() * this.canvas.height,
+                size: Math.random() * 2 + 0.5,
+                speed: Math.random() * 0.5 + 0.1,
+                opacity: Math.random() * 0.8 + 0.2
+            });
+        }
+    }
+    
+    // ===== GAME STATES =====
+    
+    showStartScreen() {
+        this.gameState = 'menu';
+        this.hideAllScreens();
+        document.getElementById('startScreen').style.display = 'flex';
+        
+        // Arrêter la musique d'ambiance et jouer l'intro
+        this.stopSound('ambiance');
+        this.playSound('intro');
+    }
+    
+    hideAllScreens() {
+        const screens = ['startScreen', 'gameOverScreen', 'levelCompleteScreen', 'victoryScreen'];
+        screens.forEach(id => {
+            document.getElementById(id).style.display = 'none';
+        });
+    }
+    
+    startGame() {
+        this.hideAllScreens();
+        this.gameState = 'playing';
+        this.resetGame();
+        
+        // Arrêter l'intro et jouer la musique d'ambiance
+        this.stopSound('intro');
+        this.playSound('ambiance');
+        
+        document.getElementById('mobileHint').style.display = 'block';
+        setTimeout(() => {
+            document.getElementById('mobileHint').style.display = 'none';
+        }, 3000);
+    }
+    
+    resetGame() {
+        this.score = 0;
+        this.level = 1;
+        this.lives = 3;
+        this.combo = 0;
+        this.maxCombo = 0;
+        this.destroyed = 0;
+        this.totalDestroyed = 0;
+        this.levelTarget = 100; // Premier niveau : 100 memecoins
+        this.bonusCollected = 0;
+        
+        this.memecoins = [];
+        this.powerups = [];
+        this.particles = [];
+        
+        this.memecoinSpawnTimer = 0;
+        this.powerupSpawnTimer = 0;
+        this.trumpSpawnCounter = 0;
+        
+        this.resetPlayer();
+        this.updateUI();
+    }
+    
+    togglePause() {
+        if (this.gameState === 'playing') {
+            this.gameState = 'paused';
+        } else if (this.gameState === 'paused') {
+            this.gameState = 'playing';
+        }
+    }
+    
+    gameOver() {
+        this.gameState = 'gameover';
+        
+        // Arrêter la musique d'ambiance
+        this.stopSound('ambiance');
+        
+        document.getElementById('finalScore').textContent = this.score.toLocaleString();
+        document.getElementById('finalLevel').textContent = this.level;
+        document.getElementById('finalCombo').textContent = this.maxCombo;
+        document.getElementById('finalDestroyed').textContent = this.totalDestroyed;
+        document.getElementById('gameOverScreen').style.display = 'flex';
+    }
+    
+    levelComplete() {
+        this.gameState = 'levelcomplete';
+        const levelBonus = this.level * 100 + this.combo * 50;
+        this.score += levelBonus;
+        
+        document.getElementById('completedLevel').textContent = this.level;
+        document.getElementById('levelBonus').textContent = levelBonus.toLocaleString();
+        document.getElementById('levelCompleteScreen').style.display = 'flex';
+    }
+    
+    victory() {
+        this.gameState = 'victory';
+        
+        // Arrêter la musique d'ambiance
+        this.stopSound('ambiance');
+        
+        document.getElementById('victoryScore').textContent = this.score.toLocaleString();
+        document.getElementById('victoryCombo').textContent = this.maxCombo;
+        document.getElementById('victoryDestroyed').textContent = this.totalDestroyed;
+        document.getElementById('victoryScreen').style.display = 'flex';
+    }
+    
+    nextLevel() {
+        this.hideAllScreens();
+        this.level++;
+        
+        if (this.level > 50) {
+            this.victory();
+            return;
+        }
+        
+        this.destroyed = 0;
+        // Progression : 100, 120, 140, 160, 180, etc.
+        this.levelTarget = 100 + (this.level - 1) * 20;
+        
+        // Spawn plus rapide et plus nombreux avec les niveaux
+        this.memecoinSpawnRate = Math.max(15, 50 - this.level * 1.5); // Plus rapide
+        this.powerupSpawnRate = Math.max(200, 500 - this.level * 8); // Plus fréquent
+        
+        this.memecoins = [];
+        this.powerups = [];
+        this.particles = [];
+        
+        this.gameState = 'playing';
+        this.updateUI();
+        
+        this.showNotification(`🎉 LEVEL ${this.level}! 🎉`, 'level');
+    }
+    
+    restartGame() {
+        this.hideAllScreens();
+        this.startGame();
+    }
+    
+    // ===== GAME LOGIC =====
+    
+    update(deltaTime) {
+        if (this.gameState !== 'playing') return;
+        
+        this.gameTime += deltaTime;
+        this.updatePlayer();
+        this.updateMemecoins();
+        this.updatePowerups();
+        this.updateParticles();
+        this.updateStars();
+        this.handleSpawning();
+        this.checkCollisions();
+        this.updateEffects();
+        this.updateUI();
+    }
+    
+    updatePlayer() {
+        const speed = this.player.speed;
+        
+        // Contrôles clavier
+        if (this.keys['ArrowLeft'] || this.keys['KeyA']) {
+            this.player.x = Math.max(0, this.player.x - speed);
+        }
+        if (this.keys['ArrowRight'] || this.keys['KeyD']) {
+            this.player.x = Math.min(this.canvas.width - this.player.width, this.player.x + speed);
+        }
+        if (this.keys['ArrowUp'] || this.keys['KeyW']) {
+            this.player.y = Math.max(0, this.player.y - speed);
+        }
+        if (this.keys['ArrowDown'] || this.keys['KeyS']) {
+            this.player.y = Math.min(this.canvas.height - this.player.height, this.player.y + speed);
+        }
+        
+        // Gestion de l'animation de coup de poing
+        if (this.player.punchTimer > 0) {
+            this.player.punchTimer--;
+            this.player.isPunching = true;
+        } else {
+            this.player.isPunching = false;
+        }
+        
+        // Contrôle tactile
+        if (this.touch.active) {
+            const targetX = this.touch.x - this.player.width / 2;
+            const targetY = this.touch.y - this.player.height / 2;
+            
+            const dx = targetX - this.player.x;
+            const dy = targetY - this.player.y;
+            
+            if (Math.abs(dx) > 5) {
+                this.player.x += dx * 0.1;
+            }
+            if (Math.abs(dy) > 5) {
+                this.player.y += dy * 0.1;
+            }
+            
+            // Limites
+            this.player.x = Math.max(0, Math.min(this.canvas.width - this.player.width, this.player.x));
+            this.player.y = Math.max(0, Math.min(this.canvas.height - this.player.height, this.player.y));
+        }
+        
+        // Trail effect
+        this.player.trail.push({
+            x: this.player.x + this.player.width / 2,
+            y: this.player.y + this.player.height / 2,
+            time: this.gameTime
+        });
+        
+        this.player.trail = this.player.trail.filter(point => 
+            this.gameTime - point.time < 200
+        );
+    }
+    
+    updateMemecoins() {
+        for (let i = this.memecoins.length - 1; i >= 0; i--) {
+            const memecoin = this.memecoins[i];
+            memecoin.y += memecoin.speed;
+            memecoin.rotation += memecoin.rotationSpeed;
+            
+            // Effets spéciaux pour Trump
+            if (memecoin.type === 'trump') {
+                memecoin.glowIntensity = Math.sin(this.gameTime * 0.01) * 0.5 + 0.5;
+            }
+            
+            // Suppression si hors écran
+            if (memecoin.y > this.canvas.height + 50) {
+                this.memecoins.splice(i, 1);
+                if (memecoin.type !== 'trump') { // Trump ne fait pas perdre de vie
+                    this.loseLife();
+                }
+            }
+        }
+    }
+    
+    updatePowerups() {
+        for (let i = this.powerups.length - 1; i >= 0; i--) {
+            const powerup = this.powerups[i];
+            powerup.y += powerup.speed;
+            powerup.rotation += powerup.rotationSpeed;
+            powerup.bobOffset = Math.sin(this.gameTime * 0.005 + powerup.phase) * 3;
+            
+            if (powerup.y > this.canvas.height + 50) {
+                this.powerups.splice(i, 1);
+            }
+        }
+    }
+    
+    updateParticles() {
+        for (let i = this.particles.length - 1; i >= 0; i--) {
+            const particle = this.particles[i];
+            particle.x += particle.vx;
+            particle.y += particle.vy;
+            particle.life--;
+            particle.opacity = particle.life / particle.maxLife;
+            
+            if (particle.life <= 0) {
+                this.particles.splice(i, 1);
+            }
+        }
+    }
+    
+    updateStars() {
+        for (const star of this.stars) {
+            star.y += star.speed;
+            if (star.y > this.canvas.height) {
+                star.y = -5;
+                star.x = Math.random() * this.canvas.width;
+            }
+        }
+    }
+    
+    updateEffects() {
+        if (this.screenShake > 0) {
+            this.screenShake -= 2;
+        }
+        
+        if (this.comboTimer > 0) {
+            this.comboTimer--;
+            if (this.comboTimer === 0) {
+                this.combo = 0;
+                this.updateUI();
+            }
+        }
+    }
+    
+    handleSpawning() {
+        // Spawn memecoins
+        this.memecoinSpawnTimer++;
+        if (this.memecoinSpawnTimer >= this.memecoinSpawnRate) {
+            // Spawn multiple memecoins aux niveaux élevés
+            const spawnCount = Math.min(1 + Math.floor(this.level / 10), 4);
+            for (let i = 0; i < spawnCount; i++) {
+                if (Math.random() < 0.8 || i === 0) { // Garantir au moins 1 spawn
+                    this.spawnMemecoin();
+                }
+            }
+            this.memecoinSpawnTimer = 0;
+        }
+        
+        // Spawn powerups
+        this.powerupSpawnTimer++;
+        if (this.powerupSpawnTimer >= this.powerupSpawnRate) {
+            this.spawnPowerup();
+            this.powerupSpawnTimer = 0;
+        }
+    }
+    
+    spawnMemecoin() {
+        const types = Object.keys(this.memecoinTypes);
+        let type;
+        
+        // Logique de spawn Trump (très rare - seulement bonus de points)
+        this.trumpSpawnCounter++;
+        const trumpChance = 0.005 + (this.level * 0.0005); // 0.5% base + très petit bonus par niveau
+        
+        if (Math.random() < trumpChance || this.trumpSpawnCounter > 200) {
+            type = 'trump';
+            this.trumpSpawnCounter = 0;
+            this.showTrumpWarning();
+            console.log('🚨 RARE TRUMP COIN SPAWNED!');
+        } else {
+            // Spawn normal (sans trump)
+            const normalTypes = types.filter(t => t !== 'trump');
+            type = normalTypes[Math.floor(Math.random() * normalTypes.length)];
+        }
+        
+        const memecoinData = this.memecoinTypes[type];
+        
+        // Vitesse augmente avec les niveaux
+        const levelSpeedBonus = this.level * 0.3;
+        const baseSpeed = memecoinData.speed + levelSpeedBonus;
+        
+        const memecoin = {
+            x: Math.random() * (this.canvas.width - 40),
+            y: -40,
+            width: type === 'trump' ? 50 : 35,
+            height: type === 'trump' ? 50 : 35,
+            type: type,
+            image: this.memecoinImages[type],
+            points: memecoinData.points,
+            speed: baseSpeed + Math.random() * 1.0,
+            rotation: 0,
+            rotationSpeed: (Math.random() - 0.5) * 0.2,
+            glowIntensity: 0
+        };
+        
+        this.memecoins.push(memecoin);
+    }
+    
+    spawnPowerup() {
+        const powerup = {
+            x: Math.random() * (this.canvas.width - 30),
+            y: -30,
+            width: 30,
+            height: 30,
+            type: 'beer',
+            speed: 1.5,
+            rotation: 0,
+            rotationSpeed: 0.1,
+            bobOffset: 0,
+            phase: Math.random() * Math.PI * 2
+        };
+        
+        this.powerups.push(powerup);
+    }
+    
+    checkCollisions() {
+        const playerCenterX = this.player.x + this.player.width / 2;
+        const playerCenterY = this.player.y + this.player.height / 2;
+        
+        // Collision avec memecoins
+        for (let i = this.memecoins.length - 1; i >= 0; i--) {
+            const memecoin = this.memecoins[i];
+            const memecoinCenterX = memecoin.x + memecoin.width / 2;
+            const memecoinCenterY = memecoin.y + memecoin.height / 2;
+            
+            const distance = Math.sqrt(
+                Math.pow(playerCenterX - memecoinCenterX, 2) +
+                Math.pow(playerCenterY - memecoinCenterY, 2)
+            );
+            
+            if (distance < this.player.hitRadius) {
+                this.destroyMemecoin(i);
+            }
+        }
+        
+        // Collision avec powerups
+        for (let i = this.powerups.length - 1; i >= 0; i--) {
+            const powerup = this.powerups[i];
+            const powerupCenterX = powerup.x + powerup.width / 2;
+            const powerupCenterY = powerup.y + powerup.height / 2;
+            
+            const distance = Math.sqrt(
+                Math.pow(playerCenterX - powerupCenterX, 2) +
+                Math.pow(playerCenterY - powerupCenterY, 2)
+            );
+            
+            if (distance < this.player.hitRadius) {
+                this.collectPowerup(i);
+            }
+        }
+    }
+    
+    destroyMemecoin(index) {
+        const memecoin = this.memecoins[index];
+        
+        // Déclencher l'animation de punch
+        this.player.punchTimer = 15; // 15 frames d'animation
+        
+        // Calcul des points avec combo
+        let points = memecoin.points;
+        const comboMultiplier = Math.min(Math.floor(this.combo / 5) + 1, 5);
+        points *= comboMultiplier;
+        
+        // Bonus spécial pour Trump
+        if (memecoin.type === 'trump') {
+            points *= 2;
+            this.combo += 5;
+            this.showNotification(`🎯 TRUMP HIT! +${points} pts! 🎯`, 'trump');
+            this.playSound('trump');
+            this.createTrumpExplosion(memecoin.x + memecoin.width / 2, memecoin.y + memecoin.height / 2);
+        } else {
+            this.combo++;
+            this.playSound('punch'); // Son coup.mp3
+            this.createExplosion(memecoin.x + memecoin.width / 2, memecoin.y + memecoin.height / 2, '#ff6600');
+        }
+        
+        this.score += points;
+        this.destroyed++;
+        this.totalDestroyed++;
+        this.maxCombo = Math.max(this.maxCombo, this.combo);
+        this.comboTimer = 180; // 3 secondes à 60fps
+        
+        // Screen shake
+        this.screenShake = memecoin.type === 'trump' ? 15 : 5;
+        
+        // Suppression du memecoin
+        this.memecoins.splice(index, 1);
+        
+        // Vérification fin de niveau
+        if (this.destroyed >= this.levelTarget) {
+            this.levelComplete();
+        }
+    }
+    
+    collectPowerup(index) {
+        const powerup = this.powerups[index];
+        
+        // Incrémenter le compteur de bonus
+        this.bonusCollected++;
+        
+        // Effets du powerup
+        const effects = [
+            { type: 'score', value: 250, text: '🍺 Cheers! +250 pts!' },
+            { type: 'life', value: 1, text: '🍺 Cheers! +1 life!' },
+            { type: 'combo', value: 3, text: '🍺 Cheers! +3 combo!' },
+            { type: 'slowmo', value: 300, text: '🍺 Cheers! Slow motion!' }
+        ];
+        
+        const effect = effects[Math.floor(Math.random() * effects.length)];
+        
+        switch (effect.type) {
+            case 'score':
+                this.score += effect.value;
+                break;
+            case 'life':
+                this.lives = Math.min(5, this.lives + effect.value);
+                break;
+            case 'combo':
+                this.combo += effect.value;
+                this.comboTimer = 180;
+                break;
+            case 'slowmo':
+                // Implémentation du slow motion si nécessaire
+                break;
+        }
+        
+        this.showNotification(effect.text, 'beer');
+        this.playSound('powerup');
+        this.createPowerupExplosion(powerup.x + powerup.width / 2, powerup.y + powerup.height / 2);
+        
+        // Jouer le son rot tous les 15 bonus
+        if (this.bonusCollected % 15 === 0) {
+            setTimeout(() => {
+                this.playSound('rot');
+                this.showNotification(`💨 In your face patriarchy! 💨`, 'beer');
+            }, 500);
+        }
+        
+        this.powerups.splice(index, 1);
+    }
+    
+    loseLife() {
+        this.lives--;
+        this.combo = 0;
+        this.screenShake = 20;
+        
+        if (this.lives <= 0) {
+            this.gameOver();
+        } else {
+            this.showNotification(`💔 LIFE LOST! ${this.lives} remaining`, 'damage');
+        }
+    }
+    
+    // ===== EFFECTS =====
+    
+    createExplosion(x, y, color) {
+        for (let i = 0; i < 15; i++) {
+            this.particles.push({
+                x: x,
+                y: y,
+                vx: (Math.random() - 0.5) * 8,
+                vy: (Math.random() - 0.5) * 8,
+                size: Math.random() * 4 + 2,
+                color: color,
+                life: 30,
+                maxLife: 30,
+                opacity: 1
+            });
+        }
+    }
+    
+    createTrumpExplosion(x, y) {
+        for (let i = 0; i < 30; i++) {
+            this.particles.push({
+                x: x,
+                y: y,
+                vx: (Math.random() - 0.5) * 12,
+                vy: (Math.random() - 0.5) * 12,
+                size: Math.random() * 6 + 3,
+                color: Math.random() > 0.5 ? '#ffd700' : '#ff6600',
+                life: 60,
+                maxLife: 60,
+                opacity: 1
+            });
+        }
+    }
+    
+    createPowerupExplosion(x, y) {
+        for (let i = 0; i < 20; i++) {
+            this.particles.push({
+                x: x,
+                y: y,
+                vx: (Math.random() - 0.5) * 6,
+                vy: (Math.random() - 0.5) * 6,
+                size: Math.random() * 3 + 2,
+                color: '#ffaa00',
+                life: 40,
+                maxLife: 40,
+                opacity: 1
+            });
+        }
+    }
+    
+    // ===== RENDERING =====
+    
+    render() {
+        // Clear avec screen shake
+        this.ctx.save();
+        if (this.screenShake > 0) {
+            this.ctx.translate(
+                (Math.random() - 0.5) * this.screenShake,
+                (Math.random() - 0.5) * this.screenShake
+            );
+        }
+        
+        // Background
+        this.drawBackground();
+        
+        if (this.gameState === 'playing' || this.gameState === 'paused') {
+            this.drawStars();
+            this.drawParticles();
+            this.drawMemecoins();
+            this.drawPowerups();
+            this.drawPlayer();
+            
+            if (this.gameState === 'paused') {
+                this.drawPauseOverlay();
+            }
+        } else {
+            this.drawStars();
+        }
+        
+        this.ctx.restore();
+    }
+    
+    drawBackground() {
+        const gradient = this.ctx.createRadialGradient(
+            this.canvas.width / 2, this.canvas.height / 2, 0,
+            this.canvas.width / 2, this.canvas.height / 2, this.canvas.width
+        );
+        gradient.addColorStop(0, '#0f1419');
+        gradient.addColorStop(1, '#000000');
+        
+        this.ctx.fillStyle = gradient;
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    }
+    
+    drawStars() {
+        this.ctx.save();
+        for (const star of this.stars) {
+            this.ctx.globalAlpha = star.opacity;
+            this.ctx.fillStyle = '#ffffff';
+            this.ctx.beginPath();
+            this.ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+            this.ctx.fill();
+        }
+        this.ctx.restore();
+    }
+    
+    drawPlayer() {
+        this.ctx.save();
+        
+        // Trail
+        this.ctx.globalAlpha = 0.3;
+        for (let i = 0; i < this.player.trail.length; i++) {
+            const point = this.player.trail[i];
+            const age = this.gameTime - point.time;
+            const alpha = Math.max(0, 1 - age / 200);
+            
+            this.ctx.globalAlpha = alpha * 0.3;
+            this.ctx.fillStyle = this.player.color;
+            this.ctx.beginPath();
+            this.ctx.arc(point.x, point.y, 8, 0, Math.PI * 2);
+            this.ctx.fill();
+        }
+        
+        // Player avec vraie image
+        this.ctx.globalAlpha = 1;
+        this.ctx.shadowColor = this.player.color;
+        this.ctx.shadowBlur = 10;
+    
+        // Choisir l'image selon l'état
+        const playerImage = this.player.isPunching ? 
+            this.playerImages.punching : this.playerImages.normal;
+        
+        if (playerImage && playerImage.complete) {
+            this.ctx.drawImage(
+                playerImage,
+                this.player.x,
+                    this.player.y,
+                this.player.width,
+                this.player.height
+            );
+        } else {
+            // Fallback si l'image n'est pas chargée
+            this.ctx.shadowBlur = 0;
+            this.ctx.fillStyle = this.player.color;
+            this.ctx.fillRect(this.player.x, this.player.y, this.player.width, this.player.height);
+        }
+        
+        // Hit radius (debug)
+        if (false) { // Mettre à true pour debug
+            this.ctx.shadowBlur = 0;
+            this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+            this.ctx.beginPath();
+            this.ctx.arc(
+                this.player.x + this.player.width / 2,
+                this.player.y + this.player.height / 2,
+                this.player.hitRadius, 0, Math.PI * 2
+            );
+            this.ctx.stroke();
+        }
+        
+        this.ctx.restore();
+    }
+    
+    drawMemecoins() {
+        for (const memecoin of this.memecoins) {
+            this.ctx.save();
+            this.ctx.translate(memecoin.x + memecoin.width / 2, memecoin.y + memecoin.height / 2);
+            this.ctx.rotate(memecoin.rotation);
+            
+            // Glow effect pour Trump
+            if (memecoin.type === 'trump') {
+                this.ctx.shadowColor = '#ffd700';
+                this.ctx.shadowBlur = 20 + memecoin.glowIntensity * 10;
+            }
+            
+            // Dessiner l'image du memecoin
+            if (memecoin.image && memecoin.image.complete) {
+                this.ctx.drawImage(
+                    memecoin.image,
+                    -memecoin.width / 2,
+                    -memecoin.height / 2,
+                    memecoin.width,
+                    memecoin.height
+                );
+            } else {
+                // Fallback si l'image n'est pas chargée
+                this.ctx.shadowBlur = 0;
+                const colors = {
+                    doge: '#ffaa00',
+                    pepe: '#00ff00',
+                    shiba: '#ff6600',
+                    floki: '#ff00ff',
+                    bonk: '#ff4400',
+                    wojak: '#888888',
+                    akita: '#cc6600',
+                    trump: '#ff6600'
+                };
+                this.ctx.fillStyle = colors[memecoin.type] || '#ffaa00';
+                this.ctx.fillRect(-memecoin.width / 2, -memecoin.height / 2, memecoin.width, memecoin.height);
+                
+                // Visage simple
+                this.ctx.fillStyle = '#000000';
+                const eyeSize = memecoin.type === 'trump' ? 6 : 4;
+                this.ctx.fillRect(-8, -8, eyeSize, eyeSize);
+                this.ctx.fillRect(2, -8, eyeSize, eyeSize);
+                this.ctx.fillRect(-6, 2, 12, 3);
+            }
+            
+            this.ctx.restore();
+        }
+    }
+    
+    drawPowerups() {
+        for (const powerup of this.powerups) {
+            this.ctx.save();
+            this.ctx.translate(
+                powerup.x + powerup.width / 2,
+                powerup.y + powerup.height / 2 + powerup.bobOffset
+            );
+            this.ctx.rotate(powerup.rotation);
+            
+            // Glow effect
+            this.ctx.shadowColor = '#ffaa00';
+            this.ctx.shadowBlur = 15;
+            
+            // Dessiner l'image du power-up
+            if (this.powerupImage && this.powerupImage.complete) {
+                this.ctx.drawImage(
+                    this.powerupImage,
+                    -powerup.width / 2,
+                    -powerup.height / 2,
+                    powerup.width,
+                    powerup.height
+                );
+            } else {
+                // Fallback si l'image n'est pas chargée
+                this.ctx.shadowBlur = 0;
+                this.ctx.fillStyle = '#ffaa00';
+                this.ctx.fillRect(-powerup.width / 2, -powerup.height / 2, powerup.width, powerup.height);
+                
+                // Détails
+                this.ctx.fillStyle = '#fff';
+                this.ctx.fillRect(-8, -12, 16, 4);
+                this.ctx.fillStyle = '#000';
+                this.ctx.fillRect(-6, -6, 12, 2);
+            }
+            
+            this.ctx.restore();
+        }
+    }
+    
+    drawParticles() {
+        for (const particle of this.particles) {
+            this.ctx.save();
+            this.ctx.globalAlpha = particle.opacity;
+            this.ctx.fillStyle = particle.color;
+            this.ctx.beginPath();
+            this.ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+            this.ctx.fill();
+            this.ctx.restore();
+        }
+    }
+    
+    drawPauseOverlay() {
+        this.ctx.save();
+        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        this.ctx.fillStyle = '#00ff88';
+        this.ctx.font = '24px "Press Start 2P"';
+        this.ctx.textAlign = 'center';
+        this.ctx.fillText('PAUSE', this.canvas.width / 2, this.canvas.height / 2);
+        this.ctx.font = '12px "Press Start 2P"';
+        this.ctx.fillText('Appuyez sur P pour continuer', this.canvas.width / 2, this.canvas.height / 2 + 40);
+        this.ctx.restore();
+    }
+    
+    // ===== UI =====
+    
+    updateUI() {
+        document.getElementById('scoreDisplay').textContent = `SCORE: ${this.score.toLocaleString()}`;
+        document.getElementById('livesDisplay').textContent = `LIVES: ${this.lives}`;
+        document.getElementById('levelDisplay').textContent = `LEVEL: ${this.level}`;
+        
+        const comboDisplay = document.getElementById('comboDisplay');
+        if (this.combo > 1) {
+            comboDisplay.style.display = 'block';
+            comboDisplay.textContent = `COMBO: x${this.combo}`;
+        } else {
+            comboDisplay.style.display = 'none';
+        }
+        
+        document.getElementById('progressInfo').textContent = 
+            `MEMECOINS DÉTRUITS: ${this.destroyed}/${this.levelTarget}`;
+        
+        const progress = (this.destroyed / this.levelTarget) * 100;
+        document.getElementById('progressFill').style.width = `${Math.min(100, progress)}%`;
+    }
+    
+    showNotification(message, type = 'default') {
+        const notification = document.getElementById('notification');
+        notification.textContent = message;
+        notification.className = `notification ${type}`;
+        notification.classList.add('show');
+        
+        setTimeout(() => {
+            notification.classList.remove('show');
+        }, 2000);
+    }
+    
+    showTrumpWarning() {
+        const notification = document.getElementById('notification');
+        notification.textContent = '🚨 TRUMP BONUS! Smack him for extra points! 🚨';
+        notification.className = 'notification trump-warning';
+        notification.classList.add('show');
+        
+        // Message reste seulement 3 secondes pour ne pas gêner le jeu
+        setTimeout(() => {
+            notification.classList.remove('show');
+        }, 3000);
+    }
+    
+    // ===== AUDIO =====
+    
+    playSound(soundName) {
+        const sound = this.sounds[soundName];
+        if (sound) {
+            sound.currentTime = 0;
+            sound.play().catch(e => {
+                console.log(`🔊 Audio play failed for ${soundName}:`, e);
+                // En cas d'erreur, on peut essayer de jouer à nouveau après un délai
+                if (e.name === 'NotAllowedError') {
+                    console.log('🔊 Audio bloqué - interaction utilisateur requise');
+                }
+            });
+            console.log(`🔊 Playing sound: ${soundName}`);
+        } else {
+            console.error(`❌ Son non trouvé: ${soundName}`);
+        }
+    }
+    
+    stopSound(soundName) {
+        const sound = this.sounds[soundName];
+        if (sound) {
+            sound.pause();
+            sound.currentTime = 0;
+            console.log(`🔇 Stopped sound: ${soundName}`);
+        }
+    }
+    
+    setVolume(soundName, volume) {
+        const sound = this.sounds[soundName];
+        if (sound) {
+            sound.volume = Math.max(0, Math.min(1, volume));
+            console.log(`🔊 Volume ${soundName}: ${Math.round(volume * 100)}%`);
+        }
+    }
+    
+    // ===== GAME LOOP =====
+    
+    gameLoop(currentTime = 0) {
+        this.deltaTime = currentTime - this.lastTime;
+        this.lastTime = currentTime;
+        
+        this.update(this.deltaTime);
+        this.render();
+        
+        requestAnimationFrame((time) => this.gameLoop(time));
+    }
 }
 
-// Global game instance
+// ===== GLOBAL FUNCTIONS =====
+
 let game;
 
-// Game control functions
 function startGame() {
-  document.getElementById('gameStart').style.display = 'none';
-  game = new LFistGame();
-  game.start();
+    game.startGame();
 }
 
 function restartGame() {
-  document.getElementById('gameOver').style.display = 'none';
-  document.getElementById('levelComplete').style.display = 'none';
-  game.reset();
-  game.start();
+    game.restartGame();
+}
+
+function showStartScreen() {
+    game.showStartScreen();
 }
 
 function nextLevel() {
-  game.nextLevel();
+    game.nextLevel();
 }
 
-function goHome() {
-  window.location.href = 'Index.html';
-}
+function showInstructions() {
+    alert(`🎮 LFIST GAME - Instructions 🎮
 
-function showControls() {
-  alert(`🎮 CONTRÔLES DU JEU 🎮
-
-🖱️ SOURIS/TACTILE:
-• Déplacez la souris pour bouger LFIST
-• Cliquez pour donner un coup de poing
-
-⌨️ CLAVIER:
-• Flèches directionnelles ou WASD pour se déplacer
-• ESPACE pour donner un coup de poing
-
-🎯 OBJECTIFS:
-• Détruisez les memecoins qui tombent
-• Collectez les poings dorés pour des bonus
-• Ne laissez pas les memecoins toucher le sol
+🎯 OBJECTIF :
+• Détruisez tous les memecoins qui tombent
+• Ne les laissez pas toucher le sol
 • Survivez aux 50 niveaux !
 
-💡 ASTUCES:
-• Les combos augmentent vos points
-• Les poings dorés augmentent votre portée temporairement
-• La difficulté augmente à chaque niveau`);
+🎮 CONTRÔLES :
+• PC : Flèches ↑↓←→ ou WASD
+• Mobile : Touchez l'écran
+• Destruction automatique au contact
+• P = Pause
+
+💎 ÉLÉMENTS SPÉCIAUX :
+• 🍺 Bières dorées = Power-ups variés
+• 🚨 Trump coins = 500+ points (RARE!)
+• 💥 Combos = Multiplicateur de points
+
+🏆 CONSEILS :
+• Enchaînez les destructions pour des combos
+• Les Trump coins ne font pas perdre de vie
+• Collectez les power-ups pour des bonus
+• Plus le niveau est élevé, plus c'est rapide !
+
+Bonne chance ! 🚀`);
 }
 
-// Initialize when page loads
+// Fonctions de partage
+function shareScore(platform) {
+    const score = game.score.toLocaleString();
+    const level = game.level;
+    const message = `🎮 J'ai fait ${score} points au niveau ${level} sur LFIST GAME ! 🥊
+
+💪 Penses-tu pouvoir battre mon score ?
+
+🚀 Joue maintenant sur lfitcoin.netlify.app
+
+#LFISTCOIN @LFISTCOIN 🚀`;
+
+    const url = 'https://lfitcoin.netlify.app';
+    
+    switch (platform) {
+        case 'twitter':
+            window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(message)}&url=${encodeURIComponent(url)}`);
+            break;
+        case 'facebook':
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(message)}`);
+            break;
+        case 'telegram':
+            window.open(`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(message)}`);
+            break;
+    }
+}
+
+function shareVictory(platform) {
+    const score = game.score.toLocaleString();
+    const combo = game.maxCombo;
+    const destroyed = game.totalDestroyed;
+    const message = `🎉 J'AI TERMINÉ LFIST GAME ! 🎉
+
+🏆 Score final: ${score} points
+💥 Combo max: ${combo}
+🎯 Total détruit: ${destroyed}
+
+🔥 50 NIVEAUX TERMINÉS ! 🔥
+
+💪 Penses-tu pouvoir faire mieux ?
+
+🚀 Joue maintenant sur lfitcoin.netlify.app
+
+#LFISTCOIN @LFISTCOIN 🚀`;
+
+    const url = 'https://lfitcoin.netlify.app';
+    
+    switch (platform) {
+        case 'twitter':
+            window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(message)}&url=${encodeURIComponent(url)}`);
+            break;
+        case 'facebook':
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(message)}`);
+            break;
+        case 'telegram':
+            window.open(`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(message)}`);
+            break;
+    }
+}
+
+// Initialisation du jeu
 document.addEventListener('DOMContentLoaded', () => {
-  // Game will be initialized when start button is clicked
-  console.log('LFIST Game Ready! 🥊');
+    game = new LFistGame();
+    console.log('🥊 LFIST GAME Loaded! Ready to punch some memecoins! 🚀');
 });
