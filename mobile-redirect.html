@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LFIST Game - Loading...</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #00ff88;
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+    }
+    .loading {
+      font-size: 18px;
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="loading">🎮 Loading LFIST Game... 🎮</div>
+  
+  <script>
+    // Detect mobile device
+    function isMobileDevice() {
+      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+             (window.innerWidth <= 768 && 'ontouchstart' in window);
+    }
+    
+    // Detect if device supports touch
+    function isTouchDevice() {
+      return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    }
+    
+    // Redirect based on device type
+    function redirectToAppropriateVersion() {
+      if (isMobileDevice() || isTouchDevice()) {
+        // Mobile device - redirect to mobile-optimized version
+        console.log('Mobile device detected - redirecting to mobile version');
+        window.location.href = 'lfist-game-mobile.html';
+      } else {
+        // Desktop device - redirect to standard version
+        console.log('Desktop device detected - redirecting to standard version');
+        window.location.href = 'lfist-game.html';
+      }
+    }
+    
+    // Wait a moment then redirect
+    setTimeout(redirectToAppropriateVersion, 1000);
+  </script>
+</body>
+</html>

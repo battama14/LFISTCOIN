@@ -206,23 +206,52 @@ class LFistGame {
     // Mobile optimization: Use device pixel ratio for crisp rendering
     const dpr = this.isMobile ? Math.min(window.devicePixelRatio, 2) : window.devicePixelRatio || 1;
     
-    // Desktop fullscreen vs mobile with header
-    const canvasWidth = window.innerWidth;
-    const canvasHeight = this.isMobile ? (window.innerHeight - 80) : window.innerHeight;
+    // Get viewport dimensions
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
     
+    // Mobile-first approach with proper header spacing
+    let canvasWidth = viewportWidth;
+    let canvasHeight = viewportHeight;
+    
+    if (this.isMobile) {
+      // Account for header on mobile (60px) and safe areas
+      canvasHeight = viewportHeight - 60;
+      
+      // Force portrait orientation optimization
+      if (viewportWidth > viewportHeight) {
+        // Landscape on mobile - show rotation message
+        console.log('Mobile landscape detected - showing rotation prompt');
+      } else {
+        // Portrait mode - optimal for mobile gaming
+        console.log('Mobile portrait mode - optimal setup');
+      }
+    }
+    
+    // Set canvas dimensions with device pixel ratio
     this.canvas.width = canvasWidth * dpr;
     this.canvas.height = canvasHeight * dpr;
     
+    // Set CSS dimensions
     this.canvas.style.width = canvasWidth + 'px';
     this.canvas.style.height = canvasHeight + 'px';
     
+    // Scale context for high DPI
     this.ctx.scale(dpr, dpr);
     
     // Store logical dimensions for game calculations
     this.logicalWidth = canvasWidth;
     this.logicalHeight = canvasHeight;
     
+    // Update touch sensitivity based on screen size
+    if (this.isMobile) {
+      this.touchSensitivity = Math.min(canvasWidth, canvasHeight) / 400; // Adaptive sensitivity
+    }
+    
     this.resetPlayerPosition();
+    
+    // Log dimensions for debugging
+    console.log(`Canvas resized: ${canvasWidth}x${canvasHeight} (logical), ${this.canvas.width}x${this.canvas.height} (physical), DPR: ${dpr}`);
   }
 
   resetPlayerPosition() {
@@ -2667,13 +2696,74 @@ function clearScores() {
 }
 
 function showControls() {
-  alert('CONTROLS:\n\n🖱️ Mouse: Move character\n👆 Click/Tap: Punch\n⌨️ Arrows or WASD: Move\n⏸️ P: Pause\n🚀 Space/Enter: Punch');
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  
+  if (isMobile) {
+    alert('MOBILE CONTROLS:\n\n👆 Tap anywhere: Move LFIST and punch\n🖐️ Hold & drag: Move continuously\n⏸️ Pause button: Pause game\n👊 Punch button: Manual punch');
+  } else {
+    alert('DESKTOP CONTROLS:\n\n🖱️ Mouse: Move character\n👆 Click/Tap: Punch\n⌨️ Arrows or WASD: Move\n⏸️ P: Pause\n🚀 Space/Enter: Punch');
+  }
+}
+
+// Mobile virtual control functions
+function togglePause() {
+  if (game) {
+    game.togglePause();
+    updatePauseButton();
+  }
+}
+
+function manualPunch() {
+  if (game && game.gameRunning && !game.gamePaused) {
+    game.punch();
+  }
+}
+
+function updatePauseButton() {
+  const pauseBtn = document.getElementById('pauseBtn');
+  if (pauseBtn && game) {
+    pauseBtn.textContent = game.gamePaused ? '▶️' : '⏸️';
+  }
+}
+
+// Show/hide mobile controls based on device
+function initializeMobileControls() {
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  const mobileControls = document.getElementById('mobileControls');
+  
+  if (mobileControls) {
+    if (isMobile) {
+      mobileControls.style.display = 'block';
+      console.log('Mobile controls enabled');
+    } else {
+      mobileControls.style.display = 'none';
+      console.log('Mobile controls disabled (desktop)');
+    }
+  }
 }
 
 // Initialize when page loads
 document.addEventListener('DOMContentLoaded', () => {
   console.log('LFIST Game Ready! 🥊');
   
+  // Initialize mobile controls
+  initializeMobileControls();
+  
   // Preload game instance for high scores
   game = new LFistGame();
+  
+  // Handle orientation changes on mobile
+  window.addEventListener('orientationchange', () => {
+    setTimeout(() => {
+      if (game) {
+        game.resizeCanvas();
+      }
+      initializeMobileControls();
+    }, 100);
+  });
+  
+  // Handle window resize
+  window.addEventListener('resize', () => {
+    initializeMobileControls();
+  });
 });
