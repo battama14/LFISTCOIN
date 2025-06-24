@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LFIST Game - Full Screen Test</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #00ff88;
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+    }
+    
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: rgba(0, 0, 0, 0.8);
+      border-radius: 15px;
+      padding: 20px;
+      border: 2px solid #00ff88;
+    }
+    
+    h1 {
+      text-align: center;
+      color: #00ff88;
+      text-shadow: 0 0 15px #00ff88;
+    }
+    
+    .test-btn {
+      background: linear-gradient(45deg, #00ff88, #00cc66);
+      color: #000;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+      margin: 10px;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+    
+    .test-btn:hover {
+      background: linear-gradient(45deg, #00cc66, #009944);
+      transform: translateY(-2px);
+    }
+    
+    .info {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 15px;
+      border-radius: 10px;
+      margin: 15px 0;
+    }
+    
+    .status {
+      padding: 10px;
+      border-radius: 5px;
+      margin: 10px 0;
+      font-weight: bold;
+    }
+    
+    .success {
+      background: rgba(0, 255, 136, 0.2);
+      border: 1px solid #00ff88;
+    }
+    
+    .warning {
+      background: rgba(255, 170, 0, 0.2);
+      border: 1px solid #ffaa00;
+      color: #ffaa00;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎮 LFIST Game - Full Screen Test 🎮</h1>
+    
+    <div class="info">
+      <h3>📱 Current Screen Info:</h3>
+      <p><strong>Viewport:</strong> <span id="viewport">Loading...</span></p>
+      <p><strong>Screen:</strong> <span id="screen">Loading...</span></p>
+      <p><strong>Device Pixel Ratio:</strong> <span id="dpr">Loading...</span></p>
+      <p><strong>Orientation:</strong> <span id="orientation">Loading...</span></p>
+    </div>
+    
+    <div class="info">
+      <h3>🧪 Tests:</h3>
+      <div id="testResults">
+        <!-- Test results will be populated here -->
+      </div>
+    </div>
+    
+    <div style="text-align: center;">
+      <button class="test-btn" onclick="testFullScreen()">🖥️ Test Full Screen</button>
+      <button class="test-btn" onclick="testCanvas()">🎨 Test Canvas</button>
+      <button class="test-btn" onclick="testSprites()">👤 Test LFIST Sprites</button>
+      <br>
+      <button class="test-btn" onclick="window.location.href='lfist-game-mobile.html'">🚀 Launch Mobile Game</button>
+      <button class="test-btn" onclick="window.location.href='mobile-test.html'">🔧 Full Test Suite</button>
+    </div>
+  </div>
+
+  <script>
+    // Update screen info
+    function updateScreenInfo() {
+      document.getElementById('viewport').textContent = `${window.innerWidth} x ${window.innerHeight}px`;
+      document.getElementById('screen').textContent = `${screen.width} x ${screen.height}px`;
+      document.getElementById('dpr').textContent = window.devicePixelRatio || 1;
+      document.getElementById('orientation').textContent = window.innerWidth > window.innerHeight ? 'Landscape' : 'Portrait';
+    }
+    
+    // Run tests
+    function runTests() {
+      const testResults = document.getElementById('testResults');
+      testResults.innerHTML = '';
+      
+      const tests = [
+        {
+          name: 'Mobile Device Detection',
+          test: () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
+          description: 'Détecte si l\'appareil est mobile'
+        },
+        {
+          name: 'Touch Support',
+          test: () => 'ontouchstart' in window,
+          description: 'Vérifie le support tactile'
+        },
+        {
+          name: 'Canvas Support',
+          test: () => {
+            const canvas = document.createElement('canvas');
+            return !!(canvas.getContext && canvas.getContext('2d'));
+          },
+          description: 'Teste le support Canvas HTML5'
+        },
+        {
+          name: 'Fullscreen API',
+          test: () => !!(document.fullscreenEnabled || document.webkitFullscreenEnabled || document.mozFullScreenEnabled),
+          description: 'Vérifie l\'API plein écran'
+        },
+        {
+          name: 'Portrait Mode',
+          test: () => window.innerWidth < window.innerHeight,
+          description: 'Vérifie l\'orientation portrait'
+        }
+      ];
+      
+      tests.forEach(test => {
+        const result = test.test();
+        const status = document.createElement('div');
+        status.className = `status ${result ? 'success' : 'warning'}`;
+        status.innerHTML = `
+          <strong>${result ? '✅' : '⚠️'} ${test.name}</strong><br>
+          <small>${test.description}</small>
+        `;
+        testResults.appendChild(status);
+      });
+    }
+    
+    function testFullScreen() {
+      alert('🖥️ Full Screen Test:\n\n' +
+            'Viewport: ' + window.innerWidth + 'x' + window.innerHeight + '\n' +
+            'Screen: ' + screen.width + 'x' + screen.height + '\n' +
+            'DPR: ' + (window.devicePixelRatio || 1) + '\n' +
+            'Orientation: ' + (window.innerWidth > window.innerHeight ? 'Landscape' : 'Portrait'));
+    }
+    
+    function testCanvas() {
+      const canvas = document.createElement('canvas');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      const ctx = canvas.getContext('2d');
+      
+      alert('🎨 Canvas Test:\n\n' +
+            'Canvas Size: ' + canvas.width + 'x' + canvas.height + '\n' +
+            'Context: ' + (ctx ? 'Available' : 'Not Available') + '\n' +
+            'Image Rendering: ' + (canvas.style.imageRendering || 'Default'));
+    }
+    
+    function testSprites() {
+      // Test sprite creation like in the game
+      const canvas = document.createElement('canvas');
+      canvas.width = 80;
+      canvas.height = 80;
+      const ctx = canvas.getContext('2d');
+      
+      // Draw LFIST sprite
+      ctx.fillStyle = '#00ff88';
+      ctx.fillRect(20, 15, 40, 50);
+      ctx.fillStyle = '#ffcc88';
+      ctx.fillRect(25, 5, 30, 25);
+      ctx.fillStyle = '#ff4444';
+      ctx.fillRect(8, 25, 18, 18);
+      ctx.fillRect(54, 25, 18, 18);
+      
+      // Convert to data URL to test
+      const dataURL = canvas.toDataURL();
+      const isValid = dataURL.startsWith('data:image/png');
+      
+      alert('👤 LFIST Sprite Test:\n\n' +
+            'Sprite Size: ' + canvas.width + 'x' + canvas.height + '\n' +
+            'Data URL: ' + (isValid ? 'Valid' : 'Invalid') + '\n' +
+            'Length: ' + dataURL.length + ' chars\n\n' +
+            'Sprite should appear in the game!');
+    }
+    
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      updateScreenInfo();
+      runTests();
+    });
+    
+    // Update on resize
+    window.addEventListener('resize', () => {
+      updateScreenInfo();
+      runTests();
+    });
+    
+    // Update on orientation change
+    window.addEventListener('orientationchange', () => {
+      setTimeout(() => {
+        updateScreenInfo();
+        runTests();
+      }, 100);
+    });
+  </script>
+</body>
+</html>

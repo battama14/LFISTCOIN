@@ -193,6 +193,34 @@
       touch-action: none;
       will-change: transform;
     }
+    
+    /* FULL SCREEN MODE - Activated when game starts */
+    body.game-fullscreen #gameCanvas {
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      z-index: 9999 !important;
+      border-radius: 0 !important;
+      margin: 0 !important;
+    }
+    
+    body.game-fullscreen header {
+      display: none !important;
+    }
+    
+    body.game-fullscreen .game-ui {
+      z-index: 10000 !important;
+    }
+    
+    body.game-fullscreen .level-progress {
+      z-index: 10000 !important;
+    }
+    
+    body.game-fullscreen .virtual-controls {
+      z-index: 10000 !important;
+    }
 
     /* Responsive Game UI */
     .game-ui {
@@ -241,6 +269,27 @@
       border-color: var(--danger-red);
       text-shadow: 0 0 10px var(--danger-red);
       box-shadow: 0 2px 10px rgba(255, 68, 68, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+    
+    .exit-fullscreen {
+      background: var(--glass-bg) !important;
+      border: 1px solid var(--warning-orange) !important;
+      color: var(--warning-orange) !important;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: clamp(6px, 2vw, 10px) !important;
+      padding: clamp(4px, 1.5vw, 8px) !important;
+      border-radius: clamp(4px, 1.5vw, 8px) !important;
+    }
+    
+    .exit-fullscreen:hover {
+      background: rgba(255, 170, 0, 0.2) !important;
+      transform: scale(1.1);
+      box-shadow: 0 0 15px rgba(255, 170, 0, 0.5);
+    }
+    
+    .exit-fullscreen:active {
+      transform: scale(0.95);
     }
 
     /* Enhanced Level Progress */
@@ -925,6 +974,7 @@
       <div class="ui-right">
         <div class="ui-item lives">Lives: <span id="lives">3</span></div>
         <div class="ui-item">Target: <span id="target">10</span></div>
+        <button class="ui-item exit-fullscreen" onclick="exitFullScreen()" title="Exit Full Screen">🚪</button>
       </div>
     </div>
 

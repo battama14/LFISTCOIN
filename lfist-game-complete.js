@@ -206,7 +206,7 @@ class LFistGame {
     // Enhanced mobile optimization with device detection
     const dpr = this.isMobile ? Math.min(window.devicePixelRatio, 2) : window.devicePixelRatio || 1;
     
-    // Get viewport dimensions with mobile browser considerations
+    // Get REAL viewport dimensions (full screen)
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
     
@@ -216,54 +216,41 @@ class LFistGame {
     const isLargePhone = viewportWidth > 414 && viewportWidth <= 768;
     const isTablet = viewportWidth > 768;
     
-    // Mobile-first approach with adaptive header spacing
+    // FORCE FULL SCREEN - Canvas prend TOUT l'écran disponible
     let canvasWidth = viewportWidth;
     let canvasHeight = viewportHeight;
-    let headerHeight = 50; // Default header height
     
-    if (this.isMobile) {
-      // Adaptive header height based on device size
-      if (isSmallPhone) {
-        headerHeight = 45;
-      } else if (isMediumPhone) {
-        headerHeight = 50;
-      } else if (isLargePhone) {
-        headerHeight = 55;
-      } else if (isTablet) {
-        headerHeight = 60;
-      }
-      
-      // Account for header and safe areas
+    // Si le jeu est en cours, on ignore le header et on prend TOUT l'écran
+    if (this.gameRunning) {
+      canvasHeight = viewportHeight; // PLEIN ÉCRAN total
+      console.log('🎮 GAME RUNNING - FULL SCREEN MODE ACTIVATED');
+    } else {
+      // Seulement dans les menus, on garde un peu d'espace pour le header
+      let headerHeight = this.isMobile ? 50 : 60;
       canvasHeight = viewportHeight - headerHeight;
-      
-      // Enhanced orientation handling
-      if (viewportWidth > viewportHeight && viewportHeight < 500) {
-        // Landscape on mobile - problematic for gameplay
-        console.log('🔄 Mobile landscape detected - rotation prompt active');
-        this.showRotationPrompt = true;
-      } else {
-        // Portrait mode - optimal for mobile gaming
-        console.log('📱 Mobile portrait mode - optimal gaming setup');
-        this.showRotationPrompt = false;
-        
-        // Optimize canvas for portrait gaming
-        if (canvasHeight > canvasWidth * 1.5) {
-          // Very tall screen - ensure good proportions
-          const maxHeight = canvasWidth * 1.8;
-          if (canvasHeight > maxHeight) {
-            canvasHeight = maxHeight;
-          }
-        }
-      }
+    }
+    
+    // Enhanced orientation handling
+    if (this.isMobile && viewportWidth > viewportHeight && viewportHeight < 500) {
+      // Landscape on mobile - problematic for gameplay
+      console.log('🔄 Mobile landscape detected - rotation prompt active');
+      this.showRotationPrompt = true;
+    } else {
+      // Portrait mode - optimal for mobile gaming
+      console.log('📱 Mobile portrait mode - optimal gaming setup');
+      this.showRotationPrompt = false;
     }
     
     // Set canvas dimensions with device pixel ratio
     this.canvas.width = canvasWidth * dpr;
     this.canvas.height = canvasHeight * dpr;
     
-    // Set CSS dimensions
+    // Set CSS dimensions to EXACTLY fill the space
     this.canvas.style.width = canvasWidth + 'px';
     this.canvas.style.height = canvasHeight + 'px';
+    this.canvas.style.position = 'absolute';
+    this.canvas.style.top = '0';
+    this.canvas.style.left = '0';
     
     // Scale context for high DPI with performance consideration
     this.ctx.scale(dpr, dpr);
@@ -305,6 +292,7 @@ class LFistGame {
                       isTablet ? 'Tablet' : 'Desktop';
     
     console.log(`📱 Canvas resized for ${deviceType}: ${canvasWidth}x${canvasHeight} (logical), ${this.canvas.width}x${this.canvas.height} (physical), DPR: ${dpr}, Touch Sensitivity: ${this.touchSensitivity.toFixed(2)}`);
+    console.log(`🎯 FULL SCREEN: Canvas covers ${canvasWidth}x${canvasHeight} pixels`);
   }
   
   updatePerformanceSettings(isSmallPhone, isMediumPhone, isLargePhone, isTablet) {
@@ -469,6 +457,13 @@ class LFistGame {
   }
 
   loadImages() {
+    console.log('🎨 Loading images and creating fallback sprites...');
+    
+    // CRÉER IMMÉDIATEMENT les sprites de secours pour garantir que le personnage apparaisse
+    this.createFallbackSprite();
+    this.createFallbackPunchSprite();
+    console.log('✅ Fallback sprites created immediately');
+    
     const memecoinCount = Object.keys(this.memecoinTypes).length;
     let loadedImages = 0;
     const totalImages = 5 + memecoinCount; // 5 images de base + images des memecoins (ajout bonus.png)
@@ -484,47 +479,48 @@ class LFistGame {
       }
     };
     
-    // Charger l'image du personnage normal
-    this.player.sprite = new Image();
-    this.player.sprite.onload = () => {
-      console.log('✅ persofix.jpeg loaded successfully!', this.player.sprite.naturalWidth, 'x', this.player.sprite.naturalHeight);
+    // Essayer de charger l'image du personnage normal (mais fallback déjà créé)
+    const playerImage = new Image();
+    playerImage.onload = () => {
+      console.log('✅ persofix.png loaded successfully!', playerImage.naturalWidth, 'x', playerImage.naturalHeight);
+      // Remplacer le fallback par l'image réelle si elle se charge
+      this.player.sprite = playerImage;
       // Traitement immédiat après chargement
       setTimeout(() => {
         this.forceProcessPlayerSprite();
       }, 100);
       onImageLoad();
     };
-    this.player.sprite.onerror = () => {
-      console.error('❌ Erreur lors du chargement de persofix.jpeg');
-      this.createFallbackSprite();
+    playerImage.onerror = () => {
+      console.log('⚠️ persofix.png not found, using fallback sprite');
       onImageLoad();
     };
-    this.player.sprite.src = 'persofix.png'; // Changé en PNG pour la transparence
+    playerImage.src = 'persofix.png';
     
-    // Timeout fallback pour le sprite normal
+    // Timeout pour l'image normale (mais on garde le fallback)
     setTimeout(() => {
-      if (!this.player.sprite.complete || this.player.sprite.naturalWidth === 0) {
-        console.log('Player sprite timeout, creating fallback');
-        this.createFallbackSprite();
+      if (!playerImage.complete || playerImage.naturalWidth === 0) {
+        console.log('🎨 Using fallback sprite (image timeout)');
       }
-    }, 3000);
+    }, 2000);
     
-    // Charger l'image du personnage qui frappe
-    this.player.punchSprite = new Image();
-    this.player.punchSprite.onload = () => {
-      console.log('✅ persopoing.jpeg loaded successfully!', this.player.punchSprite.naturalWidth, 'x', this.player.punchSprite.naturalHeight);
+    // Essayer de charger l'image du personnage qui frappe (mais fallback déjà créé)
+    const punchImage = new Image();
+    punchImage.onload = () => {
+      console.log('✅ persopoing.png loaded successfully!', punchImage.naturalWidth, 'x', punchImage.naturalHeight);
+      // Remplacer le fallback par l'image réelle si elle se charge
+      this.player.punchSprite = punchImage;
       // Traitement immédiat après chargement
       setTimeout(() => {
         this.forceProcessPunchSprite();
       }, 100);
       onImageLoad();
     };
-    this.player.punchSprite.onerror = () => {
-      console.error('❌ Erreur lors du chargement de persopoing.jpeg');
-      this.createFallbackPunchSprite();
+    punchImage.onerror = () => {
+      console.log('⚠️ persopoing.png not found, using fallback punch sprite');
       onImageLoad();
     };
-    this.player.punchSprite.src = 'persopoing.png'; // Changé en PNG pour la transparence
+    punchImage.src = 'persopoing.png';
     
     // Timeout fallback pour le sprite de frappe
     setTimeout(() => {
@@ -957,63 +953,189 @@ class LFistGame {
   }
   
   createFallbackSprite() {
-    // Créer un sprite de secours si l'image ne charge pas
+    // Créer un sprite de secours LFIST ultra-visible
     const canvas = document.createElement('canvas');
     canvas.width = 80;
     canvas.height = 80;
     const ctx = canvas.getContext('2d');
     
-    // Dessiner le personnage LFIST de base
+    console.log('🎨 Creating ENHANCED LFIST fallback sprite...');
+    
+    // Fond transparent
+    ctx.clearRect(0, 0, 80, 80);
+    
+    // Corps principal (vert LFIST signature)
     ctx.fillStyle = '#00ff88';
     ctx.fillRect(20, 15, 40, 50);
+    
+    // Contour du corps pour plus de visibilité
+    ctx.strokeStyle = '#00cc66';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(20, 15, 40, 50);
+    
+    // Tête (peau)
     ctx.fillStyle = '#ffcc88';
     ctx.fillRect(25, 5, 30, 25);
+    
+    // Contour de la tête
+    ctx.strokeStyle = '#cc9966';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(25, 5, 30, 25);
+    
+    // Poings LFIST (rouge vif)
     ctx.fillStyle = '#ff4444';
-    ctx.fillRect(10, 25, 15, 15);
-    ctx.fillRect(55, 25, 15, 15);
-    ctx.fillStyle = '#333';
-    ctx.fillRect(30, 10, 5, 5);
-    ctx.fillRect(45, 10, 5, 5);
+    ctx.fillRect(8, 25, 18, 18);  // Poing gauche plus gros
+    ctx.fillRect(54, 25, 18, 18); // Poing droit plus gros
+    
+    // Contour des poings
+    ctx.strokeStyle = '#cc0000';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(8, 25, 18, 18);
+    ctx.strokeRect(54, 25, 18, 18);
+    
+    // Yeux (plus visibles)
+    ctx.fillStyle = '#000';
+    ctx.fillRect(30, 10, 6, 6);
+    ctx.fillRect(44, 10, 6, 6);
+    
+    // Pupilles brillantes
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(32, 12, 2, 2);
+    ctx.fillRect(46, 12, 2, 2);
+    
+    // Bouche (sourire LFIST)
     ctx.fillStyle = '#ff0000';
-    ctx.fillRect(35, 18, 10, 3);
+    ctx.fillRect(35, 18, 10, 4);
+    
+    // Jambes (bleu)
     ctx.fillStyle = '#0066cc';
-    ctx.fillRect(25, 60, 12, 15);
-    ctx.fillRect(43, 60, 12, 15);
+    ctx.fillRect(25, 60, 12, 18);
+    ctx.fillRect(43, 60, 12, 18);
+    
+    // Contour des jambes
+    ctx.strokeStyle = '#004499';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(25, 60, 12, 18);
+    ctx.strokeRect(43, 60, 12, 18);
+    
+    // Texte "L" sur le corps pour identification
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 12px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText('L', 40, 35);
+    
+    // Effet de brillance
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+    ctx.fillRect(22, 17, 36, 2);
     
     this.player.sprite = canvas;
+    console.log('✅ Enhanced LFIST sprite created with dimensions:', canvas.width, 'x', canvas.height);
   }
   
   createFallbackPunchSprite() {
-    // Créer un sprite de frappe de secours
+    // Créer un sprite de frappe LFIST ultra-dynamique
     const canvas = document.createElement('canvas');
     canvas.width = 80;
     canvas.height = 80;
     const ctx = canvas.getContext('2d');
     
-    // Dessiner le personnage en position de frappe
+    console.log('🥊 Creating ENHANCED LFIST punch sprite...');
+    
+    // Fond transparent
+    ctx.clearRect(0, 0, 80, 80);
+    
+    // Corps principal (vert LFIST signature)
     ctx.fillStyle = '#00ff88';
     ctx.fillRect(20, 15, 40, 50);
+    
+    // Contour du corps
+    ctx.strokeStyle = '#00cc66';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(20, 15, 40, 50);
+    
+    // Tête (peau)
     ctx.fillStyle = '#ffcc88';
     ctx.fillRect(25, 5, 30, 25);
-    // Poings plus grands pour l'effet de frappe
+    
+    // Contour de la tête
+    ctx.strokeStyle = '#cc9966';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(25, 5, 30, 25);
+    
+    // SUPER POINGS DE FRAPPE (plus gros et plus dynamiques)
     ctx.fillStyle = '#ff0000';
-    ctx.fillRect(5, 20, 20, 20);
-    ctx.fillRect(55, 20, 20, 20);
-    ctx.fillStyle = '#333';
-    ctx.fillRect(30, 10, 5, 5);
-    ctx.fillRect(45, 10, 5, 5);
+    ctx.fillRect(2, 18, 24, 24);  // Poing gauche ÉNORME
+    ctx.fillRect(54, 18, 24, 24); // Poing droit ÉNORME
+    
+    // Contour des super poings
+    ctx.strokeStyle = '#cc0000';
+    ctx.lineWidth = 3;
+    ctx.strokeRect(2, 18, 24, 24);
+    ctx.strokeRect(54, 18, 24, 24);
+    
+    // Effets de frappe (étoiles)
+    ctx.fillStyle = '#ffff00';
+    ctx.fillRect(0, 30, 4, 4);
+    ctx.fillRect(76, 30, 4, 4);
+    ctx.fillRect(2, 15, 4, 4);
+    ctx.fillRect(74, 15, 4, 4);
+    
+    // Yeux déterminés (plus petits pour l'effort)
+    ctx.fillStyle = '#000';
+    ctx.fillRect(30, 12, 4, 4);
+    ctx.fillRect(46, 12, 4, 4);
+    
+    // Pupilles brillantes
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(31, 13, 1, 1);
+    ctx.fillRect(47, 13, 1, 1);
+    
+    // Bouche de combat (plus grande)
     ctx.fillStyle = '#ff0000';
-    ctx.fillRect(35, 18, 10, 3);
+    ctx.fillRect(33, 18, 14, 5);
+    
+    // Jambes (bleu)
     ctx.fillStyle = '#0066cc';
-    ctx.fillRect(25, 60, 12, 15);
-    ctx.fillRect(43, 60, 12, 15);
+    ctx.fillRect(25, 60, 12, 18);
+    ctx.fillRect(43, 60, 12, 18);
+    
+    // Contour des jambes
+    ctx.strokeStyle = '#004499';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(25, 60, 12, 18);
+    ctx.strokeRect(43, 60, 12, 18);
+    
+    // Texte "PUNCH!" sur le corps
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 8px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText('PUNCH!', 40, 35);
+    
+    // Effet de brillance plus intense
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+    ctx.fillRect(22, 17, 36, 3);
+    
+    // Lignes de mouvement
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(26, 30);
+    ctx.lineTo(14, 30);
+    ctx.moveTo(54, 30);
+    ctx.lineTo(66, 30);
+    ctx.stroke();
     
     this.player.punchSprite = canvas;
+    console.log('✅ Enhanced LFIST punch sprite created with POWER!');
   }
 
   constrainPlayer() {
-    this.player.x = Math.max(0, Math.min(this.canvas.width - this.player.width, this.player.x));
-    this.player.y = Math.max(0, Math.min(this.canvas.height - this.player.height, this.player.y));
+    // Utiliser les dimensions logiques pour les contraintes
+    const width = this.logicalWidth || this.canvas.width;
+    const height = this.logicalHeight || this.canvas.height;
+    
+    this.player.x = Math.max(0, Math.min(width - this.player.width, this.player.x));
+    this.player.y = Math.max(0, Math.min(height - this.player.height, this.player.y));
   }
 
   handleInput() {
@@ -1515,8 +1637,12 @@ class LFistGame {
       }
     }
     
+    // Utiliser les dimensions logiques pour le spawn
+    const canvasWidth = this.logicalWidth || this.canvas.width;
+    const canvasHeight = this.logicalHeight || this.canvas.height;
+    
     const memecoin = {
-      x: Math.random() * (this.canvas.width - memecoinType.size),
+      x: Math.random() * (canvasWidth - memecoinType.size),
       y: -memecoinType.size,
       width: memecoinType.size,
       height: memecoinType.size,
@@ -1528,6 +1654,9 @@ class LFistGame {
       wobbleSpeed: type === 'trump' ? 0.2 + Math.random() * 0.2 : 0.1 + Math.random() * 0.1,
       isSpecial: type === 'trump'
     };
+    
+    console.log(`🎯 Memecoin spawned at x:${memecoin.x.toFixed(0)} (canvas width: ${canvasWidth})`);
+    
     
     // Limit objects on mobile for better performance
     const maxObjects = this.isMobile ? 15 : 25;
@@ -1636,8 +1765,11 @@ class LFistGame {
     const types = ['fist', 'shield', 'speed', 'multi'];
     const type = types[Math.floor(Math.random() * types.length)];
     
+    // Utiliser les dimensions logiques pour le spawn
+    const canvasWidth = this.logicalWidth || this.canvas.width;
+    
     const powerup = {
-      x: Math.random() * (this.canvas.width - 50),
+      x: Math.random() * (canvasWidth - 50),
       y: -50,
       width: 50,
       height: 50,
@@ -1649,6 +1781,7 @@ class LFistGame {
       pulse: 0
     };
     
+    console.log(`💎 Powerup spawned at x:${powerup.x.toFixed(0)} (canvas width: ${canvasWidth})`);
     this.powerups.push(powerup);
   }
 
@@ -2532,17 +2665,68 @@ let game;
 
 // Game control functions
 function startGame() {
+  console.log('🚀 Starting LFIST Game in FULL SCREEN...');
+  
+  // Hide start screen
   const gameStart = document.getElementById('gameStart');
   if (gameStart) {
     gameStart.style.display = 'none';
   }
+  
+  // ACTIVATE FULL SCREEN MODE via CSS class
+  document.body.classList.add('game-fullscreen');
+  console.log('🎮 Full screen CSS class activated');
+  
+  // Force full screen mode
+  enterFullScreenMode();
   
   if (!game) {
     game = new LFistGame();
   } else {
     game.reset();
   }
-  game.start();
+  
+  // Force canvas resize to full screen BEFORE starting
+  setTimeout(() => {
+    game.resizeCanvas();
+    game.start();
+    console.log('🎮 Game started in ABSOLUTE full screen mode');
+  }, 100);
+}
+
+function enterFullScreenMode() {
+  // Try to enter fullscreen if supported
+  const canvas = document.getElementById('gameCanvas');
+  if (canvas) {
+    // Force canvas to take full viewport
+    canvas.style.position = 'fixed';
+    canvas.style.top = '0';
+    canvas.style.left = '0';
+    canvas.style.width = '100vw';
+    canvas.style.height = '100vh';
+    canvas.style.zIndex = '1000';
+    
+    console.log('🖥️ Canvas forced to full screen');
+    
+    // Try native fullscreen API
+    if (canvas.requestFullscreen) {
+      canvas.requestFullscreen().catch(err => {
+        console.log('Fullscreen not available:', err);
+      });
+    } else if (canvas.webkitRequestFullscreen) {
+      canvas.webkitRequestFullscreen().catch(err => {
+        console.log('Webkit fullscreen not available:', err);
+      });
+    } else if (canvas.mozRequestFullScreen) {
+      canvas.mozRequestFullScreen().catch(err => {
+        console.log('Mozilla fullscreen not available:', err);
+      });
+    }
+  }
+  
+  // Force body to full screen
+  document.body.style.overflow = 'hidden';
+  document.documentElement.style.overflow = 'hidden';
 }
 
 function restartGame() {
@@ -2554,10 +2738,44 @@ function restartGame() {
     }
   });
   
+  // Réactiver le mode plein écran
+  document.body.classList.add('game-fullscreen');
+  
   if (game) {
     game.reset();
-    game.start();
+    setTimeout(() => {
+      game.resizeCanvas();
+      game.start();
+    }, 100);
   }
+}
+
+function exitFullScreen() {
+  // Quitter le mode plein écran
+  document.body.classList.remove('game-fullscreen');
+  
+  // Réafficher le header
+  const header = document.querySelector('header');
+  if (header) {
+    header.style.display = 'flex';
+  }
+  
+  // Quitter le fullscreen natif si actif
+  if (document.fullscreenElement) {
+    document.exitFullscreen().catch(err => {
+      console.log('Exit fullscreen error:', err);
+    });
+  } else if (document.webkitFullscreenElement) {
+    document.webkitExitFullscreen().catch(err => {
+      console.log('Exit webkit fullscreen error:', err);
+    });
+  } else if (document.mozFullScreenElement) {
+    document.mozCancelFullScreen().catch(err => {
+      console.log('Exit moz fullscreen error:', err);
+    });
+  }
+  
+  console.log('🚪 Exited full screen mode');
 }
 
 function nextLevel() {
