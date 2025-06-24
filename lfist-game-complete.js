@@ -203,28 +203,57 @@ class LFistGame {
   }
 
   resizeCanvas() {
-    // Mobile optimization: Use device pixel ratio for crisp rendering
+    // Enhanced mobile optimization with device detection
     const dpr = this.isMobile ? Math.min(window.devicePixelRatio, 2) : window.devicePixelRatio || 1;
     
-    // Get viewport dimensions
+    // Get viewport dimensions with mobile browser considerations
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
     
-    // Mobile-first approach with proper header spacing
+    // Detect device type for optimal sizing
+    const isSmallPhone = viewportWidth <= 375;
+    const isMediumPhone = viewportWidth > 375 && viewportWidth <= 414;
+    const isLargePhone = viewportWidth > 414 && viewportWidth <= 768;
+    const isTablet = viewportWidth > 768;
+    
+    // Mobile-first approach with adaptive header spacing
     let canvasWidth = viewportWidth;
     let canvasHeight = viewportHeight;
+    let headerHeight = 50; // Default header height
     
     if (this.isMobile) {
-      // Account for header on mobile (60px) and safe areas
-      canvasHeight = viewportHeight - 60;
+      // Adaptive header height based on device size
+      if (isSmallPhone) {
+        headerHeight = 45;
+      } else if (isMediumPhone) {
+        headerHeight = 50;
+      } else if (isLargePhone) {
+        headerHeight = 55;
+      } else if (isTablet) {
+        headerHeight = 60;
+      }
       
-      // Force portrait orientation optimization
-      if (viewportWidth > viewportHeight) {
-        // Landscape on mobile - show rotation message
-        console.log('Mobile landscape detected - showing rotation prompt');
+      // Account for header and safe areas
+      canvasHeight = viewportHeight - headerHeight;
+      
+      // Enhanced orientation handling
+      if (viewportWidth > viewportHeight && viewportHeight < 500) {
+        // Landscape on mobile - problematic for gameplay
+        console.log('🔄 Mobile landscape detected - rotation prompt active');
+        this.showRotationPrompt = true;
       } else {
         // Portrait mode - optimal for mobile gaming
-        console.log('Mobile portrait mode - optimal setup');
+        console.log('📱 Mobile portrait mode - optimal gaming setup');
+        this.showRotationPrompt = false;
+        
+        // Optimize canvas for portrait gaming
+        if (canvasHeight > canvasWidth * 1.5) {
+          // Very tall screen - ensure good proportions
+          const maxHeight = canvasWidth * 1.8;
+          if (canvasHeight > maxHeight) {
+            canvasHeight = maxHeight;
+          }
+        }
       }
     }
     
@@ -236,22 +265,81 @@ class LFistGame {
     this.canvas.style.width = canvasWidth + 'px';
     this.canvas.style.height = canvasHeight + 'px';
     
-    // Scale context for high DPI
+    // Scale context for high DPI with performance consideration
     this.ctx.scale(dpr, dpr);
     
     // Store logical dimensions for game calculations
     this.logicalWidth = canvasWidth;
     this.logicalHeight = canvasHeight;
     
-    // Update touch sensitivity based on screen size
+    // Adaptive touch sensitivity based on device size and screen density
     if (this.isMobile) {
-      this.touchSensitivity = Math.min(canvasWidth, canvasHeight) / 400; // Adaptive sensitivity
+      let baseSensitivity = Math.min(canvasWidth, canvasHeight) / 400;
+      
+      // Adjust sensitivity based on device type
+      if (isSmallPhone) {
+        this.touchSensitivity = baseSensitivity * 1.2; // More sensitive for small screens
+      } else if (isMediumPhone) {
+        this.touchSensitivity = baseSensitivity * 1.1;
+      } else if (isLargePhone) {
+        this.touchSensitivity = baseSensitivity;
+      } else if (isTablet) {
+        this.touchSensitivity = baseSensitivity * 0.9; // Less sensitive for tablets
+      }
+      
+      // Adjust for high DPI screens
+      if (dpr > 1.5) {
+        this.touchSensitivity *= 1.1;
+      }
     }
+    
+    // Update game performance settings based on device capabilities
+    this.updatePerformanceSettings(isSmallPhone, isMediumPhone, isLargePhone, isTablet);
     
     this.resetPlayerPosition();
     
-    // Log dimensions for debugging
-    console.log(`Canvas resized: ${canvasWidth}x${canvasHeight} (logical), ${this.canvas.width}x${this.canvas.height} (physical), DPR: ${dpr}`);
+    // Enhanced logging with device info
+    const deviceType = isSmallPhone ? 'Small Phone' : 
+                      isMediumPhone ? 'Medium Phone' : 
+                      isLargePhone ? 'Large Phone' : 
+                      isTablet ? 'Tablet' : 'Desktop';
+    
+    console.log(`📱 Canvas resized for ${deviceType}: ${canvasWidth}x${canvasHeight} (logical), ${this.canvas.width}x${this.canvas.height} (physical), DPR: ${dpr}, Touch Sensitivity: ${this.touchSensitivity.toFixed(2)}`);
+  }
+  
+  updatePerformanceSettings(isSmallPhone, isMediumPhone, isLargePhone, isTablet) {
+    // Adaptive performance settings based on device type
+    if (isSmallPhone) {
+      this.targetFPS = 25;
+      this.particleLimit = 30;
+      this.maxFrameSkip = 3;
+      this.renderQuality = 'low';
+    } else if (isMediumPhone) {
+      this.targetFPS = 30;
+      this.particleLimit = 40;
+      this.maxFrameSkip = 2;
+      this.renderQuality = 'medium';
+    } else if (isLargePhone) {
+      this.targetFPS = 30;
+      this.particleLimit = 50;
+      this.maxFrameSkip = 1;
+      this.renderQuality = 'medium';
+    } else if (isTablet) {
+      this.targetFPS = 45;
+      this.particleLimit = 75;
+      this.maxFrameSkip = 1;
+      this.renderQuality = 'high';
+    } else {
+      // Desktop
+      this.targetFPS = 60;
+      this.particleLimit = 100;
+      this.maxFrameSkip = 0;
+      this.renderQuality = 'high';
+    }
+    
+    this.frameInterval = 1000 / this.targetFPS;
+    
+    console.log(`⚡ Performance settings updated: FPS=${this.targetFPS}, Particles=${this.particleLimit}, Quality=${this.renderQuality}`);
   }
 
   resetPlayerPosition() {

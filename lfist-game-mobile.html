@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, viewport-fit=cover, shrink-to-fit=no" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -10,25 +10,54 @@
   <meta name="theme-color" content="#00ff88" />
   <meta name="msapplication-TileColor" content="#00ff88" />
   <meta name="screen-orientation" content="portrait" />
+  <meta name="format-detection" content="telephone=no" />
   <link rel="manifest" href="manifest.json" />
-  <title>LFIST GAME - Mobile Edition</title>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Orbitron:wght@700&display=swap" rel="stylesheet" />
+  <title>LFIST GAME - Mobile Pro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet" />
   <style>
+    :root {
+      --primary-green: #00ff88;
+      --primary-green-dark: #00cc66;
+      --primary-green-light: #33ffaa;
+      --danger-red: #ff4444;
+      --warning-orange: #ffaa00;
+      --background-dark: #0f2027;
+      --background-mid: #203a43;
+      --background-light: #2c5364;
+      --text-light: #ffffff;
+      --text-medium: #cccccc;
+      --glass-bg: rgba(0, 0, 0, 0.85);
+      --glass-border: rgba(255, 255, 255, 0.1);
+      --shadow-glow: 0 0 20px rgba(0, 255, 136, 0.3);
+      --shadow-strong: 0 4px 20px rgba(0, 0, 0, 0.5);
+    }
+
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
-    html, body {
+    html {
       height: 100%;
-      overflow: hidden;
+      height: 100vh;
+      height: -webkit-fill-available;
     }
 
     body {
       font-family: 'Orbitron', sans-serif;
-      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-      color: #eee;
+      background: linear-gradient(135deg, var(--background-dark), var(--background-mid), var(--background-light));
+      color: var(--text-light);
+      height: 100%;
+      height: 100vh;
+      height: -webkit-fill-available;
+      overflow: hidden;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      left: 0;
       -webkit-user-select: none;
       -moz-user-select: none;
       -ms-user-select: none;
@@ -37,101 +66,115 @@
       -webkit-tap-highlight-color: transparent;
       touch-action: manipulation;
       -webkit-overflow-scrolling: touch;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      position: fixed;
-      width: 100%;
-      height: 100%;
     }
 
-    /* Force portrait orientation message */
-    @media screen and (orientation: landscape) {
+    /* Force portrait orientation with enhanced styling */
+    @media screen and (orientation: landscape) and (max-height: 500px) {
       body::before {
-        content: "🔄 Please rotate your device to portrait mode for the best gaming experience";
+        content: "📱 ROTATE TO PORTRAIT\A🎮 For the best LFIST Game experience\A🔄 Please turn your device vertically";
+        white-space: pre-line;
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0, 0, 0, 0.95);
-        color: #00ff88;
+        background: linear-gradient(45deg, rgba(0, 0, 0, 0.95), rgba(15, 32, 39, 0.95));
+        color: var(--primary-green);
         display: flex;
         align-items: center;
         justify-content: center;
         text-align: center;
         font-family: 'Press Start 2P', cursive;
-        font-size: 10px;
-        z-index: 9999;
+        font-size: clamp(8px, 2.5vw, 14px);
+        z-index: 99999;
         padding: 20px;
-        line-height: 1.8;
-        backdrop-filter: blur(10px);
+        line-height: 2;
+        backdrop-filter: blur(20px);
+        text-shadow: var(--shadow-glow);
+        animation: rotatePrompt 2s ease-in-out infinite alternate;
       }
     }
 
-    /* Mobile-First Header */
+    @keyframes rotatePrompt {
+      from { transform: scale(0.98); opacity: 0.9; }
+      to { transform: scale(1.02); opacity: 1; }
+    }
+
+    /* Enhanced Mobile Header */
     header {
-      background: linear-gradient(135deg, #111, #222);
-      padding: env(safe-area-inset-top, 10px) env(safe-area-inset-right, 15px) 10px env(safe-area-inset-left, 15px);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      background: linear-gradient(135deg, rgba(17, 17, 17, 0.95), rgba(34, 34, 34, 0.95));
+      backdrop-filter: blur(20px);
+      border-bottom: 2px solid var(--primary-green);
+      box-shadow: var(--shadow-strong), var(--shadow-glow);
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
       z-index: 1000;
-      box-shadow: 0 2px 15px rgba(0, 255, 136, 0.4);
-      backdrop-filter: blur(15px);
-      border-bottom: 2px solid #00ff88;
-      min-height: 50px;
+      padding: env(safe-area-inset-top, 8px) env(safe-area-inset-right, 12px) 8px env(safe-area-inset-left, 12px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: clamp(45px, 12vw, 60px);
     }
 
     .logo {
       font-family: 'Press Start 2P', cursive;
-      font-size: 10px;
-      color: #00ff88;
-      text-shadow: 0 0 10px #00ff88;
+      font-size: clamp(8px, 2.8vw, 12px);
+      color: var(--primary-green);
+      text-shadow: 0 0 15px var(--primary-green), 0 0 30px var(--primary-green);
       flex-shrink: 0;
+      animation: logoGlow 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes logoGlow {
+      from { text-shadow: 0 0 15px var(--primary-green), 0 0 30px var(--primary-green); }
+      to { text-shadow: 0 0 20px var(--primary-green), 0 0 40px var(--primary-green), 0 0 60px var(--primary-green); }
     }
 
     .nav-menu {
       display: flex;
-      gap: 8px;
+      gap: clamp(6px, 2vw, 10px);
       flex-wrap: wrap;
     }
 
     .nav-menu a {
-      color: #eee;
+      color: var(--text-light);
       text-decoration: none;
-      transition: all 0.3s;
-      font-size: 6px;
-      padding: 6px 8px;
-      border-radius: 4px;
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(5px);
+      font-size: clamp(5px, 1.8vw, 8px);
+      font-weight: 700;
+      padding: clamp(4px, 1.5vw, 8px) clamp(6px, 2vw, 10px);
+      border-radius: 8px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(10px);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       white-space: nowrap;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     }
 
     .nav-menu a:hover, .nav-menu a:active {
-      color: #00ff88;
-      background: rgba(0, 255, 136, 0.2);
-      transform: scale(1.05);
+      color: var(--primary-green);
+      background: rgba(0, 255, 136, 0.15);
+      border-color: var(--primary-green);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 255, 136, 0.3);
     }
 
-    /* Game Container - Full Mobile */
+    /* Game Container - Responsive */
     #gameContainer {
       position: fixed;
-      top: 50px;
+      top: clamp(45px, 12vw, 60px);
       left: 0;
       right: 0;
       bottom: 0;
-      background: #000;
+      background: radial-gradient(circle at center, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.95));
       overflow: hidden;
       display: flex;
       flex-direction: column;
     }
 
-    /* Game Canvas - Mobile Optimized */
+    /* Game Canvas - Ultra Responsive */
     #gameCanvas {
       display: block;
       background: transparent;
@@ -142,32 +185,32 @@
       transform: translateZ(0);
       -webkit-backface-visibility: hidden;
       backface-visibility: hidden;
-      -webkit-perspective: 1000;
-      perspective: 1000;
+      -webkit-perspective: 1000px;
+      perspective: 1000px;
       image-rendering: -webkit-optimize-contrast;
       image-rendering: -moz-crisp-edges;
       image-rendering: pixelated;
       touch-action: none;
+      will-change: transform;
     }
 
-    /* Mobile Game UI */
+    /* Responsive Game UI */
     .game-ui {
       position: absolute;
-      top: 8px;
-      left: 8px;
-      right: 8px;
+      top: clamp(8px, 2vw, 15px);
+      left: env(safe-area-inset-left, clamp(8px, 2vw, 15px));
+      right: env(safe-area-inset-right, clamp(8px, 2vw, 15px));
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 6px;
+      gap: clamp(6px, 1.5vw, 12px);
       z-index: 100;
       font-family: 'Press Start 2P', cursive;
-      font-size: 6px;
     }
 
     .ui-left, .ui-right {
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: clamp(3px, 1vw, 6px);
     }
 
     .ui-right {
@@ -175,178 +218,213 @@
     }
 
     .ui-item {
-      background: rgba(0, 0, 0, 0.9);
-      padding: 4px 8px;
-      border-radius: 6px;
-      border: 1px solid #00ff88;
-      color: #00ff88;
-      text-shadow: 0 0 8px #00ff88;
-      backdrop-filter: blur(10px);
+      background: var(--glass-bg);
+      backdrop-filter: blur(15px);
+      padding: clamp(3px, 1.2vw, 6px) clamp(6px, 2vw, 10px);
+      border-radius: clamp(4px, 1.5vw, 8px);
+      border: 1px solid var(--primary-green);
+      color: var(--primary-green);
+      text-shadow: 0 0 10px var(--primary-green);
       white-space: nowrap;
-      font-size: 5px;
-      box-shadow: 0 2px 8px rgba(0, 255, 136, 0.2);
+      font-size: clamp(4px, 1.4vw, 7px);
+      box-shadow: 0 2px 10px rgba(0, 255, 136, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .ui-item:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 15px rgba(0, 255, 136, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
     }
 
     .lives {
-      color: #ff4444;
-      border-color: #ff4444;
-      text-shadow: 0 0 8px #ff4444;
-      box-shadow: 0 2px 8px rgba(255, 68, 68, 0.2);
+      color: var(--danger-red);
+      border-color: var(--danger-red);
+      text-shadow: 0 0 10px var(--danger-red);
+      box-shadow: 0 2px 10px rgba(255, 68, 68, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
     }
 
-    /* Mobile Level Progress */
+    /* Enhanced Level Progress */
     .level-progress {
       position: absolute;
-      bottom: 80px;
-      left: 8px;
-      right: 8px;
-      background: rgba(0, 0, 0, 0.9);
-      padding: 6px 10px;
-      border-radius: 10px;
-      border: 1px solid #00ff88;
+      bottom: clamp(70px, 18vw, 100px);
+      left: env(safe-area-inset-left, clamp(8px, 2vw, 15px));
+      right: env(safe-area-inset-right, clamp(8px, 2vw, 15px));
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      padding: clamp(6px, 1.8vw, 10px) clamp(8px, 2.5vw, 15px);
+      border-radius: clamp(8px, 2.5vw, 15px);
+      border: 1px solid var(--primary-green);
       font-family: 'Press Start 2P', cursive;
-      font-size: 5px;
-      color: #00ff88;
+      font-size: clamp(4px, 1.2vw, 6px);
+      color: var(--primary-green);
       z-index: 100;
       text-align: center;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 4px 15px rgba(0, 255, 136, 0.2);
+      box-shadow: var(--shadow-strong), 0 0 15px rgba(0, 255, 136, 0.2);
     }
 
     .progress-bar {
       width: 100%;
-      height: 4px;
-      background: #333;
-      border-radius: 2px;
-      margin: 3px 0;
+      height: clamp(3px, 1vw, 6px);
+      background: rgba(51, 51, 51, 0.8);
+      border-radius: clamp(2px, 0.5vw, 3px);
+      margin: clamp(3px, 1vw, 6px) 0;
       overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .progress-fill {
       height: 100%;
-      background: linear-gradient(90deg, #00ff88, #00cc66);
-      transition: width 0.3s ease;
-      border-radius: 2px;
+      background: linear-gradient(90deg, var(--primary-green), var(--primary-green-dark), var(--primary-green-light));
+      transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: clamp(2px, 0.5vw, 3px);
+      box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
     }
 
-    /* Mobile Combo Display */
+    /* Enhanced Combo Display */
     .combo-display {
       position: absolute;
-      top: 60px;
-      right: 8px;
+      top: clamp(50px, 15vw, 80px);
+      right: env(safe-area-inset-right, clamp(8px, 2vw, 15px));
       font-family: 'Press Start 2P', cursive;
-      font-size: 8px;
-      color: #ffaa00;
-      text-shadow: 0 0 15px #ffaa00;
+      font-size: clamp(6px, 2vw, 10px);
+      color: var(--warning-orange);
+      text-shadow: 0 0 15px var(--warning-orange), 0 0 30px var(--warning-orange);
       z-index: 100;
       opacity: 0;
-      transition: opacity 0.3s ease;
-      background: rgba(0, 0, 0, 0.8);
-      padding: 4px 6px;
-      border-radius: 4px;
-      backdrop-filter: blur(5px);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      background: var(--glass-bg);
+      backdrop-filter: blur(10px);
+      padding: clamp(3px, 1vw, 6px) clamp(6px, 1.5vw, 10px);
+      border-radius: clamp(4px, 1vw, 8px);
+      border: 1px solid var(--warning-orange);
+      box-shadow: 0 0 20px rgba(255, 170, 0, 0.3);
     }
 
     .combo-display.show {
       opacity: 1;
-      animation: comboShake 0.5s ease;
+      animation: comboShake 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     @keyframes comboShake {
-      0%, 100% { transform: translateX(0); }
-      25% { transform: translateX(-2px); }
-      75% { transform: translateX(2px); }
+      0%, 100% { transform: translateX(0) scale(1); }
+      25% { transform: translateX(-3px) scale(1.05); }
+      75% { transform: translateX(3px) scale(1.05); }
     }
 
-    /* Mobile Virtual Controls */
+    /* Professional Mobile Controls */
     .mobile-controls {
       position: absolute;
-      bottom: 8px;
-      left: 8px;
-      right: 8px;
+      bottom: env(safe-area-inset-bottom, clamp(8px, 2vw, 15px));
+      left: env(safe-area-inset-left, clamp(8px, 2vw, 15px));
+      right: env(safe-area-inset-right, clamp(8px, 2vw, 15px));
       z-index: 90;
       display: block;
     }
 
     .control-instructions {
-      background: rgba(0, 0, 0, 0.85);
-      border: 1px solid #00ff88;
-      border-radius: 8px;
-      padding: 6px 10px;
-      margin-bottom: 8px;
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--primary-green);
+      border-radius: clamp(8px, 2vw, 12px);
+      padding: clamp(6px, 1.8vw, 10px) clamp(8px, 2.5vw, 15px);
+      margin-bottom: clamp(6px, 2vw, 10px);
       text-align: center;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 2px 10px rgba(0, 255, 136, 0.2);
+      box-shadow: var(--shadow-strong), 0 0 15px rgba(0, 255, 136, 0.2);
     }
 
     .instruction-text {
       font-family: 'Press Start 2P', cursive;
-      font-size: 5px;
-      color: #00ff88;
-      text-shadow: 0 0 8px #00ff88;
-      margin-bottom: 2px;
-      line-height: 1.4;
+      font-size: clamp(4px, 1.3vw, 6px);
+      color: var(--primary-green);
+      text-shadow: 0 0 10px var(--primary-green);
+      margin-bottom: clamp(2px, 0.5vw, 4px);
+      line-height: 1.6;
     }
 
     .instruction-subtext {
       font-family: 'Orbitron', sans-serif;
-      font-size: 4px;
-      color: #ccc;
-      opacity: 0.8;
+      font-size: clamp(3px, 1vw, 5px);
+      color: var(--text-medium);
+      opacity: 0.9;
+      font-weight: 400;
     }
 
     .virtual-buttons {
       display: flex;
       justify-content: space-between;
-      gap: 8px;
+      gap: clamp(8px, 2.5vw, 15px);
+      align-items: center;
     }
 
     .virtual-btn {
-      background: linear-gradient(45deg, rgba(0, 255, 136, 0.9), rgba(0, 204, 102, 0.9));
-      border: 2px solid #00ff88;
+      background: linear-gradient(135deg, rgba(0, 255, 136, 0.9), rgba(0, 204, 102, 0.9));
+      border: 2px solid var(--primary-green);
       border-radius: 50%;
-      width: 45px;
-      height: 45px;
-      font-size: 18px;
+      width: clamp(40px, 12vw, 55px);
+      height: clamp(40px, 12vw, 55px);
+      font-size: clamp(16px, 5vw, 22px);
       color: #000;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
       backdrop-filter: blur(15px);
-      box-shadow: 0 4px 15px rgba(0, 255, 136, 0.4);
+      box-shadow: 0 4px 20px rgba(0, 255, 136, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
       display: flex;
       align-items: center;
       justify-content: center;
       touch-action: manipulation;
       -webkit-tap-highlight-color: transparent;
       position: relative;
+      font-weight: 900;
+    }
+
+    .virtual-btn::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(135deg, var(--primary-green), var(--primary-green-light));
+      border-radius: 50%;
+      z-index: -1;
+      opacity: 0;
+      transition: opacity 0.2s ease;
     }
 
     .virtual-btn:active {
-      transform: scale(0.9);
-      background: linear-gradient(45deg, rgba(0, 204, 102, 1), rgba(0, 153, 68, 1));
-      box-shadow: 0 2px 8px rgba(0, 255, 136, 0.6);
+      transform: scale(0.92);
+      background: linear-gradient(135deg, rgba(0, 204, 102, 1), rgba(0, 153, 68, 1));
+      box-shadow: 0 2px 10px rgba(0, 255, 136, 0.6), inset 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .virtual-btn:active::before {
+      opacity: 0.3;
     }
 
     .pause-btn {
-      background: linear-gradient(45deg, rgba(255, 170, 0, 0.9), rgba(255, 136, 0, 0.9));
-      border-color: #ffaa00;
-      box-shadow: 0 4px 15px rgba(255, 170, 0, 0.4);
+      background: linear-gradient(135deg, rgba(255, 170, 0, 0.9), rgba(255, 136, 0, 0.9));
+      border-color: var(--warning-orange);
+      box-shadow: 0 4px 20px rgba(255, 170, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+
+    .pause-btn::before {
+      background: linear-gradient(135deg, var(--warning-orange), #ffcc33);
     }
 
     .pause-btn:active {
-      background: linear-gradient(45deg, rgba(255, 136, 0, 1), rgba(204, 102, 0, 1));
-      box-shadow: 0 2px 8px rgba(255, 170, 0, 0.6);
+      background: linear-gradient(135deg, rgba(255, 136, 0, 1), rgba(204, 102, 0, 1));
+      box-shadow: 0 2px 10px rgba(255, 170, 0, 0.6), inset 0 2px 4px rgba(0, 0, 0, 0.2);
     }
 
-    /* Modal Screens - Mobile Optimized */
+    /* Enhanced Modal Screens */
     .game-over, .level-complete, .game-start {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.95);
-      backdrop-filter: blur(15px);
+      background: linear-gradient(135deg, rgba(0, 0, 0, 0.95), rgba(15, 32, 39, 0.95));
+      backdrop-filter: blur(25px);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -354,7 +432,7 @@
       text-align: center;
       z-index: 200;
       font-family: 'Press Start 2P', cursive;
-      padding: 15px;
+      padding: clamp(15px, 4vw, 25px);
       overflow-y: auto;
       display: none;
     }
@@ -365,9 +443,14 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(45deg, rgba(255, 215, 0, 0.15), rgba(255, 0, 119, 0.15), rgba(0, 255, 136, 0.15));
-      backdrop-filter: blur(20px);
-      padding: 15px;
+      background: linear-gradient(45deg, 
+        rgba(255, 215, 0, 0.15), 
+        rgba(255, 0, 119, 0.15), 
+        rgba(0, 255, 136, 0.15),
+        rgba(0, 0, 0, 0.8)
+      );
+      backdrop-filter: blur(30px);
+      padding: clamp(15px, 4vw, 25px);
       overflow-y: auto;
       z-index: 300;
       display: none;
@@ -376,185 +459,248 @@
 
     .game-completed h2 {
       color: #ffd700 !important;
-      text-shadow: 0 0 20px #ffd700 !important;
-      font-size: 12px !important;
-      margin-bottom: 8px;
+      text-shadow: 0 0 25px #ffd700, 0 0 50px #ffd700 !important;
+      font-size: clamp(10px, 3.5vw, 16px) !important;
+      margin-bottom: clamp(8px, 2vw, 12px);
+      animation: goldGlow 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes goldGlow {
+      from { text-shadow: 0 0 25px #ffd700, 0 0 50px #ffd700; }
+      to { text-shadow: 0 0 35px #ffd700, 0 0 70px #ffd700, 0 0 100px #ffd700; }
     }
 
     .game-completed h3 {
-      color: #00ff88 !important;
-      text-shadow: 0 0 15px #00ff88 !important;
-      margin-bottom: 12px;
-      font-size: 8px !important;
+      color: var(--primary-green) !important;
+      text-shadow: 0 0 20px var(--primary-green) !important;
+      margin-bottom: clamp(12px, 3vw, 18px);
+      font-size: clamp(7px, 2.5vw, 10px) !important;
     }
 
     .game-over h2, .level-complete h2, .game-start h2 {
-      color: #ff4444;
-      margin-bottom: 12px;
-      font-size: 10px;
-      text-shadow: 0 0 15px #ff4444;
+      color: var(--danger-red);
+      margin-bottom: clamp(12px, 3vw, 18px);
+      font-size: clamp(8px, 2.8vw, 12px);
+      text-shadow: 0 0 20px var(--danger-red), 0 0 40px var(--danger-red);
     }
 
     .level-complete h2, .game-start h2 {
-      color: #00ff88;
-      text-shadow: 0 0 15px #00ff88;
+      color: var(--primary-green);
+      text-shadow: 0 0 20px var(--primary-green), 0 0 40px var(--primary-green);
     }
 
-    /* Mobile Buttons */
+    /* Professional Mobile Buttons */
     .game-button {
-      background: linear-gradient(45deg, #00ff88, #00cc66);
+      background: linear-gradient(135deg, var(--primary-green), var(--primary-green-dark));
       color: #000;
       border: none;
-      padding: 10px 16px;
-      border-radius: 8px;
+      padding: clamp(8px, 2.5vw, 12px) clamp(12px, 4vw, 20px);
+      border-radius: clamp(6px, 2vw, 10px);
       cursor: pointer;
       font-family: 'Press Start 2P', cursive;
-      font-size: 6px;
-      margin: 6px;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(0, 255, 136, 0.3);
-      min-width: 120px;
-      min-height: 40px;
+      font-size: clamp(5px, 1.8vw, 8px);
+      font-weight: 400;
+      margin: clamp(4px, 1.5vw, 8px);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 20px rgba(0, 255, 136, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      min-width: clamp(100px, 30vw, 150px);
+      min-height: clamp(35px, 10vw, 45px);
       display: flex;
       align-items: center;
       justify-content: center;
       touch-action: manipulation;
       -webkit-tap-highlight-color: transparent;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .game-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .game-button:hover::before, .game-button:active::before {
+      left: 100%;
     }
 
     .game-button:hover, .game-button:active {
-      background: linear-gradient(45deg, #00cc66, #009944);
-      transform: translateY(-1px);
-      box-shadow: 0 6px 20px rgba(0, 255, 136, 0.5);
+      background: linear-gradient(135deg, var(--primary-green-light), var(--primary-green));
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(0, 255, 136, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3);
     }
 
     .game-button.secondary {
-      background: linear-gradient(45deg, #666, #555);
-      color: #eee;
+      background: linear-gradient(135deg, #666, #555);
+      color: var(--text-light);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
     }
 
     .game-button.secondary:hover, .game-button.secondary:active {
-      background: linear-gradient(45deg, #777, #666);
+      background: linear-gradient(135deg, #777, #666);
+      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
     }
 
-    /* Mobile Share Section */
+    /* Enhanced Share Section */
     .share-section {
-      margin: 12px 0;
-      padding: 12px;
-      background: rgba(0, 0, 0, 0.4);
-      border-radius: 10px;
+      margin: clamp(12px, 3vw, 18px) 0;
+      padding: clamp(10px, 3vw, 15px);
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      border-radius: clamp(8px, 2.5vw, 15px);
       border: 2px solid #ff0077;
       width: 100%;
-      max-width: 280px;
-      backdrop-filter: blur(10px);
+      max-width: clamp(250px, 80vw, 320px);
+      box-shadow: var(--shadow-strong), 0 0 20px rgba(255, 0, 119, 0.2);
     }
 
     .share-section h3 {
-      color: #00ff88;
-      margin-bottom: 10px;
-      text-shadow: 0 0 10px #00ff88;
-      font-size: 6px;
+      color: var(--primary-green);
+      margin-bottom: clamp(8px, 2.5vw, 12px);
+      text-shadow: 0 0 15px var(--primary-green);
+      font-size: clamp(5px, 1.8vw, 8px);
     }
 
     .share-buttons {
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: clamp(5px, 1.5vw, 8px);
       align-items: center;
     }
 
     .share-button {
-      padding: 8px 12px;
+      padding: clamp(6px, 2vw, 10px) clamp(10px, 3vw, 15px);
       border: none;
-      border-radius: 15px;
-      font-size: 5px;
-      font-weight: bold;
+      border-radius: clamp(12px, 3vw, 18px);
+      font-size: clamp(4px, 1.4vw, 6px);
+      font-weight: 700;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       text-decoration: none;
       display: flex;
       align-items: center;
       justify-content: center;
       width: 100%;
-      max-width: 180px;
-      min-height: 35px;
+      max-width: clamp(160px, 50vw, 200px);
+      min-height: clamp(30px, 8vw, 40px);
       touch-action: manipulation;
       -webkit-tap-highlight-color: transparent;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .share-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .share-button:active::before {
+      left: 100%;
     }
 
     .share-button.twitter {
       background: linear-gradient(135deg, #1da1f2, #0d8bd9);
       color: white;
+      box-shadow: 0 4px 15px rgba(29, 161, 242, 0.3);
     }
 
     .share-button.twitter:active {
       background: linear-gradient(135deg, #0d8bd9, #0a7bc4);
       transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(29, 161, 242, 0.4);
     }
 
     .share-button.facebook {
       background: linear-gradient(135deg, #4267b2, #365899);
       color: white;
+      box-shadow: 0 4px 15px rgba(66, 103, 178, 0.3);
     }
 
     .share-button.facebook:active {
       background: linear-gradient(135deg, #365899, #2d4373);
       transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(66, 103, 178, 0.4);
     }
 
     .share-button.telegram {
       background: linear-gradient(135deg, #0088cc, #006699);
       color: white;
+      box-shadow: 0 4px 15px rgba(0, 136, 204, 0.3);
     }
 
     .share-button.telegram:active {
       background: linear-gradient(135deg, #006699, #004466);
       transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(0, 136, 204, 0.4);
     }
 
     .share-button.copy {
       background: linear-gradient(135deg, #ff6600, #cc5500);
       color: white;
+      box-shadow: 0 4px 15px rgba(255, 102, 0, 0.3);
     }
 
     .share-button.copy:active {
       background: linear-gradient(135deg, #cc5500, #aa4400);
       transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(255, 102, 0, 0.4);
     }
 
-    /* Mobile Instructions */
+    /* Enhanced Instructions */
     .instructions {
-      margin: 12px 0;
-      color: #ccc;
-      font-size: 5px;
-      line-height: 1.6;
-      max-width: 260px;
+      margin: clamp(12px, 3vw, 18px) 0;
+      color: var(--text-medium);
+      font-size: clamp(4px, 1.3vw, 6px);
+      line-height: 1.8;
+      max-width: clamp(240px, 75vw, 300px);
+      background: var(--glass-bg);
+      backdrop-filter: blur(10px);
+      padding: clamp(8px, 2.5vw, 12px);
+      border-radius: clamp(6px, 2vw, 10px);
+      border: 1px solid var(--glass-border);
     }
 
     .instructions p {
-      margin-bottom: 4px;
+      margin-bottom: clamp(3px, 1vw, 5px);
+      transition: color 0.3s ease;
     }
 
-    /* Mobile Powerup Notification */
+    .instructions p:hover {
+      color: var(--primary-green);
+    }
+
+    /* Enhanced Powerup Notification */
     .powerup-notification {
       position: fixed;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: rgba(255, 170, 0, 0.95);
+      background: linear-gradient(135deg, rgba(255, 170, 0, 0.95), rgba(255, 136, 0, 0.95));
       color: white;
-      padding: 12px 20px;
-      border-radius: 10px;
+      padding: clamp(10px, 3vw, 15px) clamp(15px, 4vw, 25px);
+      border-radius: clamp(8px, 2.5vw, 12px);
       border: 2px solid #fff;
       font-family: 'Press Start 2P', cursive;
-      font-size: 8px;
+      font-size: clamp(6px, 2vw, 10px);
       text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
       z-index: 1000;
       opacity: 0;
       transform: translate(-50%, -50%) scale(0.5);
-      transition: all 0.3s ease;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       pointer-events: none;
-      backdrop-filter: blur(10px);
+      backdrop-filter: blur(15px);
+      box-shadow: 0 10px 30px rgba(255, 170, 0, 0.4), 0 0 50px rgba(255, 170, 0, 0.2);
     }
 
     .powerup-notification.show {
@@ -562,15 +708,21 @@
       transform: translate(-50%, -50%) scale(1);
     }
 
-    /* Power-up glow effect */
+    /* Enhanced Power-up glow effect */
     .powerup-glow {
-      box-shadow: 0 0 15px #ffaa00, 0 0 30px #ffaa00, 0 0 45px #ffaa00;
-      animation: pulse 1s infinite alternate;
+      box-shadow: 0 0 20px var(--warning-orange), 0 0 40px var(--warning-orange), 0 0 60px var(--warning-orange);
+      animation: powerupPulse 1.5s ease-in-out infinite alternate;
     }
 
-    @keyframes pulse {
-      from { opacity: 0.7; }
-      to { opacity: 1; }
+    @keyframes powerupPulse {
+      from { 
+        opacity: 0.8; 
+        box-shadow: 0 0 20px var(--warning-orange), 0 0 40px var(--warning-orange), 0 0 60px var(--warning-orange);
+      }
+      to { 
+        opacity: 1; 
+        box-shadow: 0 0 30px var(--warning-orange), 0 0 60px var(--warning-orange), 0 0 90px var(--warning-orange);
+      }
     }
 
     /* Particle Effects */
@@ -578,14 +730,104 @@
       position: absolute;
       pointer-events: none;
       z-index: 50;
+      will-change: transform, opacity;
+    }
+
+    /* Loading Screen Enhancement */
+    .loading-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, var(--background-dark), var(--background-mid), var(--background-light));
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9998;
+      color: var(--primary-green);
+      font-family: 'Press Start 2P', cursive;
+      transition: opacity 0.5s ease;
+    }
+
+    .loading-text {
+      font-size: clamp(6px, 2.5vw, 10px);
+      margin-bottom: clamp(15px, 5vw, 25px);
+      text-shadow: 0 0 15px var(--primary-green), 0 0 30px var(--primary-green);
+      animation: loadingPulse 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes loadingPulse {
+      from { opacity: 0.7; transform: scale(0.98); }
+      to { opacity: 1; transform: scale(1.02); }
+    }
+
+    .loading-bar {
+      width: clamp(150px, 60vw, 250px);
+      height: clamp(4px, 1.5vw, 8px);
+      background: rgba(51, 51, 51, 0.8);
+      border-radius: clamp(2px, 1vw, 4px);
+      overflow: hidden;
+      border: 1px solid var(--primary-green);
+      box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+    }
+
+    .loading-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary-green), var(--primary-green-light), var(--primary-green));
+      width: 0%;
+      transition: width 0.3s ease;
+      box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+      animation: loadingShimmer 2s ease-in-out infinite;
+    }
+
+    @keyframes loadingShimmer {
+      0%, 100% { background-position: -200px 0; }
+      50% { background-position: 200px 0; }
+    }
+
+    /* Responsive breakpoints for different mobile sizes */
+    
+    /* Small phones (320px - 375px) */
+    @media (max-width: 375px) {
+      .logo { font-size: 7px; }
+      .nav-menu a { font-size: 4px; padding: 3px 5px; }
+      .ui-item { font-size: 3px; padding: 2px 4px; }
+      .virtual-btn { width: 35px; height: 35px; font-size: 14px; }
+    }
+
+    /* Medium phones (375px - 414px) */
+    @media (min-width: 375px) and (max-width: 414px) {
+      .logo { font-size: 8px; }
+      .nav-menu a { font-size: 5px; }
+      .ui-item { font-size: 4px; }
+      .virtual-btn { width: 40px; height: 40px; font-size: 16px; }
+    }
+
+    /* Large phones (414px+) */
+    @media (min-width: 414px) {
+      .logo { font-size: 10px; }
+      .nav-menu a { font-size: 6px; }
+      .ui-item { font-size: 5px; }
+      .virtual-btn { width: 45px; height: 45px; font-size: 18px; }
+    }
+
+    /* Tablets in portrait */
+    @media (min-width: 768px) and (orientation: portrait) {
+      .logo { font-size: 14px; }
+      .nav-menu a { font-size: 8px; }
+      .ui-item { font-size: 8px; }
+      .virtual-btn { width: 60px; height: 60px; font-size: 24px; }
+      .game-button { font-size: 10px; }
     }
 
     /* Safe area handling for notched devices */
     @supports (padding: max(0px)) {
       header {
-        padding-top: max(10px, env(safe-area-inset-top));
-        padding-left: max(15px, env(safe-area-inset-left));
-        padding-right: max(15px, env(safe-area-inset-right));
+        padding-top: max(8px, env(safe-area-inset-top));
+        padding-left: max(12px, env(safe-area-inset-left));
+        padding-right: max(12px, env(safe-area-inset-right));
       }
 
       .game-ui {
@@ -596,78 +838,69 @@
       .level-progress, .mobile-controls {
         left: max(8px, env(safe-area-inset-left));
         right: max(8px, env(safe-area-inset-right));
-        bottom: max(8px, env(safe-area-inset-bottom));
       }
 
       .mobile-controls {
-        bottom: max(80px, calc(env(safe-area-inset-bottom) + 8px));
+        bottom: max(8px, env(safe-area-inset-bottom));
+      }
+
+      .combo-display {
+        right: max(8px, env(safe-area-inset-right));
       }
     }
 
-    /* High DPI displays */
+    /* High DPI displays optimization */
     @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
       #gameCanvas {
         image-rendering: auto;
+      }
+      
+      .ui-item, .game-button, .share-button {
+        -webkit-font-smoothing: subpixel-antialiased;
       }
     }
 
     /* Reduce motion for accessibility */
     @media (prefers-reduced-motion: reduce) {
-      * {
+      *, *::before, *::after {
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
       }
     }
 
-    /* Loading screen */
-    .loading-screen {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 9998;
-      color: #00ff88;
-      font-family: 'Press Start 2P', cursive;
+    /* Dark mode support */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --text-light: #ffffff;
+        --text-medium: #e0e0e0;
+        --glass-bg: rgba(0, 0, 0, 0.9);
+      }
     }
 
-    .loading-text {
-      font-size: 8px;
-      margin-bottom: 20px;
-      text-shadow: 0 0 10px #00ff88;
-    }
-
-    .loading-bar {
-      width: 200px;
-      height: 6px;
-      background: #333;
-      border-radius: 3px;
-      overflow: hidden;
-      border: 1px solid #00ff88;
-    }
-
-    .loading-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #00ff88, #00cc66);
-      width: 0%;
-      transition: width 0.3s ease;
+    /* High contrast mode */
+    @media (prefers-contrast: high) {
+      .ui-item, .game-button, .share-button {
+        border-width: 2px;
+      }
+      
+      .virtual-btn {
+        border-width: 3px;
+      }
     }
   </style>
 </head>
 <body>
-  <!-- Loading Screen -->
+  <!-- Enhanced Loading Screen -->
   <div class="loading-screen" id="loadingScreen">
     <div class="loading-text">🎮 LOADING LFIST GAME 🎮</div>
     <div class="loading-bar">
       <div class="loading-fill" id="loadingFill"></div>
     </div>
-    <div style="font-size: 5px; margin-top: 10px; color: #ccc;">Optimized for Mobile</div>
+    <div style="font-size: clamp(3px, 1.2vw, 6px); margin-top: clamp(8px, 2.5vw, 15px); color: var(--text-medium); font-family: 'Orbitron', sans-serif;">
+      Professional Mobile Edition
+    </div>
   </div>
 
   <header>
@@ -682,7 +915,7 @@
   <div id="gameContainer">
     <canvas id="gameCanvas"></canvas>
     
-    <!-- Game UI -->
+    <!-- Enhanced Game UI -->
     <div class="game-ui">
       <div class="ui-left">
         <div class="ui-item">Score: <span id="score">0</span></div>
@@ -695,13 +928,13 @@
       </div>
     </div>
 
-    <!-- Combo Display -->
+    <!-- Enhanced Combo Display -->
     <div class="combo-display" id="comboDisplay">COMBO x<span id="comboMultiplier">1</span>!</div>
 
-    <!-- Powerup Notification -->
+    <!-- Enhanced Powerup Notification -->
     <div class="powerup-notification" id="powerupNotification">BEER BREAK!</div>
 
-    <!-- Level Progress -->
+    <!-- Enhanced Level Progress -->
     <div class="level-progress">
       <div>Level Progress</div>
       <div class="progress-bar">
@@ -710,19 +943,19 @@
       <div><span id="destroyed">0</span> / <span id="levelTarget">10</span></div>
     </div>
 
-    <!-- Mobile Virtual Controls -->
+    <!-- Professional Mobile Controls -->
     <div class="mobile-controls" id="mobileControls">
       <div class="control-instructions">
         <div class="instruction-text">👆 Tap anywhere to move LFIST and punch!</div>
         <div class="instruction-subtext">Hold and drag to move continuously</div>
       </div>
       <div class="virtual-buttons">
-        <button class="virtual-btn pause-btn" onclick="togglePause()" id="pauseBtn">⏸️</button>
-        <button class="virtual-btn punch-btn" onclick="manualPunch()" id="punchBtn">👊</button>
+        <button class="virtual-btn pause-btn" onclick="togglePause()" id="pauseBtn" aria-label="Pause Game">⏸️</button>
+        <button class="virtual-btn punch-btn" onclick="manualPunch()" id="punchBtn" aria-label="Manual Punch">👊</button>
       </div>
     </div>
 
-    <!-- Game Start Screen -->
+    <!-- Enhanced Game Start Screen -->
     <div class="game-start" id="gameStart">
       <h2>🎮 LFIST GAME 🎮</h2>
       <div class="instructions">
@@ -731,18 +964,25 @@
         <p>💎 Collect golden fists for bonus points</p>
         <p>❤️ Don't let memecoins hit the ground!</p>
         <p>🏆 Survive all 50 levels of increasing difficulty</p>
+        <p style="color: var(--warning-orange); margin-top: clamp(8px, 2vw, 12px);">
+          🎯 Optimized for mobile gaming experience
+        </p>
       </div>
       <button class="game-button" onclick="startGame()">🚀 START GAME</button>
       <button class="game-button secondary" onclick="showControls()">🎮 CONTROLS</button>
     </div>
 
-    <!-- Game Over Screen -->
+    <!-- Enhanced Game Over Screen -->
     <div class="game-over" id="gameOver">
       <h2>💀 GAME OVER 💀</h2>
-      <p>Final Score: <span id="finalScore">0</span></p>
-      <p>Level Reached: <span id="finalLevel">1</span></p>
+      <p style="font-size: clamp(5px, 1.8vw, 8px); margin-bottom: clamp(4px, 1vw, 6px);">
+        Final Score: <span id="finalScore" style="color: var(--primary-green);">0</span>
+      </p>
+      <p style="font-size: clamp(5px, 1.8vw, 8px); margin-bottom: clamp(8px, 2vw, 12px);">
+        Level Reached: <span id="finalLevel" style="color: var(--warning-orange);">1</span>
+      </p>
       
-      <!-- Share buttons -->
+      <!-- Enhanced Share buttons -->
       <div class="share-section">
         <h3>🚀 Share your score!</h3>
         <div class="share-buttons">
@@ -765,25 +1005,37 @@
       <button class="game-button secondary" onclick="goHome()">🏠 HOME</button>
     </div>
 
-    <!-- Level Complete Screen -->
+    <!-- Enhanced Level Complete Screen -->
     <div class="level-complete" id="levelComplete">
       <h2>🏆 LEVEL COMPLETE! 🏆</h2>
-      <p>Score: <span id="levelScore">0</span></p>
-      <p>Level Bonus: <span id="levelBonus">0</span></p>
+      <p style="font-size: clamp(5px, 1.8vw, 8px); margin-bottom: clamp(4px, 1vw, 6px);">
+        Score: <span id="levelScore" style="color: var(--primary-green);">0</span>
+      </p>
+      <p style="font-size: clamp(5px, 1.8vw, 8px); margin-bottom: clamp(8px, 2vw, 12px);">
+        Level Bonus: <span id="levelBonus" style="color: var(--warning-orange);">0</span>
+      </p>
       <button class="game-button" onclick="nextLevel()">➡️ NEXT LEVEL</button>
       <button class="game-button secondary" onclick="restartGame()">🔄 RESTART</button>
     </div>
 
-    <!-- Game Completed Screen -->
+    <!-- Enhanced Game Completed Screen -->
     <div class="game-completed" id="gameCompleted">
       <h2>🎉 CONGRATULATIONS! 🎉</h2>
       <h3>🏆 GAME COMPLETED! 🏆</h3>
-      <p>Final Score: <span id="completedScore">0</span></p>
-      <p>All 50 levels completed!</p>
-      <p>Max Combo: <span id="completedMaxCombo">0</span></p>
-      <p>Total Destroyed: <span id="completedTotalDestroyed">0</span></p>
+      <p style="font-size: clamp(5px, 1.8vw, 8px); margin-bottom: clamp(3px, 1vw, 5px);">
+        Final Score: <span id="completedScore" style="color: var(--primary-green);">0</span>
+      </p>
+      <p style="font-size: clamp(5px, 1.8vw, 8px); margin-bottom: clamp(3px, 1vw, 5px);">
+        All 50 levels completed!
+      </p>
+      <p style="font-size: clamp(5px, 1.8vw, 8px); margin-bottom: clamp(3px, 1vw, 5px);">
+        Max Combo: <span id="completedMaxCombo" style="color: var(--warning-orange);">0</span>
+      </p>
+      <p style="font-size: clamp(5px, 1.8vw, 8px); margin-bottom: clamp(8px, 2vw, 12px);">
+        Total Destroyed: <span id="completedTotalDestroyed" style="color: var(--danger-red);">0</span>
+      </p>
       
-      <!-- Share buttons -->
+      <!-- Enhanced Share buttons -->
       <div class="share-section">
         <h3>🚀 Share your achievement!</h3>
         <div class="share-buttons">
@@ -809,19 +1061,38 @@
 
   <script src="lfist-game-complete.js"></script>
   <script>
-    // Mobile-specific initialization
+    // Enhanced Mobile-specific initialization
     document.addEventListener('DOMContentLoaded', () => {
-      // Hide loading screen after a short delay
-      setTimeout(() => {
-        const loadingScreen = document.getElementById('loadingScreen');
-        if (loadingScreen) {
-          loadingScreen.style.opacity = '0';
+      console.log('🎮 LFIST Game Mobile Pro - Initializing...');
+      
+      // Progressive loading animation
+      let loadingProgress = 0;
+      const loadingFill = document.getElementById('loadingFill');
+      const loadingInterval = setInterval(() => {
+        loadingProgress += Math.random() * 15 + 5;
+        if (loadingProgress >= 100) {
+          loadingProgress = 100;
+          clearInterval(loadingInterval);
+          
+          // Hide loading screen with smooth transition
           setTimeout(() => {
-            loadingScreen.style.display = 'none';
-          }, 500);
+            const loadingScreen = document.getElementById('loadingScreen');
+            if (loadingScreen) {
+              loadingScreen.style.opacity = '0';
+              setTimeout(() => {
+                loadingScreen.style.display = 'none';
+                console.log('🚀 LFIST Game Mobile Pro - Ready!');
+              }, 500);
+            }
+          }, 800);
         }
-      }, 1500);
+        if (loadingFill) {
+          loadingFill.style.width = loadingProgress + '%';
+        }
+      }, 100);
 
+      // Enhanced mobile optimizations
+      
       // Prevent zoom on double tap
       let lastTouchEnd = 0;
       document.addEventListener('touchend', function (event) {
@@ -835,15 +1106,104 @@
       // Prevent context menu on long press
       document.addEventListener('contextmenu', function(e) {
         e.preventDefault();
+        return false;
       });
+
+      // Prevent pull-to-refresh
+      document.addEventListener('touchstart', function(e) {
+        if (e.touches.length > 1) {
+          e.preventDefault();
+        }
+      });
+
+      document.addEventListener('touchmove', function(e) {
+        if (e.scale !== 1) {
+          e.preventDefault();
+        }
+      }, { passive: false });
 
       // Lock orientation to portrait if possible
       if (screen.orientation && screen.orientation.lock) {
-        screen.orientation.lock('portrait').catch(() => {
-          console.log('Orientation lock not supported');
+        screen.orientation.lock('portrait-primary').then(() => {
+          console.log('📱 Orientation locked to portrait');
+        }).catch((error) => {
+          console.log('⚠️ Orientation lock not supported:', error);
         });
       }
+
+      // Enhanced viewport height handling for mobile browsers
+      function setViewportHeight() {
+        const vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+      }
+      
+      setViewportHeight();
+      window.addEventListener('resize', setViewportHeight);
+      window.addEventListener('orientationchange', () => {
+        setTimeout(setViewportHeight, 100);
+      });
+
+      // Performance monitoring
+      if ('performance' in window) {
+        window.addEventListener('load', () => {
+          setTimeout(() => {
+            const perfData = performance.getEntriesByType('navigation')[0];
+            console.log(`⚡ Page load time: ${Math.round(perfData.loadEventEnd - perfData.loadEventStart)}ms`);
+          }, 0);
+        });
+      }
+
+      // Battery API for performance optimization
+      if ('getBattery' in navigator) {
+        navigator.getBattery().then((battery) => {
+          if (battery.level < 0.2) {
+            console.log('🔋 Low battery detected - enabling power saving mode');
+            document.documentElement.style.setProperty('--animation-speed', '0.5s');
+          }
+        });
+      }
+
+      // Network information for adaptive quality
+      if ('connection' in navigator) {
+        const connection = navigator.connection;
+        if (connection.effectiveType === 'slow-2g' || connection.effectiveType === '2g') {
+          console.log('📶 Slow connection detected - reducing visual effects');
+          document.documentElement.style.setProperty('--blur-amount', '5px');
+        }
+      }
+
+      // Haptic feedback support
+      window.vibrate = window.vibrate || window.webkitVibrate || window.mozVibrate || window.msVibrate;
+      
+      // Add haptic feedback to buttons
+      document.querySelectorAll('.virtual-btn, .game-button, .share-button').forEach(button => {
+        button.addEventListener('touchstart', () => {
+          if (window.vibrate) {
+            window.vibrate(50); // Short vibration
+          }
+        });
+      });
+
+      console.log('✅ Mobile optimizations applied successfully');
     });
+
+    // Enhanced error handling
+    window.addEventListener('error', (e) => {
+      console.error('🚨 Game Error:', e.error);
+      // Could implement error reporting here
+    });
+
+    // Performance observer for monitoring
+    if ('PerformanceObserver' in window) {
+      const observer = new PerformanceObserver((list) => {
+        for (const entry of list.getEntries()) {
+          if (entry.entryType === 'measure') {
+            console.log(`📊 ${entry.name}: ${Math.round(entry.duration)}ms`);
+          }
+        }
+      });
+      observer.observe({ entryTypes: ['measure'] });
+    }
   </script>
 </body>
 </html>

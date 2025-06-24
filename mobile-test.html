@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LFIST Game - Mobile Test Suite</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #00ff88;
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+    }
+    
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: rgba(0, 0, 0, 0.8);
+      border-radius: 15px;
+      padding: 20px;
+      border: 2px solid #00ff88;
+    }
+    
+    h1 {
+      text-align: center;
+      color: #00ff88;
+      text-shadow: 0 0 15px #00ff88;
+      margin-bottom: 30px;
+    }
+    
+    .test-section {
+      margin-bottom: 30px;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      border: 1px solid rgba(0, 255, 136, 0.3);
+    }
+    
+    .test-section h2 {
+      color: #ffaa00;
+      margin-bottom: 15px;
+    }
+    
+    .device-info {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    
+    .info-item {
+      background: rgba(0, 0, 0, 0.5);
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #00ff88;
+    }
+    
+    .info-label {
+      font-weight: bold;
+      color: #00ff88;
+    }
+    
+    .info-value {
+      color: #ffffff;
+      margin-left: 10px;
+    }
+    
+    .test-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    
+    .test-btn {
+      background: linear-gradient(45deg, #00ff88, #00cc66);
+      color: #000;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+    
+    .test-btn:hover {
+      background: linear-gradient(45deg, #00cc66, #009944);
+      transform: translateY(-2px);
+    }
+    
+    .test-btn.secondary {
+      background: linear-gradient(45deg, #666, #555);
+      color: #fff;
+    }
+    
+    .status {
+      padding: 10px;
+      border-radius: 5px;
+      margin: 10px 0;
+    }
+    
+    .status.success {
+      background: rgba(0, 255, 136, 0.2);
+      border: 1px solid #00ff88;
+    }
+    
+    .status.warning {
+      background: rgba(255, 170, 0, 0.2);
+      border: 1px solid #ffaa00;
+      color: #ffaa00;
+    }
+    
+    .status.error {
+      background: rgba(255, 68, 68, 0.2);
+      border: 1px solid #ff4444;
+      color: #ff4444;
+    }
+    
+    .responsive-preview {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+    
+    .device-preview {
+      background: rgba(0, 0, 0, 0.7);
+      border: 2px solid #00ff88;
+      border-radius: 10px;
+      padding: 10px;
+      text-align: center;
+    }
+    
+    .device-screen {
+      background: #000;
+      border-radius: 5px;
+      margin: 10px auto;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .device-screen.phone-small {
+      width: 60px;
+      height: 120px;
+    }
+    
+    .device-screen.phone-medium {
+      width: 70px;
+      height: 140px;
+    }
+    
+    .device-screen.phone-large {
+      width: 80px;
+      height: 160px;
+    }
+    
+    .device-screen.tablet {
+      width: 100px;
+      height: 140px;
+    }
+    
+    .screen-content {
+      background: linear-gradient(135deg, #0f2027, #203a43);
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 8px;
+      color: #00ff88;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎮 LFIST Game - Mobile Test Suite 🎮</h1>
+    
+    <div class="test-section">
+      <h2>📱 Device Information</h2>
+      <div class="device-info" id="deviceInfo">
+        <!-- Device info will be populated by JavaScript -->
+      </div>
+    </div>
+    
+    <div class="test-section">
+      <h2>🔧 Compatibility Tests</h2>
+      <div id="compatibilityTests">
+        <!-- Compatibility tests will be populated by JavaScript -->
+      </div>
+    </div>
+    
+    <div class="test-section">
+      <h2>📐 Responsive Preview</h2>
+      <p>Preview of how the game will look on different devices:</p>
+      <div class="responsive-preview">
+        <div class="device-preview">
+          <h4>Small Phone</h4>
+          <div class="device-screen phone-small">
+            <div class="screen-content">LFIST</div>
+          </div>
+          <small>≤375px</small>
+        </div>
+        <div class="device-preview">
+          <h4>Medium Phone</h4>
+          <div class="device-screen phone-medium">
+            <div class="screen-content">LFIST</div>
+          </div>
+          <small>375-414px</small>
+        </div>
+        <div class="device-preview">
+          <h4>Large Phone</h4>
+          <div class="device-screen phone-large">
+            <div class="screen-content">LFIST</div>
+          </div>
+          <small>414-768px</small>
+        </div>
+        <div class="device-preview">
+          <h4>Tablet</h4>
+          <div class="device-screen tablet">
+            <div class="screen-content">LFIST</div>
+          </div>
+          <small>>768px</small>
+        </div>
+      </div>
+    </div>
+    
+    <div class="test-section">
+      <h2>🚀 Launch Game</h2>
+      <div class="test-buttons">
+        <a href="lfist-game-mobile.html" class="test-btn">📱 Mobile Version</a>
+        <a href="lfist-game.html" class="test-btn secondary">🖥️ Desktop Version</a>
+        <a href="mobile-redirect.html" class="test-btn">🔄 Auto-Detect</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Device detection and testing
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('🧪 Starting mobile test suite...');
+      
+      // Populate device information
+      populateDeviceInfo();
+      
+      // Run compatibility tests
+      runCompatibilityTests();
+    });
+    
+    function populateDeviceInfo() {
+      const deviceInfo = document.getElementById('deviceInfo');
+      
+      const info = [
+        {
+          label: 'Screen Size',
+          value: `${window.innerWidth} x ${window.innerHeight}px`
+        },
+        {
+          label: 'Device Pixel Ratio',
+          value: window.devicePixelRatio || 1
+        },
+        {
+          label: 'User Agent',
+          value: navigator.userAgent.substring(0, 50) + '...'
+        },
+        {
+          label: 'Touch Support',
+          value: 'ontouchstart' in window ? '✅ Yes' : '❌ No'
+        },
+        {
+          label: 'Orientation',
+          value: window.innerWidth > window.innerHeight ? 'Landscape' : 'Portrait'
+        },
+        {
+          label: 'Device Type',
+          value: getDeviceType()
+        },
+        {
+          label: 'Viewport',
+          value: `${window.innerWidth}px x ${window.innerHeight}px`
+        },
+        {
+          label: 'Color Depth',
+          value: `${screen.colorDepth} bits`
+        }
+      ];
+      
+      info.forEach(item => {
+        const infoItem = document.createElement('div');
+        infoItem.className = 'info-item';
+        infoItem.innerHTML = `
+          <span class="info-label">${item.label}:</span>
+          <span class="info-value">${item.value}</span>
+        `;
+        deviceInfo.appendChild(infoItem);
+      });
+    }
+    
+    function getDeviceType() {
+      const width = window.innerWidth;
+      if (width <= 375) return 'Small Phone';
+      if (width <= 414) return 'Medium Phone';
+      if (width <= 768) return 'Large Phone';
+      return 'Tablet/Desktop';
+    }
+    
+    function runCompatibilityTests() {
+      const testsContainer = document.getElementById('compatibilityTests');
+      
+      const tests = [
+        {
+          name: 'Mobile Device Detection',
+          test: () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
+          description: 'Checks if device is detected as mobile'
+        },
+        {
+          name: 'Touch Events Support',
+          test: () => 'ontouchstart' in window,
+          description: 'Verifies touch event support'
+        },
+        {
+          name: 'Canvas Support',
+          test: () => {
+            const canvas = document.createElement('canvas');
+            return !!(canvas.getContext && canvas.getContext('2d'));
+          },
+          description: 'Checks HTML5 Canvas support'
+        },
+        {
+          name: 'Local Storage',
+          test: () => {
+            try {
+              localStorage.setItem('test', 'test');
+              localStorage.removeItem('test');
+              return true;
+            } catch (e) {
+              return false;
+            }
+          },
+          description: 'Tests local storage availability'
+        },
+        {
+          name: 'Audio Context',
+          test: () => !!(window.AudioContext || window.webkitAudioContext),
+          description: 'Checks Web Audio API support'
+        },
+        {
+          name: 'Fullscreen API',
+          test: () => !!(document.fullscreenEnabled || document.webkitFullscreenEnabled || document.mozFullScreenEnabled),
+          description: 'Tests fullscreen capability'
+        },
+        {
+          name: 'Vibration API',
+          test: () => !!(navigator.vibrate || navigator.webkitVibrate || navigator.mozVibrate),
+          description: 'Checks haptic feedback support'
+        },
+        {
+          name: 'Orientation Lock',
+          test: () => !!(screen.orientation && screen.orientation.lock),
+          description: 'Tests screen orientation lock'
+        },
+        {
+          name: 'Performance API',
+          test: () => !!(window.performance && window.performance.now),
+          description: 'Checks performance monitoring'
+        },
+        {
+          name: 'Optimal Portrait Mode',
+          test: () => window.innerWidth < window.innerHeight,
+          description: 'Verifies portrait orientation'
+        }
+      ];
+      
+      tests.forEach(test => {
+        const result = test.test();
+        const status = document.createElement('div');
+        status.className = `status ${result ? 'success' : 'warning'}`;
+        status.innerHTML = `
+          <strong>${result ? '✅' : '⚠️'} ${test.name}</strong><br>
+          <small>${test.description}</small>
+        `;
+        testsContainer.appendChild(status);
+      });
+      
+      // Overall compatibility score
+      const passedTests = tests.filter(test => test.test()).length;
+      const score = Math.round((passedTests / tests.length) * 100);
+      
+      const scoreStatus = document.createElement('div');
+      scoreStatus.className = `status ${score >= 80 ? 'success' : score >= 60 ? 'warning' : 'error'}`;
+      scoreStatus.innerHTML = `
+        <strong>🎯 Overall Compatibility Score: ${score}%</strong><br>
+        <small>${passedTests}/${tests.length} tests passed</small>
+      `;
+      testsContainer.appendChild(scoreStatus);
+      
+      console.log(`🎯 Compatibility Score: ${score}% (${passedTests}/${tests.length})`);
+    }
+    
+    // Real-time viewport monitoring
+    window.addEventListener('resize', () => {
+      console.log(`📐 Viewport changed: ${window.innerWidth}x${window.innerHeight}`);
+    });
+    
+    window.addEventListener('orientationchange', () => {
+      setTimeout(() => {
+        console.log(`🔄 Orientation changed: ${window.innerWidth}x${window.innerHeight}`);
+        // Refresh device info
+        document.getElementById('deviceInfo').innerHTML = '';
+        populateDeviceInfo();
+      }, 100);
+    });
+  </script>
+</body>
+</html>
